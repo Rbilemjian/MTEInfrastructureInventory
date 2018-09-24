@@ -85,6 +85,10 @@ DATABASES = {
     }
 }
 
+AUTHENTICATION_BACKENDS = ('django.contrib.auth.backends.ModelBackend',
+                           'infrastructureinventoryapp.custom_auth.SSOAuth.SSOAuth',
+                          )
+
 
 # Password validation
 # https://docs.djangoproject.com/en/2.1/ref/settings/#auth-password-validators
