@@ -1,1 +1,6 @@
 venv/
+
+infrastructureinventoryproject/infrastructureinventoryproject/__pycache__/
+infrastructureinventoryproject/infrastructureinventoryapp/__pycache__/
+
+\.DS_Store
