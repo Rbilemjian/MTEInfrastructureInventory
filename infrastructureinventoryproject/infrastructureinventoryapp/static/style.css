@@ -1,0 +1,246 @@
+body {
+    background-color: #e8edf3;
+    margin-bottom: 50px;
+}
+
+.footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    height: 50px;
+    line-height: 50px;
+    background-color: #c4cedb;
+}
+
+/* padding for report form fields */
+.my-padding {
+    margin: 2em;
+}
+
+/*
+.container-fluid {
+    max-width: 2150px;
+}
+*/
+
+/*
+@media only screen and (min-device-width: 2300px){
+    .container {
+        width: 2000px;
+    }
+}
+
+@media only screen and (min-device-width: 1700px){
+    .container {
+        width: 1400px;
+    }
+}
+
+@media only screen and (min-device-width: 1200px){
+    .container {
+        width: 900px;
+    }
+}
+*/
+
+/********** Navigation Bar Styles ******************/
+
+.navbar {
+    background-color: #c4cedb;
+    -webkit-box-shadow: 0 8px 12px -6px #999;
+    -moz-box-shadow: 0 8px 12px -6px #999;
+    box-shadow: 0 8px 12px -6px #999;
+    font-family: 'Poppins', sans-serif;
+}
+
+.navbar-brand{
+    color: #609;
+    font-family: 'Poppins', sans-serif;
+}
+
+.navbar-nav > li > a {
+    color: #609;
+}
+
+@media (min-width: 992px){
+    .navbar li {
+        margin-left : 0.0em;
+        margin-right : 0.0em;
+    }
+}
+
+.navbar .navbar-nav > li > a:hover {
+    /*color: #e8edf3;*/
+    background-color: #c4cedb;
+}
+
+.navbar .navbar-nav li:hover {
+    border-bottom: 2px solid #609;
+}
+
+/*
+.navbar .navbar-nav li.active {
+    border-bottom: 2px solid #609;
+}
+*/
+
+.navbar-toggle .icon-bar {
+    background-color: #609;
+}
+
+
+/********** End Navigation Bar Styles ****************/
+
+
+h1, h2, h3, h4{
+    font-family: 'Poppins', sans-serif;
+    color: #609;
+}
+
+p {
+    font-family: 'Poppins', sans-serif;
+}
+
+.center-div
+{
+  margin: 15% auto;
+  width: 340px;
+  height: 340px;
+}
+
+/* has box shadow */
+.my-center {
+    margin: 0;
+    padding: 30px 70px 30px 70px;
+    position: absolute;
+    top: 45%;
+    left: 50%;
+    margin-right: -50%;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 4px 16px 8px rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+/* does not have box shadow */
+.my-center2 {
+    margin: 0;
+    padding: 50px;
+    position: absolute;
+    top: 45%;
+    left: 50%;
+    margin-right: -50%;
+    transform: translate(-50%, -50%);
+}
+
+/* center the outages detail page */
+.centering {
+    width: 800px;
+    margin: auto;
+}
+
+@media (min-width: 1400px){
+    .centering {
+        width: 900px;
+        margin: auto;
+    }
+}
+
+@media (min-width: 2000px){
+    .centering {
+        width: 1400px;
+        margin: auto;
+    }
+}
+/* -------end centering outage detials------ */
+
+.pagination > .active > a {
+    z-index: 0;
+}
+
+.btn {
+    margin-top: 20px;
+}
+
+ul
+{
+    list-style-type: none;
+    padding-left: 0px;
+}
+
+/********* datatables red and green background **********/
+ 
+.red {
+  background-color: rgba(255, 79, 79, 0.48) !important;
+}
+
+.green {
+    background-color: rgba(2, 144, 2, 0.44) !important; 
+}
+
+/* ---------- Form errors **************/
+
+/* red form errors */
+ul.errorlist > li{
+    color: red;
+}
+
+/* *********** fix table header misalignment ********/
+
+.table > thead > tr > th {
+    vertical-align: top;
+}
+
+.mywidth {
+    min-width: 150px;
+}
+
+table.dataTable thead th {
+    font-weight: 300;
+    font-family: 'Poppins';
+    font-size: 13px;
+}
+
+/* ********** Style form inputs *****************/
+
+input, textarea {
+    border: 1px solid rgba(204, 212, 222, 0.88);
+    border-radius: 3px;
+    box-shadow: 0 0 16px #c4cedb;
+    padding: 6px;
+}
+
+input[type="search"] {
+    border: 1px solid rgba(204, 212, 222, 0.88);
+    border-radius: 3px;
+    box-shadow: 0 0 16px #c4cedb;
+}
+
+label {
+    font-family: 'Poppins', sans-serif;
+    color: #3a4a5f;
+}
+
+select[id="id_location"], select[id="id_outage_owner"]{
+    width: 335px !important;
+    padding: 6px !important;
+    font-family: 'Poppins';
+    background-color: white;
+    border: 1px solid rgba(204, 212, 222, 0.88);
+    border-radius: 3px;
+    box-shadow: 0 0 16px #c4cedb;
+}
+
+select[id="id_month_filter"], select[id="id_year_filter"]{
+    width: 100px !important;
+    padding: 6px !important;
+    font-family: 'Poppins';
+    background-color: white;
+    border: 1px solid rgba(204, 212, 222, 0.88);
+    border-radius: 3px;
+    box-shadow: 0 0 16px #c4cedb;
+}
+
+
+
+
