@@ -69,10 +69,9 @@
 
         <!-- right side of nav bar -->
           <ul class="nav navbar-nav navbar-right">
-                <li><a style="color:black">Welcome, {{ user.get_short_name }}</a></li>
-                <li><a href="/outages/current"><span class="glyphicon glyphicon-home" aria-hiddne="true" style="right:5px; "></span>
+                <li><a style="color:black">Welcome, {{ user.get_username }}</a></li>
+                <li><a href="/infrastructureinventory"><span class="glyphicon glyphicon-home" aria-hiddne="true" style="right:5px; "></span>
                 Home <span class="sr-only">(current)</span></a></li>
-                <li><a href="/outages/metrics/"><span class="glyphicon glyphicon-signal" aria-hiddne="true" style="right:5px"></span>Metrics</a></li>
                 <li><a href="/infrastructureinventory/logout/"><span class="glyphicon glyphicon-user" aria-hiddne="true" style="right:5px"></span>Logout</a></li>
           </ul>
 
@@ -94,7 +93,6 @@
             </div>
             <div class="col-md-4"></div>
             <div class="col-md-2 text-right">
-               <!--<a href="/outages/change-password/">Reset Password</a>-->
             </div>
         </div>
     </footer>
