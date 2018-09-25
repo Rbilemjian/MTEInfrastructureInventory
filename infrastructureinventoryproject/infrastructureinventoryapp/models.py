@@ -46,30 +46,10 @@ NETWORKS = [
 ]
 
 
-class StorageInfo(models.Model):
-    cpu = models.IntegerField(null=True, blank=True)
-    ram = models.IntegerField(null=True, blank=True)
-    c_drive = models.IntegerField(null=True, blank=True)
-    d_drive = models.IntegerField(null=True, blank=True)
-    e_drive = models.IntegerField(null=True, blank=True)
-    storage_type = models.CharField(max_length=15, null=True, blank=True)
-
-class WarrantyInfo(models.Model):
-    purchase_order = models.CharField(max_length=20, null=True, blank=True)
-    start_date = models.DateField(null=True, blank=True)
-    next_hardware_support_date = models.DateField(null=True, blank=True)
-    base_warranty = models.DateField(null=True, blank=True)
-
-class NetworkInfo(models.Model):
-    network = models.CharField(max_length=4, choices=NETWORKS)
-    private_ip = models.GenericIPAddressField(null=True, blank=True)
-    dmz_public_ip = models.GenericIPAddressField(null=True, blank=True)
-    virtual_ip = models.GenericIPAddressField(null=True, blank=True)
-    nat_ip_or_ilo = models.GenericIPAddressField(null=True, blank=True)
-    nic_mac_address = models.CharField(max_length=23, null=True, blank=True)
-    switch_or_port = models.CharField(max_length=40, null=True, blank=True)
-
 class ApplicationServer(models.Model):
+
+    #General Information
+
     server_function = models.CharField(max_length=40)
     hostname = models.CharField(max_length=30)
     primary_application_function = models.CharField(max_length=40)
@@ -82,9 +62,32 @@ class ApplicationServer(models.Model):
     model = models.CharField(max_length=30, null=True, blank=True)
     serial_number = models.CharField(max_length=30, null=True, blank=True)
     notes = models.TextField(null=True, blank=True)
-    network_info = models.ForeignKey(NetworkInfo, on_delete=models.SET_NULL, null=True)
-    warranty_info = models.ForeignKey(WarrantyInfo, on_delete=models.SET_NULL, null=True)
-    storage_info = models.ForeignKey(StorageInfo, on_delete=models.SET_NULL, null=True)
+
+    #Network Information
+
+    network = models.CharField(max_length=4, choices=NETWORKS, default="Corp")
+    private_ip = models.GenericIPAddressField(null=True, blank=True)
+    dmz_public_ip = models.GenericIPAddressField(null=True, blank=True)
+    virtual_ip = models.GenericIPAddressField(null=True, blank=True)
+    nat_ip_or_ilo = models.GenericIPAddressField(null=True, blank=True)
+    nic_mac_address = models.CharField(max_length=23, null=True, blank=True)
+    switch_or_port = models.CharField(max_length=40, null=True, blank=True)
+
+    #Warranty Information
+
+    purchase_order = models.CharField(max_length=20, null=True, blank=True)
+    start_date = models.DateField(null=True, blank=True)
+    next_hardware_support_date = models.DateField(null=True, blank=True)
+    base_warranty = models.DateField(null=True, blank=True)
+
+    #Storage Information
+
+    cpu = models.IntegerField(null=True, blank=True)
+    ram = models.IntegerField(null=True, blank=True)
+    c_drive = models.IntegerField(null=True, blank=True)
+    d_drive = models.IntegerField(null=True, blank=True)
+    e_drive = models.IntegerField(null=True, blank=True)
+    storage_type = models.CharField(max_length=15, null=True, blank=True)
 
 
 
