@@ -82,9 +82,9 @@ class ApplicationServer(models.Model):
     model = models.CharField(max_length=30, null=True, blank=True)
     serial_number = models.CharField(max_length=30, null=True, blank=True)
     notes = models.TextField(null=True, blank=True)
-    network_info = models.ForeignKey(NetworkInfo, on_delete=models.CASCADE)
-    warranty_info = models.ForeignKey(WarrantyInfo, on_delete=models.CASCADE)
-    storage_info = models.ForeignKey(StorageInfo, on_delete=models.CASCADE)
+    network_info = models.ForeignKey(NetworkInfo, on_delete=models.SET_NULL, null=True)
+    warranty_info = models.ForeignKey(WarrantyInfo, on_delete=models.SET_NULL, null=True)
+    storage_info = models.ForeignKey(StorageInfo, on_delete=models.SET_NULL, null=True)
 
 
 
