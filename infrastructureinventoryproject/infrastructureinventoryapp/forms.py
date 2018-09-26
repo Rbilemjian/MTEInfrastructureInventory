@@ -9,9 +9,9 @@ class ServerForm(forms.ModelForm):
         widgets = {
             #General Info Form Widget
 
-            'service': forms.TextInput(attrs={'size': 45}),
+            'service': floppyforms.widgets.Input(datalist=models.SERVICES, attrs={'size': 45}),
             'hostname': forms.TextInput(attrs={'size': 45}),
-            'primary_application': forms.TextInput(attrs={'size': 45}),
+            'primary_application': floppyforms.widgets.Input(datalist=models.PRIMARY_APPLICATIONS, attrs={'size': 45}),
             'is_virtual_machine': forms.Select(choices=models.BOOL, attrs={'width': '335px'}),
             'location': floppyforms.widgets.Input(datalist=models.LOCATIONS, attrs={'size': 45}),
             'data_center': floppyforms.widgets.Input(datalist=models.DATA_CENTERS, attrs={'size': 45}),

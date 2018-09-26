@@ -277,14 +277,21 @@
 {% block scripts %}
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-
-    <!-- ask if min/max date feature is needed -->
     <script>
     $( function() {
-    $( "#id_date" ).datepicker();
+    $( "#id_start_date" ).datepicker();
     $( "#anim" ).on( "change", function() {
-      $( "#id_date" ).datepicker( "option", "showAnim", $( this ).val() );
+      $( "#id_start_date" ).datepicker( "option", "showAnim", $( this ).val() );
+    });
+    $( "#id_next_hardware_support_date" ).datepicker();
+    $( "#anim" ).on( "change", function() {
+      $( "#id_next_hardware_support_date" ).datepicker( "option", "showAnim", $( this ).val() );
+    });
+    $( "#id_base_warranty" ).datepicker();
+    $( "#anim" ).on( "change", function() {
+      $( "#id_base_warranty" ).datepicker( "option", "showAnim", $( this ).val() );
     });
   } );
         </script>
+
 {% endblock %}
