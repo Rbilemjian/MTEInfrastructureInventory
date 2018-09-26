@@ -27,38 +27,42 @@ DATA_CENTERS = [
     'Broadcast DMZ',
     'USH 1360',
     'WC DMZ - 1360',
-    'Ashburn'
+    'Ashburn',
 ]
 
 OPERATING_SYSTEMS = [
-    'Windows 2008 R2 Standard 64-Bit',
-    'Windows 2012 R2 Standard 64-Bit',
     'Oracle Linux - OEL 5.7 64-Bit',
     'Oracle Linux - OEL 6.5 64-Bit',
     'Redhat Linux - RHEL AS 3.0',
     'Redhat Linux - RHEL AS 4.0',
     'Ubuntu 14.04.2 LTS 64-Bit',
+    'Windows 2008 R2 Standard 64-Bit',
+    'Windows 2012 R2 Standard 64-Bit',
 ]
+
 
 NETWORKS = [
     ('Corp', 'Corp'),
     ('DMZ', 'DMZ'),
 ]
 
+BOOL = [
+    (0, 'No'),
+    (1, 'Yes'),
+]
+
 
 class ApplicationServer(models.Model):
 
-    #General Information
-
-    server_function = models.CharField(max_length=40)
+    service = models.CharField(max_length=40)
     hostname = models.CharField(max_length=30)
-    primary_application_function = models.CharField(max_length=40)
+    primary_application = models.CharField(max_length=40)
     is_virtual_machine = models.BooleanField(default=False)
-    environment = models.CharField(max_length=4, choices=ENVIRONMENTS)
+    environment = models.CharField(max_length=4, choices=ENVIRONMENTS, default="Prod")
     location = models.CharField(max_length=40)
     data_center = models.CharField(max_length=30)
+    operating_system = models.CharField(max_length=30)
     rack = models.CharField(max_length=20, null=True, blank=True)
-    operating_system = models.CharField(max_length=30, blank=True)
     model = models.CharField(max_length=30, null=True, blank=True)
     serial_number = models.CharField(max_length=30, null=True, blank=True)
     notes = models.TextField(null=True, blank=True)
@@ -69,9 +73,11 @@ class ApplicationServer(models.Model):
     private_ip = models.GenericIPAddressField(null=True, blank=True)
     dmz_public_ip = models.GenericIPAddressField(null=True, blank=True)
     virtual_ip = models.GenericIPAddressField(null=True, blank=True)
-    nat_ip_or_ilo = models.GenericIPAddressField(null=True, blank=True)
+    nat_ip = models.GenericIPAddressField(null=True, blank=True)
+    ilo_or_cimc = models.GenericIPAddressField(null=True, blank=True)
     nic_mac_address = models.CharField(max_length=23, null=True, blank=True)
-    switch_or_port = models.CharField(max_length=40, null=True, blank=True)
+    switch = models.CharField(max_length=40, null=True, blank=True)
+    port = models.CharField(max_length=40, null=True, blank=True)
 
     #Warranty Information
 
@@ -87,7 +93,6 @@ class ApplicationServer(models.Model):
     c_drive = models.IntegerField(null=True, blank=True)
     d_drive = models.IntegerField(null=True, blank=True)
     e_drive = models.IntegerField(null=True, blank=True)
-    storage_type = models.CharField(max_length=15, null=True, blank=True)
 
 
 

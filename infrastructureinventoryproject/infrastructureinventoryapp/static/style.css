@@ -221,25 +221,12 @@ label {
     color: #3a4a5f;
 }
 
-select[id="id_location"], select[id="id_outage_owner"]{
+select[id="id_network"], select[id="id_is_virtual_machine"], select[id="id_environment"]{
     width: 335px !important;
-    padding: 6px !important;
+    padding-top: 6px !important;
     font-family: 'Poppins';
-    background-color: white;
-    border: 1px solid rgba(204, 212, 222, 0.88);
-    border-radius: 3px;
-    box-shadow: 0 0 16px #c4cedb;
 }
 
-select[id="id_month_filter"], select[id="id_year_filter"]{
-    width: 100px !important;
-    padding: 6px !important;
-    font-family: 'Poppins';
-    background-color: white;
-    border: 1px solid rgba(204, 212, 222, 0.88);
-    border-radius: 3px;
-    box-shadow: 0 0 16px #c4cedb;
-}
 
 
 

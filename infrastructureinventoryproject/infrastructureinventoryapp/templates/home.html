@@ -30,7 +30,7 @@
 
 
             <div class="col-md-6 text-right" style="padding-right: 0px">
-                <a role="button" class="btn btn-md" href="">
+                <a role="button" class="btn btn-md" href="/infrastructureinventory/addserver/">
                 Add Application Server
                 <span class="glyphicon glyphicon-plus" aria-hiddne="true">
                 </span></a>
@@ -53,7 +53,7 @@
                     <tr>
                         <th class="select-filter">Server Function</th>
                         <th class="select-filter">Hostname</th>
-                        <th class="select-filter">Primary Application Function</th>
+                        <th class="select-filter">Primary Application</th>
                         <th class="select-filter">Serial Number</th>
                         <th class="select-filter">Private IP</th>
                         <th class="select-filter">Location</th>
@@ -64,9 +64,9 @@
 
                     {% for applicationServer in applicationServers %}
                         <tr>
-                            <td>{{applicationServer.server_function}}</td>
+                            <td>{{applicationServer.service}}</td>
                             <td>{{applicationServer.hostname}}</td>
-                            <td>{{applicationServer.primary_application_function}}</td>
+                            <td>{{applicationServer.primary_application}}</td>
                             <td>{{applicationServer.serial_number}}</td>
                             <td>{{applicationServer.private_ip}}</td>
                             <td>{{applicationServer.location}}</td>
@@ -78,7 +78,7 @@
                 </tbody>
                 <tfoot>
                     <tr>
-                        <th>Server Function</th>
+                        <th>Service</th>
                         <th>Hostname</th>
                         <th>Primary Application Function</th>
                         <th>Serial Number</th>

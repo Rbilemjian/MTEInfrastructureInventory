@@ -6,3 +6,5 @@ infrastructureinventoryproject/infrastructureinventoryapp/__pycache__/
 \.DS_Store
 
 *.pyc
+
+infrastructureinventoryproject/infrastructureinventoryapp/migrations/
