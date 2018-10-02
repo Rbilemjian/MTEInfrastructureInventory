@@ -35,9 +35,9 @@ class ServerForm(forms.ModelForm):
             #Warranty Info Form Widgets
 
             'purchase_order': forms.TextInput(attrs={'size': 31}),
-            'start_date': forms.DateInput(attrs={'class': 'datepicker', 'size': 31}),
-            'next_hardware_support_date': forms.DateInput(attrs={'class': 'datepicker', 'size': 31}),
-            'base_warranty': forms.DateInput(attrs={'class': 'datepicker', 'size': 31}),
+            'start_date': forms.DateInput(attrs={'class': 'datepicker', 'size': 31, 'autocomplete': 'off'}),
+            'next_hardware_support_date': forms.DateInput(attrs={'class': 'datepicker', 'size': 31, 'autocomplete': 'off'}),
+            'base_warranty': forms.DateInput(attrs={'class': 'datepicker', 'size': 31, 'autocomplete': 'off'}),
 
             #Storage Info Form Widgets
 
