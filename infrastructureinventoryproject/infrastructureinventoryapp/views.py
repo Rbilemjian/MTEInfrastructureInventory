@@ -5,14 +5,18 @@ from .forms import ServerForm, ServerImportForm
 import xlrd
 
 
+#helper functions
 def get_str_date(row, column, worksheet, book):
     tuple = xlrd.xldate.xldate_as_tuple(worksheet.cell_value(row, column), book.datemode)
     return str(tuple[0]) + "-" + str(tuple[1]) + "-" + str(tuple[2])
 
+
+#view functions
 @login_required
 def view_application_servers(request):
     application_servers = ApplicationServer.objects.all()
     return render(request, 'application_server_list.html', {'applicationServers': application_servers})
+
 
 @login_required
 def create_application_server_form(request):
@@ -26,6 +30,7 @@ def create_application_server_form(request):
         form = ServerForm()
     # if form invalid or GET request
     return render(request, 'application_server_form.html', {"form": form})
+
 
 @login_required
 def import_application_server(request):
