@@ -242,17 +242,17 @@ BOOL = [
 
 class ApplicationServer(models.Model):
 
-    service = models.CharField(max_length=40)
-    hostname = models.CharField(max_length=30)
-    primary_application = models.CharField(max_length=40)
+    service = models.CharField(max_length=100)
+    hostname = models.CharField(max_length=100)
+    primary_application = models.CharField(max_length=100)
     is_virtual_machine = models.BooleanField(default=False)
     environment = models.CharField(max_length=4, choices=ENVIRONMENTS, default="Prod")
     location = models.CharField(max_length=40)
     data_center = models.CharField(max_length=30)
-    operating_system = models.CharField(max_length=30)
+    operating_system = models.CharField(max_length=100)
     rack = models.CharField(max_length=20, null=True, blank=True)
-    model = models.CharField(max_length=30, null=True, blank=True)
-    serial_number = models.CharField(max_length=30, null=True, blank=True)
+    model = models.CharField(max_length=100, null=True, blank=True)
+    serial_number = models.CharField(max_length=100, null=True, blank=True)
     notes = models.TextField(null=True, blank=True)
 
     #Network Information

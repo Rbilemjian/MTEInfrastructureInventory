@@ -51,7 +51,7 @@
     {% block nav %}
 
     <nav class="navbar fixed-top">
-      <div class="container">
+      <div class = "container">
         <!-- Brand and toggle get grouped for better mobile display -->
         <div class="navbar-header">
           <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
@@ -70,7 +70,7 @@
         <!-- right side of nav bar -->
           <ul class="nav navbar-nav navbar-right">
                 <li><a style="color:black">Welcome, {{ user.get_username }}</a></li>
-                <li><a href="/infrastructureinventory"><span class="glyphicon glyphicon-home" aria-hiddne="true" style="right:5px; "></span>
+                <li><a href="/infrastructureinventory/applicationserver"><span class="glyphicon glyphicon-home" aria-hiddne="true" style="right:5px; "></span>
                 Home <span class="sr-only">(current)</span></a></li>
                 <li><a href="/infrastructureinventory/logout/"><span class="glyphicon glyphicon-user" aria-hiddne="true" style="right:5px"></span>Logout</a></li>
           </ul>
@@ -81,9 +81,11 @@
 
     {% endblock %}
 
-    <div class="container">
-        {% block body %}
-        {% endblock %}
+    <div>
+        <div style="padding-left:10%; padding-right: 10%">
+            {% block body %}
+            {% endblock %}
+        </div>
     </div>
 
     <!-- Footer -->

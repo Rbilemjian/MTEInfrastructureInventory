@@ -12,7 +12,7 @@
 {% endblock %}
 
 {% block body %}
-
+<div class="container">
     <div class="row" style="padding-bottom: 30px; padding-top: 20px">
 
 
@@ -225,17 +225,17 @@
                 </div>
                 <div class="col-md-2">
                     {{ form.c_drive.errors }}
-                    <label for="{{ form.c_drive.id_for_label }}">C</label><br>
+                    <label for="{{ form.c_drive.id_for_label }}">C Drive</label><br>
                     {{ form.c_drive }}
                 </div>
                 <div class="col-md-2">
                     {{ form.d_drive.errors }}
-                    <label for="{{ form.d_drive.id_for_label }}">D</label><br>
+                    <label for="{{ form.d_drive.id_for_label }}">D Drive</label><br>
                     {{ form.d_drive }}
                 </div>
                 <div class="col-md-2">
                     {{ form.e_drive.errors }}
-                    <label for="{{ form.e_drive.id_for_label }}">E</label><br>
+                    <label for="{{ form.e_drive.id_for_label }}">E Drive</label><br>
                     {{ form.e_drive }}
                 </div>
             </div>
@@ -268,7 +268,7 @@
     </div>
 
     <div class="col-md-2"></div>
-</div>
+    </div></div>
 
 
 {% endblock %}

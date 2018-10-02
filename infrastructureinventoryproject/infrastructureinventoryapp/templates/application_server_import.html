@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block head %}
+    <title>Import Application Server</title>
+{% endblock %}
+
+
+{% block body %}
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="my-center2">
+        {{form.as_p}}
+        <button type="submit" class="btn btn-success btn-md" style="margin-left:35%">Submit<span style="padding-left: 7px" class="glyphicon glyphicon-share-alt" aria-hidden="true">
+        </span></button>
+    </div>
+</form>
+
+{% endblock %}
+

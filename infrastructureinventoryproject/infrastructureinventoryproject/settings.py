@@ -109,6 +109,9 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+FILE_UPLOAD_HANDLERS = ("django_excel.ExcelMemoryFileUploadHandler",
+                        "django_excel.TemporaryExcelFileUploadHandler")
+
 
 # Internationalization
 # https://docs.djangoproject.com/en/2.1/topics/i18n/
@@ -123,12 +126,8 @@ USE_L10N = True
 
 USE_TZ = True
 
-
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/2.1/howto/static-files/
-
 STATIC_URL = '/static/'
 
-LOGIN_REDIRECT_URL = '/infrastructureinventory/'
+LOGIN_REDIRECT_URL = '/infrastructureinventory/applicationserver'
 
 LOGIN_URL = '/infrastructureinventory/login'

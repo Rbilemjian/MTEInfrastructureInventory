@@ -4,12 +4,13 @@ from django.contrib.auth.views import login, logout
 import floppyforms
 
 urlpatterns = [
-    url(r'^$', views.home),
 
     # user registration urls
     url(r'^login/$', login, {'template_name': 'login.html'}),
     url(r'^logout/$', logout, {'template_name': 'logout.html'}),
 
-    #create, update, details, and delete urls
-    url(r'^addserver/$', views.create_serverForm)
+    #application server urls
+    url(r'^applicationserver/$', views.view_application_servers),
+    url(r'^applicationserver/add/$', views.create_application_server_form),
+    url(r'^applicationserver/import/$', views.import_application_server),
 ]
