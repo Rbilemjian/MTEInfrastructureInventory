@@ -278,9 +278,9 @@ class ApplicationServer(models.Model):
 
     cpu = models.IntegerField(null=True, blank=True)
     ram = models.IntegerField(null=True, blank=True)
-    c_drive = models.IntegerField(null=True, blank=True)
-    d_drive = models.IntegerField(null=True, blank=True)
-    e_drive = models.IntegerField(null=True, blank=True)
+    c_drive = models.DecimalField(null=True, blank=True, decimal_places=2, max_digits=10)
+    d_drive = models.DecimalField(null=True, blank=True, decimal_places=2, max_digits=10)
+    e_drive = models.DecimalField(null=True, blank=True, decimal_places=2, max_digits=10)
 
 
 
