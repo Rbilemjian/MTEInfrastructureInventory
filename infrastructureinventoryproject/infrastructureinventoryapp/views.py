@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from .models import ApplicationServer
 from .forms import ServerForm, ServerImportForm
@@ -157,3 +157,23 @@ def import_application_server(request):
         form = ServerImportForm()
     # if form invalid or GET request
     return render(request, 'application_server_import.html', {"form": form})
+
+
+def edit_application_server(request, pk):
+    applicationServer = get_object_or_404(ApplicationServer, pk=pk)
+    if request.method == "POST":
+        form = ServerForm(request.POST, instance=applicationServer)
+        if form.is_valid():
+            form.save()
+            return redirect('details-view', pk=applicationServer.pk)
+    else:
+        form = ServerForm(instance=applicationServer)
+
+    #if form is invalid or GET request
+    args = {'form': form}
+    return render(request, 'application_server_edit.html', args)
+
+
+def details_application_server(request, pk):
+    applicationServer = get_object_or_404(ApplicationServer, pk=pk)
+    return render(request, 'application_server_details.html', {'applicationServer': applicationServer})
