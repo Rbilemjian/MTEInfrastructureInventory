@@ -3,15 +3,16 @@ from django.contrib.auth.decorators import login_required
 from .models import ApplicationServer
 from .forms import ServerForm, ServerImportForm
 import xlrd
+import decimal
 
 
 #helper functions
 def get_str_date(row, column, worksheet, book):
-    tuple = xlrd.xldate.xldate_as_tuple(worksheet.cell_value(row, column), book.datemode)
-    return str(tuple[0]) + "-" + str(tuple[1]) + "-" + str(tuple[2])
+    date_tuple = xlrd.xldate.xldate_as_tuple(worksheet.cell_value(row, column), book.datemode)
+    return str(date_tuple[0]) + "-" + str(date_tuple[1]) + "-" + str(date_tuple[2])
+
 
 def save_server(server):
-    print(server.private_ip)
     fields = ApplicationServer._meta.get_all_field_names()
     for field in fields:
         if getattr(server, field) == "":
@@ -23,9 +24,33 @@ def save_server(server):
         server.is_virtual_machine = 0
     if server.environment == "TBD":
         server.environment = "Prod"
-    server.save()
-    return server
-
+    saved_server, created = ApplicationServer.objects.get_or_create(
+        service=server.service,
+        hostname=server.hostname,
+        primary_application=server.primary_application,
+        is_virtual_machine=server.is_virtual_machine,
+        environment=server.environment,
+        location=server.location,
+        data_center=server.data_center,
+        operating_system=server.operating_system,
+        rack=server.rack,
+        model=server.model,
+        serial_number=server.serial_number,
+        notes=server.notes,
+        network=server.network,
+        private_ip=server.private_ip,
+        dmz_public_ip=server.dmz_public_ip,
+        virtual_ip=server.virtual_ip,
+        nat_ip=server.nat_ip,
+        ilo_or_cimc=server.ilo_or_cimc,
+        nic_mac_address=server.nic_mac_address,
+        switch=server.switch,
+        port=server.port,
+        base_warranty=server.base_warranty,
+    )
+    if created:
+        return saved_server
+    return None
 
 
 #view functions
@@ -41,8 +66,8 @@ def create_application_server_form(request):
         form = ServerForm(request.POST)
         if form.is_valid():
             server = form.save(commit=False)
-            save_server(server)
-            return redirect('details-view', pk=server.pk)
+            applicationServer = save_server(server)
+            return render(request, 'application_server_details.html', {'applicationServer': applicationServer})
     else:
         form = ServerForm()
     # if form invalid or GET request
@@ -114,6 +139,7 @@ def import_application_server(request):
                 app_server.c_drive = worksheet.cell_value(i, 26)
                 app_server.d_drive = worksheet.cell_value(i, 27)
                 app_server.e_drive = worksheet.cell_value(i, 28)
+
                 save_server(app_server)
             return redirect('/infrastructureinventory/applicationserver')
     else:
