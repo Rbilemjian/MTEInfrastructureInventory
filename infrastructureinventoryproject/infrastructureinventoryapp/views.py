@@ -12,7 +12,7 @@ def get_str_date(row, column, worksheet, book):
     return str(date_tuple[0]) + "-" + str(date_tuple[1]) + "-" + str(date_tuple[2])
 
 
-def save_server(server):
+def add_server(server):
     fields = ApplicationServer._meta.get_all_field_names()
     for field in fields:
         if getattr(server, field) == "":
@@ -53,6 +53,22 @@ def save_server(server):
     return None
 
 
+def update_server(server):
+    fields = ApplicationServer._meta.get_all_field_names()
+    for field in fields:
+        if getattr(server, field) == "":
+            if ApplicationServer._meta.get_field(field).null:
+                setattr(server, field, None)
+            else:
+                setattr(server, field, "TBD")
+    if server.is_virtual_machine == "TBD":
+        server.is_virtual_machine = 0
+    if server.environment == "TBD":
+        server.environment = "Prod"
+    server.save()
+    return server
+
+
 #view functions
 @login_required
 def view_application_servers(request):
@@ -66,7 +82,7 @@ def create_application_server_form(request):
         form = ServerForm(request.POST)
         if form.is_valid():
             server = form.save(commit=False)
-            applicationServer = save_server(server)
+            applicationServer = add_server(server)
             return render(request, 'application_server_details.html', {'applicationServer': applicationServer})
     else:
         form = ServerForm()
@@ -140,7 +156,7 @@ def import_application_server(request):
                 app_server.d_drive = worksheet.cell_value(i, 27)
                 app_server.e_drive = worksheet.cell_value(i, 28)
 
-                save_server(app_server)
+                add_server(app_server)
             return redirect('/infrastructureinventory/applicationserver')
     else:
         form = ServerImportForm()
@@ -154,8 +170,8 @@ def edit_application_server(request, pk):
         form = ServerForm(request.POST, instance=applicationServer)
         if form.is_valid():
             server = form.save(commit=False)
-            save_server(server)
-            return redirect('details-view', pk=applicationServer.pk)
+            update_server(server)
+            return redirect('details-view', pk=server.pk)
     else:
         form = ServerForm(instance=applicationServer)
 
