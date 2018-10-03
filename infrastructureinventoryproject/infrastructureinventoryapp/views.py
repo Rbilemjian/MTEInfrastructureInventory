@@ -10,6 +10,16 @@ def get_str_date(row, column, worksheet, book):
     tuple = xlrd.xldate.xldate_as_tuple(worksheet.cell_value(row, column), book.datemode)
     return str(tuple[0]) + "-" + str(tuple[1]) + "-" + str(tuple[2])
 
+def save_form(form):
+    server = form.save(commit=False)
+    fields = ApplicationServer._meta.get_all_field_names()
+    for field in fields:
+        if ApplicationServer._meta.get_field(field).null and getattr(server, field) == "":\
+            setattr(server, field, None)
+    server.save()
+    return server
+
+
 
 #view functions
 @login_required
@@ -23,9 +33,8 @@ def create_application_server_form(request):
     if request.method == 'POST':
         form = ServerForm(request.POST)
         if form.is_valid():
-            server = form.save(commit=False)
-            server.save()
-            return redirect('/infrastructureinventory/applicationserver/')
+            server = save_form(form)
+            return redirect('details-view', pk=server.pk)
     else:
         form = ServerForm()
     # if form invalid or GET request
@@ -150,7 +159,7 @@ def import_application_server(request):
                     app_server.e_drive = None
                 else:
                     app_server.e_drive = worksheet.cell_value(i, 28)
-
+                
                 app_server.save()
             return redirect('/infrastructureinventory/applicationserver')
     else:
@@ -164,7 +173,7 @@ def edit_application_server(request, pk):
     if request.method == "POST":
         form = ServerForm(request.POST, instance=applicationServer)
         if form.is_valid():
-            form.save()
+            save_form(form)
             return redirect('details-view', pk=applicationServer.pk)
     else:
         form = ServerForm(instance=applicationServer)
