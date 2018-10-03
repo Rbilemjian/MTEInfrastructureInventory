@@ -22,7 +22,7 @@
             <span class="glyphicon glyphicon-pencil" aria-hiddne="true">
             </span></a>
             {% if user.is_staff %}
-                <a role="button" class="btn btn-danger btn-md" href="">
+                <a role="button" class="btn btn-danger btn-md" href="{% url 'delete-view' pk=applicationServer.pk %}">
                 Delete Application Server
                 <span class="glyphicon glyphicon-trash" aria-hiddne="true">
                 </span></a>

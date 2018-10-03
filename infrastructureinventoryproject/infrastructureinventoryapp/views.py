@@ -183,3 +183,8 @@ def edit_application_server(request, pk):
 def details_application_server(request, pk):
     applicationServer = get_object_or_404(ApplicationServer, pk=pk)
     return render(request, 'application_server_details.html', {'applicationServer': applicationServer})
+
+
+def delete_application_server(request, pk):
+    get_object_or_404(ApplicationServer, pk=pk).delete()
+    return redirect('/infrastructureinventory/applicationserver/')

@@ -14,4 +14,5 @@ urlpatterns = [
     url(r'^applicationserver/import/$', views.import_application_server),
     url(r'^applicationserver/edit/(?P<pk>\d+)/$', views.edit_application_server, name="edit-view"),
     url(r'^applicationserver/details/(?P<pk>\d+)/$', views.details_application_server, name="details-view"),
+    url(r'^applicationserver/delete/(?P<pk>\d+)/$', views.delete_application_server, name="delete-view"),
 ]
