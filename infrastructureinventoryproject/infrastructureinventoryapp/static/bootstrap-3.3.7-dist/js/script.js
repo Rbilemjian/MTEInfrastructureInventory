@@ -16,25 +16,25 @@ $(document).ready(function() {
             {
                 extend: 'copy',
                 exportOptions: {
-                    columns: [0, 1, 2, 3, 4, 5]
+                    columns: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]
                 }
             },
             {
                 extend: 'csv',
                 exportOptions: {
-                    columns: [0, 1, 2, 3, 4, 5]
+                    columns: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]
                 }
             },
             {
                 extend: 'excel',
                 exportOptions: {
-                    columns: [0, 1, 2, 3, 4, 5]
+                    columns: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]
                 }
             },
             {
                 extend: 'pdf',
                 exportOptions: {
-                    columns: [0, 1, 2, 3, 4, 5]
+                    columns: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]
                 }
             }
     ], 
@@ -67,6 +67,7 @@ $(document).ready(function() {
         
     });
 });
+
 
 
 
