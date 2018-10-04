@@ -227,7 +227,8 @@ select[id="id_network"], select[id="id_is_virtual_machine"], select[id="id_envir
     font-family: 'Poppins';
 }
 
-
-
+td, tr {
+    white-space: nowrap;
+}
 
 

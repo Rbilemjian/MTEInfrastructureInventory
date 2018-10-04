@@ -1,35 +1,14 @@
-$.fn.dataTable.ext.type.order['month-grade-pre'] = function ( d ) {
-    switch ( d ) {
-            case 'January':    return 1;
-            case 'February': return 2;
-            case 'March':   return 3;
-            case 'April':   return 4;
-            case 'May':   return 5;
-            case 'June':   return 6;
-            case 'July':   return 7;
-            case 'August':   return 8;
-            case 'September':   return 9;
-            case 'October':   return 10;
-            case 'November':   return 11;
-            case 'December':   return 12;
-    }
-    return 0;
-};
+
 
 
 $(document).ready(function() {
     $('#example').DataTable( {
-        
+
+        "scrollX": true,
+
         select: true,
-        
-        "autoWidth": true,
-        
-        "columnDefs": [
-                { 
-                "type": "month-grade", 
-                "targets": 2 
-                }
-            ],
+
+
         
         //export datatable columns not including the "edit" column
         dom: 'Bfrtip',
