@@ -100,7 +100,7 @@ def import_application_server(request):
             book = xlrd.open_workbook(file_contents=file.read())
             worksheet = book.sheet_by_name('Sheet1')
             num_rows = worksheet.nrows - 1
-            for i in range(1, num_rows):
+            for i in range(1, num_rows + 1):
 
                 app_server = ApplicationServer()
 
@@ -155,7 +155,6 @@ def import_application_server(request):
                 app_server.c_drive = worksheet.cell_value(i, 26)
                 app_server.d_drive = worksheet.cell_value(i, 27)
                 app_server.e_drive = worksheet.cell_value(i, 28)
-
                 add_server(app_server)
             return redirect('/infrastructureinventory/applicationserver')
     else:

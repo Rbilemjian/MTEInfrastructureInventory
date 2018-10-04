@@ -19,29 +19,24 @@
 
 {% block body %}
 
-    <div class="container" style="padding-left: 15px; padding-right: 15px">
-        <div class="row" style="border-bottom: 3px inset #c4cedb; border-bottom-left-radius: 5px; border-bottom-right-radius: 5px; border-top-left-radius: 5px; border-top-right-radius: 5px">
-            <div class="col-md-6" style="padding-left: 0px">
-                <h2>Application Servers
-                <span style="color: black; font-size: 22px">
-                </span>
-                </h2>
-            </div>
+    <div class="container-fluid" style="background-color: white; padding-left: 15px; padding-right: 15px; padding-bottom: 10px;">
+            <h2 style="text-align: center">Application Servers
+            <span style="color: black; font-size: 22px">
+            </span>
+            </h2>
 
 
-            <div class="col-md-6 text-right" style="padding-right: 0px">
+            <div style="style: inline-block; float:none; text-align: center">
+
                 <a role="button" class="btn btn-success" href="/infrastructureinventory/applicationserver/import/">
-                Import Application Servers From Excel
-                <span class="glyphicon glyphicon-plus" aria-hiddne="true">
-                </span></a>
-                <div class="col-md-1"></div>
-                <a role="button" class="btn btn-primary" href="/infrastructureinventory/applicationserver/add/">
-                Add Application Server
-                <span class="glyphicon glyphicon-plus" aria-hiddne="true">
-                </span></a>
-            </div>
+                    Import Application Servers From Excel
+                <span style="padding-left: 7px" class="glyphicon glyphicon-plus" aria-hiddne="true"></span></a>
 
-        </div>
+                <a role="button" class="btn btn-primary" href="/infrastructureinventory/applicationserver/add/">
+                    Add Application Server
+                <span style="padding-left: 7px" class="glyphicon glyphicon-plus" aria-hiddne="true"></span></a>
+
+            </div>
     </div>
 
 <br>
@@ -53,7 +48,7 @@
 
         <div class="row">
             <div class="col-xs-12">
-            <table id="example" class="table table-bordered" data-count-fixed-columns="2" style="width: 100%">
+            <table id="example" class="table table-bordered" style="width: 100%">
                 <thead style="background-color: #580084; color: white">
                     <tr>
 

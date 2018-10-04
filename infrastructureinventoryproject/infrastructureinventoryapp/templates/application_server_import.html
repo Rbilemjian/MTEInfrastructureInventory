@@ -6,16 +6,37 @@
     <title>Import Application Server</title>
 {% endblock %}
 
-
 {% block body %}
+
+<div class="container-fluid" style="background-color: white; padding-left: 15px; padding-right: 15px; padding-bottom: 10px;">
+    <div style="style: inline-block; float:none; text-align: center">
+        <h2>Import Servers from Excel
+            <span style="color: black; font-size: 22px"></span>
+            </h2>
+            <p>
+                Select the excel file with the server information you would like to import into the site.<br>
+                Excel sheet must follow the exact format of the example available for download below.
+            </p>
+
+            <a role="button" id = "download-btn" class="btn btn-primary" href="{% static "FormatSample.xlsx" %}">
+            Download Sample Sheet
+                <span style="padding-left: 7px" class="glyphicon glyphicon-save" aria-hiddne="true"></span></a>
+    </div>
+</div>
+
 <form method="post" enctype="multipart/form-data">
-    {% csrf_token %}
     <div class="my-center2">
+        {% csrf_token %}
         {{form.as_p}}
         <button type="submit" class="btn btn-success btn-md" style="margin-left:35%">Submit<span style="padding-left: 7px" class="glyphicon glyphicon-share-alt" aria-hidden="true">
         </span></button>
     </div>
 </form>
 
+
+
 {% endblock %}
+
+
+
 
