@@ -61,12 +61,17 @@ $(document).ready(function() {
                 } );
             } );
         },
-        
-
-
-        
     });
 });
+
+
+//table click redirect to details page
+$('#example').on( 'click', 'tbody tr', function () {
+  window.location.href = $(this).data('href');
+});
+
+
+
 
 
 

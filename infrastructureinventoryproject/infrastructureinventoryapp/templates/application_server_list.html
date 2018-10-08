@@ -25,6 +25,9 @@
             </span>
             </h2>
 
+            <p style="text-align: center">
+                To see an application server's details, click on its entry in the table.
+            </p>
 
             <div style="style: inline-block; float:none; text-align: center">
 
@@ -50,9 +53,8 @@
             <div class="col-xs-12">
             <table id="example" class="table table-bordered" style="width: 100%">
                 <thead style="background-color: #580084; color: white">
+                <a href="/infrastructureinventory/applicationserver/">
                     <tr>
-
-                        <th style="width: 20px">Details</th>
                         <th class="select-filter">Server Function</th>
                         <th class="select-filter">Hostname</th>
                         <th class="select-filter">Primary Application</th>
@@ -74,13 +76,12 @@
                         <th class="select-filter">Switch</th>
                         <th class="select-filter">Port</th>
                     </tr>
+                    </a>
                 </thead>
                 <tbody>
 
                     {% for applicationServer in applicationServers %}
-                        <tr>
-                            <td align="center"><a href="{%url 'details-view' pk=applicationServer.pk%}">
-                            <span class="glyphicon glyphicon-book" aria-hidden="true"></span></a></td>
+                        <tr data-href="{%url 'details-view' pk=applicationServer.pk%}" class="my-hover">
                             <td>{{applicationServer.service}}</td>
                             <td>{{applicationServer.hostname}}</td>
                             <td>{{applicationServer.primary_application}}</td>
