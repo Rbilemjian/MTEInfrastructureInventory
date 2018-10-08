@@ -1,6 +1,5 @@
 body {
     background-color: #e8edf3;
-    margin-bottom: 50px;
 }
 
 .footer {
@@ -173,6 +172,12 @@ ul
 
 /** Datatable styling **/
 
+td, tr {
+    white-space: nowrap;
+    border-collapse: separate;
+}
+
+
 /* red and green background */
  
 .red {
@@ -205,6 +210,7 @@ table.dataTable thead th {
     background-color: whitesmoke;
     cursor: pointer;
 }
+
 
 /* ---------- Form errors -----------*/
 
@@ -240,8 +246,6 @@ select[id="id_network"], select[id="id_is_virtual_machine"], select[id="id_envir
     font-family: 'Poppins';
 }
 
-td, tr {
-    white-space: nowrap;
-}
+
 
 

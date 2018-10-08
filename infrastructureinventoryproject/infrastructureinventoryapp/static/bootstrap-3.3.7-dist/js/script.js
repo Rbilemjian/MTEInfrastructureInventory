@@ -3,11 +3,9 @@
 
 $(document).ready(function() {
     $('#example').DataTable( {
-
         "scrollX": true,
-
         select: true,
-
+        "paging": false,
 
         //export datatable columns
         dom: 'Bfrtip',
