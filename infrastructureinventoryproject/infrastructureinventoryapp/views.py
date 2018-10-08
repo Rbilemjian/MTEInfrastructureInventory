@@ -105,8 +105,8 @@ def import_application_server(request):
                 app_server = ApplicationServer()
 
                 app_server.service = worksheet.cell_value(i, 0).strip()
-                app_server.hostname = worksheet.cell_value(i, 1).strip()
-                app_server.primary_application = worksheet.cell_value(i, 2).strip()
+                app_server.primary_application = worksheet.cell_value(i, 1).strip()
+                app_server.hostname = worksheet.cell_value(i, 2).strip()
                 app_server.is_virtual_machine = worksheet.cell_value(i, 3)
                 app_server.environment = worksheet.cell_value(i, 4).strip()
                 app_server.location = worksheet.cell_value(i, 5).strip()
