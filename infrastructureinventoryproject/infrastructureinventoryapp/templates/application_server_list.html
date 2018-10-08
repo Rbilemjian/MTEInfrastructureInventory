@@ -57,8 +57,8 @@
                 <a href="/infrastructureinventory/applicationserver/">
                     <tr>
                         <th class="select-filter">Server Function</th>
-                        <th class="select-filter">Hostname</th>
                         <th class="select-filter">Primary Application</th>
+                        <th class="select-filter">Hostname</th>
                         <th class="select-filter">Serial Number</th>
                         <th class="select-filter">Private IP</th>
                         <th class="select-filter">Location</th>
@@ -84,8 +84,8 @@
                     {% for applicationServer in applicationServers %}
                         <tr data-href="{%url 'details-view' pk=applicationServer.pk%}" class="my-hover">
                             <td>{{applicationServer.service}}</td>
-                            <td>{{applicationServer.hostname}}</td>
                             <td>{{applicationServer.primary_application}}</td>
+                            <td>{{applicationServer.hostname}}</td>
                             <td>{{applicationServer.serial_number}}</td>
                             <td>{{applicationServer.private_ip}}</td>
                             <td>{{applicationServer.location}}</td>
