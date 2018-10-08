@@ -74,11 +74,9 @@ body {
 .navbar .navbar-nav > li > a:hover {
     /*color: #e8edf3;*/
     background-color: #c4cedb;
+    color: #000099
 }
 
-.navbar .navbar-nav li:hover {
-    border-bottom: 2px solid #609;
-}
 
 /*
 .navbar .navbar-nav li.active {
@@ -88,6 +86,11 @@ body {
 
 .navbar-toggle .icon-bar {
     background-color: #609;
+}
+
+.welcome {
+    padding-top:15px;
+    padding-right: 10px;
 }
 
 
