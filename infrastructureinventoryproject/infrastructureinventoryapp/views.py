@@ -1,9 +1,9 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
+from django.core import serializers
 from .models import ApplicationServer
 from .forms import ServerForm, ServerImportForm
 import xlrd
-import decimal
 
 
 #helper functions
@@ -12,7 +12,8 @@ def get_str_date(row, column, worksheet, book):
     return str(date_tuple[0]) + "-" + str(date_tuple[1]) + "-" + str(date_tuple[2])
 
 
-def add_server(server):
+def sanitize_server(server):
+    #correcting fields
     fields = ApplicationServer._meta.get_all_field_names()
     for field in fields:
         if getattr(server, field) == "":
@@ -24,7 +25,9 @@ def add_server(server):
         server.is_virtual_machine = 0
     if server.environment == "TBD":
         server.environment = "Prod"
-    saved_server, created = ApplicationServer.objects.get_or_create(
+
+    #checking if exists already in database
+    if ApplicationServer.objects.filter(
         service=server.service,
         hostname=server.hostname,
         primary_application=server.primary_application,
@@ -47,10 +50,9 @@ def add_server(server):
         switch=server.switch,
         port=server.port,
         base_warranty=server.base_warranty,
-    )
-    if created:
-        return saved_server
-    return None
+    ).exists():
+        return {'exists_in_database': True, 'server': server}
+    return {'exists_in_database': False, 'server': server}
 
 
 def update_server(server):
@@ -72,7 +74,7 @@ def update_server(server):
 #view functions
 @login_required
 def view_application_servers(request):
-    application_servers = ApplicationServer.objects.all()
+    application_servers = ApplicationServer.objects.filter(visible=True)
     return render(request, 'application_server_list.html', {'applicationServers': application_servers})
 
 
@@ -82,8 +84,11 @@ def create_application_server_form(request):
         form = ServerForm(request.POST)
         if form.is_valid():
             server = form.save(commit=False)
-            applicationServer = add_server(server)
-            return render(request, 'application_server_details.html', {'applicationServer': applicationServer})
+            sanitization_result = sanitize_server(server)
+            server = sanitization_result['server']
+            if sanitization_result['exists_in_database'] is False:
+                server.save()
+            return render(request, 'application_server_details.html', {'applicationServer': server})
     else:
         form = ServerForm()
     # if form invalid or GET request
@@ -94,8 +99,8 @@ def create_application_server_form(request):
 def import_application_server(request):
     if request.method == 'POST':
         form = ServerImportForm(request.POST, request.FILES)
-
         if form.is_valid():
+            ApplicationServer.objects.filter(visible=False).delete()
             file = request.FILES['file']
             book = xlrd.open_workbook(file_contents=file.read())
             worksheet = book.sheet_by_name('Sheet1')
@@ -155,14 +160,35 @@ def import_application_server(request):
                 app_server.c_drive = worksheet.cell_value(i, 26)
                 app_server.d_drive = worksheet.cell_value(i, 27)
                 app_server.e_drive = worksheet.cell_value(i, 28)
-                add_server(app_server)
-            return redirect('/infrastructureinventory/applicationserver')
+
+                sanitization_result = sanitize_server(app_server)
+                if sanitization_result['exists_in_database'] is False:
+                    app_server.visible = False
+                    app_server.save()
+
+            return redirect('/infrastructureinventory/applicationserver/import/confirm')
+
+            #return redirect('/infrastructureinventory/applicationserver')
     else:
         form = ServerImportForm()
     # if form invalid or GET request
     return render(request, 'application_server_import.html', {"form": form})
 
 
+@login_required()
+def confirm_import_application_server(request):
+    parsed_servers = ApplicationServer.objects.filter(visible=False)
+    if request.method == "POST":
+        for ps in parsed_servers:
+            ps.visible=True
+            ps.save()
+        return redirect('/infrastructureinventory/applicationserver')
+    else:
+        return render(request, 'application_server_import_confirm.html', {"applicationServers": parsed_servers})
+
+
+
+@login_required()
 def edit_application_server(request, pk):
     applicationServer = get_object_or_404(ApplicationServer, pk=pk)
     if request.method == "POST":
@@ -179,11 +205,13 @@ def edit_application_server(request, pk):
     return render(request, 'application_server_edit.html', args)
 
 
+@login_required()
 def details_application_server(request, pk):
     applicationServer = get_object_or_404(ApplicationServer, pk=pk)
     return render(request, 'application_server_details.html', {'applicationServer': applicationServer})
 
 
+@login_required()
 def delete_application_server(request, pk):
     get_object_or_404(ApplicationServer, pk=pk).delete()
     return redirect('/infrastructureinventory/applicationserver/')

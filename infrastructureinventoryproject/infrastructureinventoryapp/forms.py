@@ -48,6 +48,7 @@ class ServerForm(forms.ModelForm):
             'e_drive': forms.NumberInput(attrs={'min_value': 0,'size': 45}),
             'storage_type': forms.NumberInput(attrs={'min_value': 0}),
         }
+        exclude = ['visible']
 
 
 class ServerImportForm(forms.Form):

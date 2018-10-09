@@ -282,9 +282,5 @@ class ApplicationServer(models.Model):
     d_drive = models.DecimalField(null=True, blank=True, decimal_places=2, max_digits=10)
     e_drive = models.DecimalField(null=True, blank=True, decimal_places=2, max_digits=10)
 
-
-
-
-
-
-
+    #Visible Boolean
+    visible = models.BooleanField(default=True)
