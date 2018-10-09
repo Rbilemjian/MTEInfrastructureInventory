@@ -161,6 +161,11 @@ def import_application_server(request):
                 app_server.d_drive = worksheet.cell_value(i, 27)
                 app_server.e_drive = worksheet.cell_value(i, 28)
 
+                if worksheet.cell_value(i, 29) == "":
+                    app_server.notes = None
+                else:
+                    app_server.notes = worksheet.cell_value(i, 29)
+
                 sanitization_result = sanitize_server(app_server)
                 if sanitization_result['exists_in_database'] is False:
                     app_server.visible = False

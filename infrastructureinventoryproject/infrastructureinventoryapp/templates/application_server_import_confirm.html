@@ -71,6 +71,15 @@
                         <th class="select-filter">NIC MAC Address</th>
                         <th class="select-filter">Switch</th>
                         <th class="select-filter">Port</th>
+                        <th class="select-filter">Purchase Order</th>
+                        <th class="select-filter">Start Date</th>
+                        <th class="select-filter">Next Hardware Support Date</th>
+                        <th class="select-filter">Base Warranty</th>
+                        <th class="select-filter">CPU</th>
+                        <th class="select-filter">RAM (GB)</th>
+                        <th class="select-filter">C: (GB)</th>
+                        <th class="select-filter">D: (GB)</th>
+                        <th class="select-filter">E: (GB)</th>
                     </tr>
                     </a>
                 </thead>
@@ -98,6 +107,15 @@
                             <td>{{applicationServer.nic_mac_address}}</td>
                             <td>{{applicationServer.switch}}</td>
                             <td>{{applicationServer.port}}</td>
+                            <td>{{applicationServer.purchase_order}}</td>
+                            <td>{{applicationServer.start_date}}</td>
+                            <td>{{applicationServer.next_hardware_support_date}}</td>
+                            <td>{{applicationServer.base_warranty}}</td>
+                            <td>{{applicationServer.cpu}}</td>
+                            <td>{{applicationServer.ram}}</td>
+                            <td>{{applicationServer.c_drive}}</td>
+                            <td>{{applicationServer.d_drive}}</td>
+                            <td>{{applicationServer.e_drive}}</td>
                         </tr>
                     {% endfor %}
 
