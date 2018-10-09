@@ -19,7 +19,7 @@ class ServerForm(forms.ModelForm):
             'operating_system': floppyforms.widgets.Input(datalist=models.OPERATING_SYSTEMS, attrs={'size': 45}),
             'model': forms.TextInput(attrs={'size': 45}),
             'serial_number': forms.TextInput(attrs={'size': 45}),
-            'notes': forms.Textarea(attrs={'rows': 5, 'cols': 99, 'style': 'resize:none'}),
+            'notes': forms.Textarea(attrs={'rows': 5, 'cols': 20000, 'style': 'resize:none; width:99%', 'class': 'container'}),
 
             #Network Info Form Widgets
 
