@@ -1,18 +1,21 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
-from django.core import serializers
+from django.utils import timezone
 from .models import ApplicationServer
 from .forms import ServerForm, ServerImportForm
 import xlrd
 
 
+
 #helper functions
+
+
 def get_str_date(row, column, worksheet, book):
     date_tuple = xlrd.xldate.xldate_as_tuple(worksheet.cell_value(row, column), book.datemode)
     return str(date_tuple[0]) + "-" + str(date_tuple[1]) + "-" + str(date_tuple[2])
 
 
-def sanitize_server(server):
+def sanitize_server(server, request):
     #correcting fields
     fields = ApplicationServer._meta.get_all_field_names()
     for field in fields:
@@ -25,6 +28,8 @@ def sanitize_server(server):
         server.is_virtual_machine = 0
     if server.environment == "TBD":
         server.environment = "Prod"
+    server.published_by = request.user
+    server.published_date = timezone.now()
 
     #checking if exists already in database
     if ApplicationServer.objects.filter(
@@ -55,7 +60,7 @@ def sanitize_server(server):
     return {'exists_in_database': False, 'server': server}
 
 
-def update_server(server):
+def update_server(server, request):
     fields = ApplicationServer._meta.get_all_field_names()
     for field in fields:
         if getattr(server, field) == "":
@@ -67,11 +72,15 @@ def update_server(server):
         server.is_virtual_machine = 0
     if server.environment == "TBD":
         server.environment = "Prod"
+    server.last_edited = timezone.now()
+    server.last_editor = request.user
     server.save()
     return server
 
 
 #view functions
+
+
 @login_required
 def view_application_servers(request):
     application_servers = ApplicationServer.objects.filter(visible=True)
@@ -84,9 +93,10 @@ def create_application_server_form(request):
         form = ServerForm(request.POST)
         if form.is_valid():
             server = form.save(commit=False)
-            sanitization_result = sanitize_server(server)
+            sanitization_result = sanitize_server(server, request)
             server = sanitization_result['server']
             if sanitization_result['exists_in_database'] is False:
+                server = sanitization_result['server']
                 server.save()
             return render(request, 'application_server_details.html', {'applicationServer': server})
     else:
@@ -166,8 +176,9 @@ def import_application_server(request):
                 else:
                     app_server.notes = worksheet.cell_value(i, 29)
 
-                sanitization_result = sanitize_server(app_server)
+                sanitization_result = sanitize_server(app_server, request)
                 if sanitization_result['exists_in_database'] is False:
+                    app_server = sanitization_result['server']
                     app_server.visible = False
                     app_server.save()
 
@@ -200,7 +211,7 @@ def edit_application_server(request, pk):
         form = ServerForm(request.POST, instance=applicationServer)
         if form.is_valid():
             server = form.save(commit=False)
-            update_server(server)
+            update_server(server, request)
             return redirect('details-view', pk=server.pk)
     else:
         form = ServerForm(instance=applicationServer)

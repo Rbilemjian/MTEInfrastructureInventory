@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 # Create your models here.
 
@@ -284,3 +285,9 @@ class ApplicationServer(models.Model):
 
     #Visible Boolean
     visible = models.BooleanField(default=True)
+
+    #Logistical Information
+    published_by = models.ForeignKey(User, null=True, related_name='application_server_owner')
+    published_date = models.DateTimeField(null=True, blank=True, editable=False)
+    last_edited = models.DateTimeField(null=True, blank=True)
+    last_editor = models.ForeignKey(User, null=True, related_name='last_application_server_editor')

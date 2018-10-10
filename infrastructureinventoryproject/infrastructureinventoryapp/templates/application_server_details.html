@@ -35,35 +35,29 @@
     </div>
 </div>
 
-    <div class="row" style="background-color:white; border-radius: 5px">
-   
-        <div class="col-md-6">
-            {% if applicationServer.published_date %}
-            <div class="date">
-                <p>
-                    <font color="#609">Published: </font>
-                    {{applicationServer.published_date}} EST
-                </p>
+<div class="container-fluid" style="background-color:white; border-radius: 5px; style:inline-block; text-align: center;">
+    <p>
+        {% if applicationServer.last_editor and applicationServer.last_edited %}
+            <div>
+            <font style="font-weight: bold;">Published By: </font>
+                {{applicationServer.published_by}}
+                <font style="font-weight: bold; margin-left: 30px;">Published On: </font>
+                {{applicationServer.published_date}} PST
+                <font style="font-weight: bold; margin-left: 30px;">Last Editor: </font>
+                {{applicationServer.last_editor.username}}
+                <font style="font-weight: bold; margin-left: 30px;">Last Edited: </font>
+                {{applicationServer.last_edited}} PST
             </div>
-            {% endif %}
-        </div>
-
-        <div class="col-md-6">
-            {% if applicationServer.last_editor %}
-            <p>
-                <font color="#609">Last Editor: </font>
-                {{applicationServer.last_editor.get_full_name}}
-            </p>
-            {% endif %}
-            {% if applicationServer.last_edited %}
-                <p>
-                    <font color="#609">Last Edited: </font>
-                    {{applicationServer.last_edited}} EST
-                </p>
-            {% endif %}
-        </div>
-
-    </div>
+        {% else %}
+            <div>
+                <font style="font-weight: bold;">Published By: </font>
+                {{applicationServer.published_by.username}}
+                <font style="font-weight: bold; margin-left: 30px;">Published On: </font>
+                {{applicationServer.published_date}} PST
+            </div>
+        {% endif %}
+    </p>
+</div>
 
     <br>
 
