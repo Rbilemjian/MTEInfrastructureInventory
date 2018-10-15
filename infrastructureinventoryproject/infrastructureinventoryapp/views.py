@@ -1,9 +1,10 @@
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect, get_object_or_404, HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.utils import timezone
 from .models import ApplicationServer
-from .forms import ServerForm, ServerImportForm
+from .forms import ServerForm, ServerImportForm, ServerSearchForm
 import xlrd
+import datetime
 
 
 
@@ -76,6 +77,78 @@ def update_server(server, request):
     server.last_editor = request.user
     server.save()
     return server
+
+
+def filter_servers(form):
+    search_result = ApplicationServer.objects.all()
+    data = form.data
+
+    if data.get('service') != '':
+        search_result = search_result.filter(service__icontains=data.get('service'))
+
+    if data.get('hostname') != '':
+        search_result = search_result.filter(hostname__icontains=data.get('hostname'))
+
+    if data.get('primary_application') != '':
+        search_result = search_result.filter(primary_application__icontains=data.get('primary_application'))
+
+    if data.get('is_virtual_machine') != '':
+        search_result = search_result.filter(is_virtual_machine=data.get('is_virtual_machine'))
+
+    if data.get('environment') != '':
+        search_result = search_result.filter(environment=data.get('environment'))
+
+    if data.get('location') != '':
+        search_result = search_result.filter(location__icontains=data.get('location'))
+
+    if data.get('data_center') != '':
+        search_result = search_result.filter(data_center__icontains=data.get('data_center'))
+
+    if data.get('operating_system') != '':
+        search_result = search_result.filter(operating_system__icontains=data.get('operating_system'))
+
+    if data.get('rack') != '':
+        search_result = search_result.filter(rack__icontains=data.get('rack'))
+
+    if data.get('model') != '':
+        search_result = search_result.filter(model__icontains=data.get('model'))
+
+    if data.get('serial_number') != '':
+        search_result = search_result.filter(serial_number__icontains=data.get('serial_number'))
+
+    if data.get('network') != '':
+        search_result = search_result.filter(network__icontains=data.get('network'))
+
+    if data.get('private_ip') != '':
+        search_result = search_result.filter(private_ip__icontains=data.get('private_ip'))
+
+    if data.get('dmz_public_ip') != '':
+        search_result = search_result.filter(dmz_public_ip__icontains=data.get('dmz_public_ip'))
+
+    if data.get('virtual_ip') != '':
+        search_result = search_result.filter(virtual_ip__icontains=data.get('virtual_ip'))
+
+    if data.get('nat_ip') != '':
+        search_result = search_result.filter(nat_ip__icontains=data.get('nat_ip'))
+
+    if data.get('ilo_or_cimc') != '':
+        search_result = search_result.filter(ilo_or_cimc__icontains=data.get('ilo_or_cimc'))
+
+    if data.get('nic_mac_address') != '':
+        search_result = search_result.filter(nic_mac_address__icontains=data.get('nic_mac_address'))
+
+    if data.get('switch') != '':
+        search_result = search_result.filter(switch__icontains=data.get('switch'))
+
+    if data.get('port') != '':
+        search_result = search_result.filter(port__icontains=data.get('port'))
+
+    if data.get('purchase_order') != '':
+        search_result = search_result.filter(purchase_order__icontains=data.get('purchase_order'))
+
+    return search_result
+
+
 
 
 #view functions
@@ -231,3 +304,15 @@ def details_application_server(request, pk):
 def delete_application_server(request, pk):
     get_object_or_404(ApplicationServer, pk=pk).delete()
     return redirect('/infrastructureinventory/applicationserver/')
+
+
+@login_required()
+def search_application_server(request):
+    if request.method == "POST":
+        form = ServerSearchForm(request.POST)
+        if form.is_valid:
+            search_result = filter_servers(form)
+            return render(request, 'application_server_search_result.html', {'applicationServers': search_result})
+    else:
+        form = ServerSearchForm()
+    return render(request, 'application_server_search_form.html', {'form': form})

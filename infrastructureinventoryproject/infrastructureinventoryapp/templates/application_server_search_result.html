@@ -1,0 +1,159 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block links %}
+
+<!-- this css is for the datatable without the exports
+<link rel="stylesheet" type="text/css" href="{% static 'bootstrap-3.3.7-dist/css/dataTables.bootstrap.css' %}"> -->
+
+<!-- DataTable file export css -->
+<link rel="stylesheet" type="text/css" href="{% static 'bootstrap-3.3.7-dist/css/jquery.dataTables.min.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'bootstrap-3.3.7-dist/css/buttons.dataTables.min.css' %}">
+
+<!-- rowGroup API -->
+<link rel="stylesheet" type="text/css" href="{% static 'bootstrap-3.3.7-dist/css/rowGroup.dataTables.min.css' %}">
+
+
+{% endblock %}
+
+{% block body %}
+
+    <div class="container-fluid" style="background-color: white; padding-left: 15px; padding-right: 15px; padding-bottom: 10px;">
+            <h2 style="text-align: center">Application Servers Search Result
+            <span style="color: black; font-size: 22px">
+            </span>
+            </h2>
+
+            <p style="text-align: center; margin-bottom:0px;">
+                To see an application server's details, click on its entry in the table.<br>
+                Please Note: The table is horizontally scrollable.
+            </p>
+
+            <div style="style: inline-block; float:none; text-align: center; ">
+
+                <a role="button" class="btn btn-success" href="/infrastructureinventory/applicationserver/import/">
+                    Import Application Servers From Excel
+                <span style="padding-left: 7px" class="glyphicon glyphicon-import" aria-hiddne="true"></span></a>
+
+                <a role="button" class="btn btn-primary" href="/infrastructureinventory/applicationserver/add/">
+                    Add Application Server
+                <span style="padding-left: 7px" class="glyphicon glyphicon-plus-sign" aria-hiddne="true"></span></a>
+
+            </div>
+    </div>
+
+<br>
+
+
+
+
+<br>
+
+        <div class="row">
+            <div class="col-xs-12">
+            <table id="example" class="table table-bordered" style="width: 100%;">
+                <thead style="background-color: #580084; color: white">
+                <a href="/infrastructureinventory/applicationserver/">
+                    <tr>
+                        <th class="select-filter">Server Function</th>
+                        <th class="select-filter">Primary Application</th>
+                        <th class="select-filter">Hostname</th>
+                        <th class="select-filter">Serial Number</th>
+                        <th class="select-filter">Private IP</th>
+                        <th class="select-filter">Location</th>
+                        <th class="select-filter">Virtual Machine</th>
+                        <th class="select-filter">Environment</th>
+                        <th class="select-filter">Datacenter</th>
+                        <th class="select-filter">Operating System</th>
+                        <th class="select-filter">Rack</th>
+                        <th class="select-filter">Model</th>
+                        <th class="select-filter">Network</th>
+                        <th class="select-filter">DMZ Public IP</th>
+                        <th class="select-filter">Virtual IP</th>
+                        <th class="select-filter">Nat IP</th>
+                        <th class="select-filter">ILO or CIMC</th>
+                        <th class="select-filter">NIC MAC Address</th>
+                        <th class="select-filter">Switch</th>
+                        <th class="select-filter">Port</th>
+                        <th class="select-filter">Purchase Order</th>
+                        <th class="select-filter">Start Date</th>
+                        <th class="select-filter">Next Hardware Support Date</th>
+                        <th class="select-filter">Base Warranty</th>
+                        <th class="select-filter">CPU</th>
+                        <th class="select-filter">RAM (GB)</th>
+                        <th class="select-filter">C: (GB)</th>
+                        <th class="select-filter">D: (GB)</th>
+                        <th class="select-filter">E: (GB)</th>
+                    </tr>
+                    </a>
+                </thead>
+                <tbody>
+
+                    {% for applicationServer in applicationServers %}
+                        <tr data-href="{%url 'details-view' pk=applicationServer.pk%}" class="my-hover">
+                            <td>{{applicationServer.service}}</td>
+                            <td>{{applicationServer.primary_application}}</td>
+                            <td>{{applicationServer.hostname}}</td>
+                            <td>{{applicationServer.serial_number}}</td>
+                            <td>{{applicationServer.private_ip}}</td>
+                            <td>{{applicationServer.location}}</td>
+                            <td>{{applicationServer.is_virtual_machine}}</td>
+                            <td>{{applicationServer.get_environment_display}}</td>
+                            <td>{{applicationServer.data_center}}</td>
+                            <td>{{applicationServer.operating_system}}</td>
+                            <td>{{applicationServer.rack}}</td>
+                            <td>{{applicationServer.model}}</td>
+                            <td>{{applicationServer.network}}</td>
+                            <td>{{applicationServer.dmz_public_ip}}</td>
+                            <td>{{applicationServer.virtual_ip}}</td>
+                            <td>{{applicationServer.nat_ip}}</td>
+                            <td>{{applicationServer.ilo_or_cimc}}</td>
+                            <td>{{applicationServer.nic_mac_address}}</td>
+                            <td>{{applicationServer.switch}}</td>
+                            <td>{{applicationServer.port}}</td>
+                            <td>{{applicationServer.purchase_order}}</td>
+                            <td>{{applicationServer.start_date}}</td>
+                            <td>{{applicationServer.next_hardware_support_date}}</td>
+                            <td>{{applicationServer.base_warranty}}</td>
+                            <td>{{applicationServer.cpu}}</td>
+                            <td>{{applicationServer.ram}}</td>
+                            <td>{{applicationServer.c_drive}}</td>
+                            <td>{{applicationServer.d_drive}}</td>
+                            <td>{{applicationServer.e_drive}}</td>
+                        </tr>
+                    {% endfor %}
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+<div class="my-padding"></div>
+
+{% endblock %}
+
+{% block scripts %}
+
+    <!-- Datatables js and jquery -->
+
+
+
+    <!-- this js was for the datatable without the exports -->
+    <!--<script type="text/javascript" src="{% static 'bootstrap-3.3.7-dist/js/dataTables.bootstrap.js' %}"></script>-->
+
+    <script type="text/javascript" src="{% static 'bootstrap-3.3.7-dist/js/jquery.dataTables.js' %}"></script>
+
+    <!-- For the export buttons functionality -->
+    <script type="text/javascript" src="{% static 'bootstrap-3.3.7-dist/js/jszip.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'bootstrap-3.3.7-dist/js/pdfmake.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'bootstrap-3.3.7-dist/js/vfs_fonts.js' %}"></script>
+    <script type="text/javascript" src="{% static 'bootstrap-3.3.7-dist/js/dataTables.buttons.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'bootstrap-3.3.7-dist/js/buttons.flash.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'bootstrap-3.3.7-dist/js/buttons.html5.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'bootstrap-3.3.7-dist/js/buttons.print.min.js' %}"></script>
+
+    <!-- our custom style -->
+    <script type="text/javascript" src="{% static 'bootstrap-3.3.7-dist/js/script.js' %}"></script>
+
+{% endblock %}
