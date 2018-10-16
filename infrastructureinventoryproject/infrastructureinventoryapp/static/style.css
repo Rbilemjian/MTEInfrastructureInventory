@@ -178,7 +178,7 @@ td, tr {
 }
 
 
-/* red and green background */
+/* colored backgrounds */
  
 .red {
   background-color: rgba(255, 79, 79, 0.48) !important;
@@ -186,6 +186,10 @@ td, tr {
 
 .green {
     background-color: rgba(2, 144, 2, 0.44) !important; 
+}
+
+.yellow {
+    background-color: rgba(255, 255, 0, 0.46) !important;
 }
 
 /* fix table header misalignment */
