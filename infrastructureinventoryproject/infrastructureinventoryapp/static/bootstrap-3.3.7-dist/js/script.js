@@ -2,6 +2,24 @@
 
 
 $(document).ready(function() {
+
+    if(document.getElementById("hw-support") != null)
+    {
+        hwSupport = document.getElementById("hw-support");
+        var hwDate = hwSupport.textContent;
+        if(hwDate != "None")
+            {
+                var hwDateMilliseconds = Date.parse(hwDate);
+                var todayMilliseconds = Date.parse(new Date());
+                var difference = hwDateMilliseconds - todayMilliseconds;
+                if(difference <= 0)
+                    hwSupport.style.color = "red";
+                else if(difference < 2592000000)
+                    hwSupport.style.color = "orange";
+
+            }
+    }
+
     $('#example').DataTable( {
         "scrollX": true,
         select: true,
@@ -67,16 +85,16 @@ $(document).ready(function() {
                 var hwDateMilliseconds = Date.parse(hwDate);
                 var todayMilliseconds = Date.parse(new Date());
                 var difference = hwDateMilliseconds - todayMilliseconds;
-//                alert(difference);
                 if(difference <= 0)
                     $(row).addClass('red');
                 else if(difference < 2592000000)
-                    $(row).addClass('yellow');
+                    $(row).addClass('orange');
 
             }
         },
 
     });
+
 });
 
 
@@ -84,6 +102,8 @@ $(document).ready(function() {
 $('#example').on( 'click', 'tbody tr', function () {
   window.location.href = $(this).data('href');
 });
+
+
 
 
 

@@ -227,8 +227,8 @@ td, tr {
     background-color: rgba(2, 144, 2, 0.44) !important; 
 }
 
-.yellow {
-    background-color: rgba(255, 255, 0, 0.46) !important;
+.orange {
+    background-color: rgba(255, 165, 0, 0.46) !important;
 }
 
 /* fix table header misalignment */

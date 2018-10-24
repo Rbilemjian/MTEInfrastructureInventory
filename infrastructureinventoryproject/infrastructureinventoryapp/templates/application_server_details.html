@@ -198,7 +198,7 @@
             <div class="my-padding"></div>
 
             <h4 style="border-bottom: 1px solid #609">Next Hardware Support Date</h4>
-            {{applicationServer.next_hardware_support_date}}
+            <div id="hw-support">{{applicationServer.next_hardware_support_date}}</div>
 
             <div class="my-padding"></div>
 
@@ -234,4 +234,5 @@
 
 <!-- JQuery DatPicker Scripts -->
 {% block scripts %}
+    <script type="text/javascript" src="{% static 'bootstrap-3.3.7-dist/js/script.js' %}"></script>
 {% endblock %}
