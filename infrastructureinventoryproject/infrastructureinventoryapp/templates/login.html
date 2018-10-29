@@ -18,8 +18,8 @@
 
 {% block body %}
 
-    <div class="my-center">
-        <b><h3>Welcome </h3></b>
+    <div class="my-center" style="text-align: center; padding-top: 10px;">
+        <b><h3 style="padding-bottom: 10px">Welcome </h3></b>
         <form method="post">
             {% csrf_token %}
             <div class="form-group">
@@ -35,7 +35,7 @@
                 {{ form.password }}
             </div> 
             {% if form.errors %}
-                <p style="color:red; font-size: 12px">Incorrect username or password.</p>
+                <p style="color:red; font-size: 12px">Invalid login.</p>
             {% endif %}
             <div >
                 <button type="submit" class="btn btn-primary" style="margin-top:0px; width: 160px">Login<span style="padding-left: 7px" class="glyphicon glyphicon-log-in" aria-hidden="true">
