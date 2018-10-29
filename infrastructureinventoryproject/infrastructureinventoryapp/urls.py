@@ -21,6 +21,7 @@ urlpatterns = [
     url(r'^applicationserver/import/confirm/$', views.confirm_import_application_server),
 
     #delete urls
+    url(r'^applicationserver/delete/confirm/(?P<pk>\d+)/$', views.application_server_delete_confirm, name="delete-confirmation-view"),
     url(r'^applicationserver/delete/(?P<pk>\d+)/$', views.delete_application_server, name="delete-view"),
 
     #search urls

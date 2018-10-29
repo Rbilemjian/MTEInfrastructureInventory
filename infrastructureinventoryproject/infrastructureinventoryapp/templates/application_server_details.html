@@ -13,18 +13,24 @@
 
 {% block body %}
 
+
+<div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    </div>
+
 <div>
     <div class="container-fluid" style="background-color:white; border-radius: 5px; float: none; text-align: center; padding-bottom: 10px;">
         <h2>{{applicationServer.service}} </h2><h4 style="color:black" >Application Server Details</h4>
-            <a role="button" class="btn btn-primary btn-md" href="{% url 'edit-view' pk=applicationServer.pk %}">
+        <a role="button" class="btn btn-primary btn-md" href="{% url 'edit-view' pk=applicationServer.pk %}">
             Edit Server
             <span style="padding-left: 7px" class="glyphicon glyphicon-edit" aria-hiddne="true">
             </span></a>
             {% if user.is_staff %}
-                <a role="button" class="btn btn-danger btn-md" href="{% url 'delete-view' pk=applicationServer.pk %}">
-                Delete Server
-                <span style="padding-left: 7px" class="glyphicon glyphicon-trash" aria-hiddne="true">
-                </span></a>
+
+        <a class="btn btn-danger btn-md" data-toggle="modal" data-target="#modal">
+            Delete Server
+            <span style="padding-left: 7px;" class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+        </a>
+
             {% else %}
                 <a role="button" class="btn btn-default btn-md" disabled="disabled">
                 Delete Server
@@ -232,7 +238,22 @@
 
 {% endblock %}
 
-<!-- JQuery DatPicker Scripts -->
 {% block scripts %}
+    <!-- JQuery DatePicker Script -->
     <script type="text/javascript" src="{% static 'bootstrap-3.3.7-dist/js/script.js' %}"></script>
+    <!-- JQuery modal script -->
+    <script src="http://malsup.github.com/jquery.form.js"></script>
+
+    <script>
+        $('#modal').on('show.bs.modal', function (event) {
+            var modal = $(this)
+            $.ajax({
+                url: "{% url 'delete-confirmation-view' applicationServer.id%}",
+                context: document.body
+            }).done(function(response) {
+                modal.html(response);
+            });
+        })
+</script>
+
 {% endblock %}

@@ -316,3 +316,7 @@ def search_application_server(request):
     else:
         form = ServerSearchForm()
     return render(request, 'application_server_search_form.html', {'form': form})
+
+def application_server_delete_confirm(request, pk):
+    applicationServer = get_object_or_404(ApplicationServer, pk=pk)
+    return render(request, 'application_server_delete_confirm.html', {'applicationServer': applicationServer})

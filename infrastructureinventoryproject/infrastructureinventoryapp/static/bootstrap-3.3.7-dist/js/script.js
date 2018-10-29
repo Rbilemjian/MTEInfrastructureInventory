@@ -22,7 +22,7 @@ $(document).ready(function() {
 
     $('#example').DataTable( {
         "scrollX": true,
-        select: true,
+        "select": true,
         "paging": false,
 
         //export datatable columns
