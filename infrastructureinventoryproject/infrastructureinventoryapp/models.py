@@ -94,8 +94,7 @@ class ApplicationServer(models.Model):
     last_editor = models.ForeignKey(User, null=True, related_name='last_application_server_editor')
 
 
-
-class filterProfile(models.Model):
+class FilterProfile(models.Model):
 
     #General Information
     service = models.CharField(max_length=100, null=True, blank=True)
