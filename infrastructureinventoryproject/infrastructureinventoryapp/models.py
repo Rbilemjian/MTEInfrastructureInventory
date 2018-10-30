@@ -42,21 +42,24 @@ BOOL_WITH_NULL = [
 
 class ApplicationServer(models.Model):
 
+    #General Information
     service = models.CharField(max_length=100)
     hostname = models.CharField(max_length=100)
     primary_application = models.CharField(max_length=100)
     is_virtual_machine = models.BooleanField(default=False)
     environment = models.CharField(max_length=4, choices=ENVIRONMENTS, default="Prod")
-    location = models.CharField(max_length=40)
-    data_center = models.CharField(max_length=30)
     operating_system = models.CharField(max_length=100)
-    rack = models.CharField(max_length=20, null=True, blank=True)
     model = models.CharField(max_length=100, null=True, blank=True)
     serial_number = models.CharField(max_length=100, null=True, blank=True)
     notes = models.TextField(null=True, blank=True)
 
-    #Network Information
+    #Location Information
+    location = models.CharField(max_length=40)
+    data_center = models.CharField(max_length=30)
+    rack = models.CharField(max_length=20, null=True, blank=True)
 
+
+    #Network Information
     network = models.CharField(max_length=4, choices=NETWORKS, default="Corp")
     private_ip = models.GenericIPAddressField(null=True, blank=True)
     dmz_public_ip = models.GenericIPAddressField(null=True, blank=True)
@@ -75,7 +78,6 @@ class ApplicationServer(models.Model):
     base_warranty = models.DateField(null=True, blank=True)
 
     #Storage Information
-
     cpu = models.IntegerField(null=True, blank=True)
     ram = models.IntegerField(null=True, blank=True)
     c_drive = models.DecimalField(null=True, blank=True, decimal_places=2, max_digits=10)
@@ -90,3 +92,34 @@ class ApplicationServer(models.Model):
     published_date = models.DateTimeField(null=True, blank=True, editable=False)
     last_edited = models.DateTimeField(null=True, blank=True)
     last_editor = models.ForeignKey(User, null=True, related_name='last_application_server_editor')
+
+
+
+class filterProfile(models.Model):
+
+    #General Information
+    service = models.CharField(max_length=100, null=True, blank=True)
+    hostname = models.CharField(max_length=100, null=True, blank=True)
+    primary_application = models.CharField(max_length=100, null=True, blank=True)
+    is_virtual_machine = models.NullBooleanField(choices=BOOL_WITH_NULL, default=None, null=True, blank=True)
+    environment = models.CharField(max_length=4, choices=ENVIRONMENTS_WITH_NULL, default=None, null=True, blank=True)
+    operating_system = models.CharField(max_length=100, null=True, blank=True)
+    model = models.CharField(max_length=100, null=True, blank=True)
+    serial_number = models.CharField(max_length=100, null=True, blank=True)
+    purchase_order = models.CharField(max_length=20, null=True, blank=True)
+
+    #Location Information
+    location = models.CharField(max_length=40, null=True, blank=True)
+    data_center = models.CharField(max_length=30, null=True, blank=True)
+    rack = models.CharField(max_length=20, null=True, blank=True)
+
+    # Network Information
+    network = models.CharField(max_length=4, choices=NETWORKS_WITH_NULL, default=None, null=True, blank=True)
+    private_ip = models.GenericIPAddressField(null=True, blank=True)
+    dmz_public_ip = models.GenericIPAddressField(null=True, blank=True)
+    virtual_ip = models.GenericIPAddressField(null=True, blank=True)
+    nat_ip = models.GenericIPAddressField(null=True, blank=True)
+    ilo_or_cimc = models.GenericIPAddressField(null=True, blank=True)
+    nic_mac_address = models.CharField(max_length=23, null=True, blank=True)
+    switch = models.CharField(max_length=40, null=True, blank=True)
+    port = models.CharField(max_length=40, null=True, blank=True)
