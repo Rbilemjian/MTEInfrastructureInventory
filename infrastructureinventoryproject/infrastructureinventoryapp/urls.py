@@ -26,4 +26,7 @@ urlpatterns = [
 
     #search urls
     url(r'^applicationserver/search', views.search_application_server),
+
+    #filter profile urls
+    url(r'^applicationserver/filterform', views.filter_profile_form),
 ]

@@ -1,8 +1,8 @@
 from django.shortcuts import render, redirect, get_object_or_404, HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.utils import timezone
-from .models import ApplicationServer
-from .forms import ServerForm, ServerImportForm, ServerSearchForm
+from .models import ApplicationServer, FilterProfile
+from .forms import ServerForm, ServerImportForm, ServerSearchForm, FilterProfileForm
 import xlrd
 import datetime
 
@@ -322,3 +322,18 @@ def search_application_server(request):
 def application_server_delete_confirm(request, pk):
     applicationServer = get_object_or_404(ApplicationServer, pk=pk)
     return render(request, 'application_server_delete_confirm.html', {'applicationServer': applicationServer})
+
+
+@login_required()
+def filter_profile_form(request):
+    if request.method == "POST":
+        form = FilterProfileForm(request.POST, instance=FilterProfile())
+        if form.is_valid():
+            filter = form.save(commit=False)
+            filter.user = request.user
+            filter.save()
+            return redirect('/infrastructureinventory/applicationserver/')
+            #TODO: Actually get this to redirect to Filter Profile Page
+    else:
+        form = FilterProfileForm()
+    return render(request, 'filter_profile_form.html', {'form': form})

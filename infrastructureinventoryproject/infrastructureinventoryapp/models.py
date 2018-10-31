@@ -96,11 +96,14 @@ class ApplicationServer(models.Model):
 
 class FilterProfile(models.Model):
 
+    user = models.ForeignKey(User, related_name='filter_profile_owner', null=True, blank=True)
+    profile_name = models.CharField(max_length=100)
+
     #General Information
     service = models.CharField(max_length=100, null=True, blank=True)
     hostname = models.CharField(max_length=100, null=True, blank=True)
     primary_application = models.CharField(max_length=100, null=True, blank=True)
-    is_virtual_machine = models.NullBooleanField(choices=BOOL_WITH_NULL, default=None, null=True, blank=True)
+    is_virtual_machine = models.NullBooleanField(choices=BOOL_WITH_NULL, default=None, null=True)
     environment = models.CharField(max_length=4, choices=ENVIRONMENTS_WITH_NULL, default=None, null=True, blank=True)
     operating_system = models.CharField(max_length=100, null=True, blank=True)
     model = models.CharField(max_length=100, null=True, blank=True)
@@ -122,3 +125,6 @@ class FilterProfile(models.Model):
     nic_mac_address = models.CharField(max_length=23, null=True, blank=True)
     switch = models.CharField(max_length=40, null=True, blank=True)
     port = models.CharField(max_length=40, null=True, blank=True)
+
+
+    #TODO: Create filter profile form, and page to display a user's clickable filter profiles

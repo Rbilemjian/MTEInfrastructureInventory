@@ -1,6 +1,6 @@
 from django import forms
 from . import models
-from .models import ApplicationServer
+from .models import ApplicationServer, FilterProfile
 import floppyforms
 
 #Getting list of unique values for certain columns in the database for use in floppyforms
@@ -23,7 +23,7 @@ nic_mac_addresses = ApplicationServer.objects.filter().values_list('nic_mac_addr
 switches = ApplicationServer.objects.filter().values_list('switch', flat=True).order_by('switch').distinct().exclude(switch__isnull=True)
 ports = ApplicationServer.objects.filter().values_list('port', flat=True).order_by('port').distinct().exclude(port__isnull=True)
 purchase_orders = ApplicationServer.objects.filter().values_list('purchase_order', flat=True).order_by('purchase_order').distinct().exclude(purchase_order__isnull=True)
-
+filter_profiles = FilterProfile.objects.filter().values_list('profile_name', flat=True)
 
 #Defines form for new application server and application server edit pages
 
@@ -114,6 +114,48 @@ class ServerSearchForm(forms.Form):
     #Warranty Information Search Form Fields
 
     purchase_order = forms.CharField(required=False, widget=floppyforms.widgets.Input(datalist=purchase_orders, attrs={'size': 45}))
+
+
+class FilterProfileForm(forms.ModelForm):
+    class Meta:
+        model = models.FilterProfile
+        fields = '__all__'
+        widgets = {
+
+            #Profile Info Form Widgets
+
+            'profile_name': forms.TextInput(attrs={'size': 45}),
+
+            #General Info Form Widgets
+
+            'service': floppyforms.widgets.Input(datalist=services, attrs={'size': 45}),
+            'hostname': floppyforms.widgets.Input(datalist=hostnames, attrs={'size': 45}),
+            'primary_application': floppyforms.widgets.Input(datalist=primary_applications, attrs={'size': 45}),
+            'is_virtual_machine': forms.Select(choices=models.BOOL, attrs={'cols': 5}),
+            'location': floppyforms.widgets.Input(datalist=locations, attrs={'size': 45}),
+            'data_center': floppyforms.widgets.Input(datalist=data_centers, attrs={'size': 45}),
+            'rack': floppyforms.widgets.Input(datalist=racks, attrs={'size': 45}),
+            'operating_system': floppyforms.widgets.Input(datalist=operating_systems, attrs={'size': 45}),
+            'model': floppyforms.widgets.Input(datalist=server_models, attrs={'size': 45}),
+            'serial_number': floppyforms.widgets.Input(datalist=serial_numbers, attrs={'size': 45}),
+
+            #Network Info Form Widgets
+
+            'private_ip': floppyforms.widgets.Input(datalist=private_ips, attrs={'size': 45}),
+            'dmz_public_ip': floppyforms.widgets.Input(datalist=dmz_public_ips, attrs={'size': 45}),
+            'virtual_ip': floppyforms.widgets.Input(datalist=virtual_ips, attrs={'size': 45}),
+            'nat_ip': floppyforms.widgets.Input(datalist=nat_ips, attrs={'size': 45}),
+            'ilo_or_cimc': floppyforms.widgets.Input(datalist=ilo_or_cimcs, attrs={'size': 45}),
+            'nic_mac_address': floppyforms.widgets.Input(datalist=nic_mac_addresses, attrs={'size': 45}),
+            'switch': floppyforms.widgets.Input(datalist=switches, attrs={'size': 45}),
+            'port': floppyforms.widgets.Input(datalist=ports, attrs={'size': 45}),
+
+            #Warranty Info Form Widgets
+
+            'purchase_order': floppyforms.widgets.Input(datalist=purchase_orders, attrs={'size': 45}),
+
+
+        }
 
 
 

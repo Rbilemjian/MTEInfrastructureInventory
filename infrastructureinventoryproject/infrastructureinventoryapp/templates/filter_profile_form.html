@@ -1,0 +1,242 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block head %}
+    <title>Search Application Servers</title>
+{% endblock %}
+
+<!-- JQuery DatePicker widget -->
+{% block links %}
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+{% endblock %}
+
+{% block body %}
+<div class="container">
+    <div class="row" style="padding-bottom: 30px; padding-top: 20px">
+
+
+    <div class="col-md-12" style="background-color: white; padding-left: 25px; padding-right: 15px">
+        <div class="row">
+            <div class="col-md-1"></div>
+            <div class="col-md-10" style="text-align: center; padding-bottom: 15px;">
+                <h2 style="padding-bottom: 8px">Filter Profile Creation Form</h2>
+                <p>Provide a name and information for one or more fields in order to create a filter profile.</p>
+            </div>
+            <div class="col-md-1"></div>
+        </div>
+
+        <form method="post">
+            {% csrf_token %}
+
+            {{ form.non_field_errors }}
+            <div class="row">
+
+                <div class="col-md-4">
+                    {{ form.profile_name.errors }}
+                    <label for="{{ form.profile_name.id_for_label }}">* Profile Name</label><br>
+                    {{ form.profile_name }}
+                </div>
+
+                <div class="col-md-4">
+                    {{ form.service.errors }}
+                    <label for="{{ form.service.id_for_label }}">Service</label><br>
+                    {{ form.service }}
+                </div>
+
+                <div class="col-md-4">
+                    {{ form.hostname.errors }}
+                    <label for="{{ form.hostname.id_for_label }}">Hostname</label><br>
+                    {{ form.hostname }}
+                </div>
+
+            </div>
+
+            <div class="my-padding"></div>
+
+            <div class="row">
+                <div class="col-md-4">
+                    {{ form.primary_application.errors }}
+                    <label for="{{ form.category.id_for_label }}">Primary Application </label><br>
+                    {{ form.primary_application }}
+                </div>
+                <div class="col-md-4">
+                    {{ form.operating_system.errors }}
+                    <label for="{{ form.operating_system.id_for_label }}">Operating System</label><br>
+                    {{ form.operating_system }}
+                </div>
+
+                <div class="col-md-4">
+                    {{ form.model.errors }}
+                    <label for="{{ form.model.id_for_label }}">Model</label><br>
+                    {{ form.model }}
+                </div>
+
+            </div>
+
+            <div class="my-padding"></div>
+
+            <div class="row">
+                <div class="col-md-4">
+                    {{ form.serial_number.errors }}
+                    <label for="{{ form.operating_system.id_for_label }}">Serial Number</label><br>
+                    {{ form.serial_number }}
+                </div>
+
+                <div class="col-md-4">
+                    {{ form.purchase_order.errors }}
+                    <label for="{{ form.purchase_order.id_for_label }}">Purchase Order</label><br>
+                    {{ form.purchase_order }}
+                </div>
+                <div class="col-md-4">
+                    {{ form.environment.errors }}
+                    <label for="{{ form.environment.id_for_label }}">Environment</label><br>
+                    {{ form.environment }}
+                </div>
+
+            </div>
+            <div class="my-padding"></div>
+            <div class="row">
+                <div class="col-md-4">
+                    {{ form.is_virtual_machine.errors }}
+                    <label for="{{ form.is_virtual_machine.id_for_label }}">Is Virtual Machine</label><br>
+                    {{ form.is_virtual_machine }}
+                </div>
+            </div>
+
+
+
+            <div class="my-padding"></div>
+            <h3>Location Information</h3>
+            <div class="my-padding"></div>
+
+            <div class="row">
+                <div class="col-md-4">
+                    {{ form.location.errors }}
+                    <label for="{{ form.location.id_for_label }}">Location</label><br>
+                    {{ form.location }}
+                </div>
+                <div class="col-md-4">
+                    {{ form.data_center.errors }}
+                    <label for="{{ form.data_center.id_for_label }}">Datacenter</label><br>
+                    {{ form.data_center }}
+                </div>
+                <div class="col-md-4">
+                    {{ form.rack.errors }}
+                    <label for="{{ form.rack.id_for_label }}">Rack</label><br>
+                    {{ form.rack }}
+                </div>
+            </div>
+
+
+
+            <div class="my-padding"></div>
+            <h3>Network Information</h3>
+            <div class="my-padding"></div>
+
+            <div class="row">
+                <div class="col-md-4">
+                    {{ form.network.errors }}
+                    <label for="{{ form.network.id_for_label }}">Network</label><br>
+                    {{ form.network }}
+                </div>
+
+                <div class="col-md-4">
+                    {{ form.private_ip.errors }}
+                    <label for="{{ form.operating_system.id_for_label }}">Private IP</label><br>
+                    {{ form.private_ip }}
+                </div>
+                <div class="col-md-4">
+                    {{ form.dmz_public_ip.errors }}
+                    <label for="{{ form.dmz_public_ip.id_for_label }}">DMZ Public IP</label><br>
+                    {{ form.dmz_public_ip }}
+                </div>
+            </div>
+
+            <div class="my-padding"></div>
+
+            <div class="row">
+
+
+                <div class="col-md-4">
+                    {{ form.virtual_ip.errors }}
+                    <label for="{{ form.virtual_ip.id_for_label }}">Virtual IP</label><br>
+                    {{ form.virtual_ip }}
+                </div>
+                <div class="col-md-4">
+                    {{ form.nat_ip.errors }}
+                    <label for="{{ form.nat_ip.id_for_label }}">NAT IP</label><br>
+                    {{ form.nat_ip }}
+                </div>
+                <div class="col-md-4">
+                    {{ form.ilo_or_cimc.errors }}
+                    <label for="{{ form.ilo_or_cimc.id_for_label }}">ILO / CIMC</label><br>
+                    {{ form.ilo_or_cimc }}
+                </div>
+            </div>
+
+            <div class="my-padding"></div>
+
+            <div class="row">
+                <div class="col-md-4">
+                    {{ form.nic_mac_address.errors }}
+                    <label for="{{ form.nic_mac_address.id_for_label }}">NIC MAC Address</label><br>
+                    {{ form.nic_mac_address }}
+                </div>
+
+                <div class="col-md-4">
+                    {{ form.switch.errors }}
+                    <label for="{{ form.switch.id_for_label }}">Switch</label><br>
+                    {{ form.switch }}
+                </div>
+                <div class="col-md-4">
+                    {{ form.port.errors }}
+                    <label for="{{ form.port.id_for_label }}">Port</label><br>
+                    {{ form.port }}
+                </div>
+            </div>
+
+            <div class="my-padding"></div>
+
+            <div class="row" style="padding-bottom: 20px">
+                <div class="col-md-4"></div>
+
+                <div class="col-md-4" style="text-align: center"><button type="submit" class="btn btn-success btn-md">Create Filter Profile<span style="padding-left: 7px" class="glyphicon glyphicon-plus-sign" aria-hidden="true">
+                </span></button></div>
+
+                <div class="col-md-4" style="text-align: right; padding-right: 6%">
+                </div>
+            </div>
+
+        </form>
+
+    </div>
+
+    <div class="col-md-2"></div>
+    </div></div>
+
+
+{% endblock %}
+
+<!-- JQuery DatPicker Scripts -->
+{% block scripts %}
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script>
+    $( function() {
+    $( "#id_start_date" ).datepicker();
+    $( "#anim" ).on( "change", function() {
+      $( "#id_start_date" ).datepicker( "option", "showAnim", $( this ).val() );
+    });
+    $( "#id_next_hardware_support_date" ).datepicker();
+    $( "#anim" ).on( "change", function() {
+      $( "#id_next_hardware_support_date" ).datepicker( "option", "showAnim", $( this ).val() );
+    });
+    $( "#id_base_warranty" ).datepicker();
+    $( "#anim" ).on( "change", function() {
+      $( "#id_base_warranty" ).datepicker( "option", "showAnim", $( this ).val() );
+    });
+  } );
+        </script>
+
+{% endblock %}
