@@ -28,5 +28,7 @@ urlpatterns = [
     url(r'^applicationserver/search', views.search_application_server),
 
     #filter profile urls
-    url(r'^applicationserver/filterform', views.filter_profile_form),
+    url(r'^applicationserver/filteredlist/(?P<pk>\d+)/$', views.filtered_list, name="filtered-list-view"),
+    url(r'^applicationserver/filterprofiles/$', views.filter_profile),
+    url(r'^applicationserver/filterform/$', views.filter_profile_form),
 ]

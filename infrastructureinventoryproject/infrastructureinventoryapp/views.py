@@ -79,9 +79,8 @@ def update_server(server, request):
     return server
 
 
-def filter_servers(form):
+def filter_servers(data):
     search_result = ApplicationServer.objects.all()
-    data = form.data
 
     if data.get('service') != '':
         search_result = search_result.filter(service__icontains=data.get('service'))
@@ -148,6 +147,75 @@ def filter_servers(form):
 
     return search_result
 
+
+def filter_from_profile(filter_profile):
+    filter_result = ApplicationServer.objects.all()
+
+    if filter_profile.service != None:
+        print(filter_profile.service)
+        filter_result = filter_result.filter(service__icontains=filter_profile.service)
+
+    if filter_profile.hostname != None:
+        filter_result = filter_result.filter(hostname__icontains=filter_profile.hostname)
+
+    if filter_profile.primary_application != None:
+        filter_result = filter_result.filter(primary_application__icontains=filter_profile.primary_application)
+
+    if filter_profile.is_virtual_machine != None:
+        filter_result = filter_result.filter(is_virtual_machine=filter_profile.is_virtual_machine)
+
+    if filter_profile.environment != None:
+        filter_result = filter_result.filter(environment=filter_profile.environment)
+
+    if filter_profile.location != None:
+        filter_result = filter_result.filter(location__icontains=filter_profile.location)
+
+    if filter_profile.data_center != None:
+        filter_result = filter_result.filter(data_center__icontains=filter_profile.data_center)
+
+    if filter_profile.operating_system != None:
+        filter_result = filter_result.filter(operating_system__icontains=filter_profile.operating_system)
+
+    if filter_profile.rack != None:
+        filter_result = filter_result.filter(rack__icontains=filter_profile.rack)
+
+    if filter_profile.model != None:
+        filter_result = filter_result.filter(model__icontains=filter_profile.model)
+
+    if filter_profile.serial_number != None:
+        filter_result = filter_result.filter(serial_number__icontains=filter_profile.serial_number)
+
+    if filter_profile.network != None:
+        filter_result = filter_result.filter(network__icontains=filter_profile.network)
+
+    if filter_profile.private_ip != None:
+        filter_result = filter_result.filter(private_ip__icontains=filter_profile.private_ip)
+
+    if filter_profile.dmz_public_ip != None:
+        filter_result = filter_result.filter(dmz_public_ip__icontains=filter_profile.dmz_public_ip)
+
+    if filter_profile.virtual_ip != None:
+        filter_result = filter_result.filter(virtual_ip__icontains=filter_profile.virtual_ip)
+
+    if filter_profile.nat_ip != None:
+        filter_result = filter_result.filter(nat_ip__icontains=filter_profile.nat_ip)
+
+    if filter_profile.ilo_or_cimc != None:
+        filter_result = filter_result.filter(ilo_or_cimc__icontains=filter_profile.ilo_or_cimc)
+
+    if filter_profile.nic_mac_address != None:
+        filter_result = filter_result.filter(nic_mac_address__icontains=filter_profile.nic_mac_address)
+
+    if filter_profile.switch != None:
+        filter_result = filter_result.filter(switch__icontains=filter_profile.switch)
+
+    if filter_profile.port != None:
+        filter_result = filter_result.filter(port__icontains=filter_profile.port)
+
+    if filter_profile.purchase_order != None:
+        filter_result = filter_result.filter(purchase_order__icontains=filter_profile.purchase_order)
+
+    return filter_result
 
 
 
@@ -306,12 +374,13 @@ def delete_application_server(request, pk):
     return redirect('/infrastructureinventory/applicationserver/')
 
 
+#TODO: Refactor to be a filterprofile form variation to remove redundancy in helper function for filtering
 @login_required()
 def search_application_server(request):
     if request.method == "POST":
         form = ServerSearchForm(request.POST)
         if form.is_valid:
-            search_result = filter_servers(form)
+            search_result = filter_servers(form.data)
             return render(request, 'application_server_search_result.html', {'applicationServers': search_result})
     else:
         form = ServerSearchForm()
@@ -325,15 +394,32 @@ def application_server_delete_confirm(request, pk):
 
 
 @login_required()
+def filter_profile(request):
+    filterProfiles = FilterProfile.objects.filter(user = request.user)
+    return render(request, 'filter_profiles.html', {"filterProfiles": filterProfiles})
+
+
+@login_required()
 def filter_profile_form(request):
     if request.method == "POST":
         form = FilterProfileForm(request.POST, instance=FilterProfile())
         if form.is_valid():
             filter = form.save(commit=False)
             filter.user = request.user
+            #setting any empty field to have a null value
+            fields = FilterProfile._meta.get_all_field_names()
+            for field in fields:
+                if getattr(filter, field) == "":
+                    if ApplicationServer._meta.get_field(field).null:
+                        setattr(filter, field, None)
             filter.save()
-            return redirect('/infrastructureinventory/applicationserver/')
-            #TODO: Actually get this to redirect to Filter Profile Page
+            return redirect('/infrastructureinventory/applicationserver/filterprofiles')
     else:
         form = FilterProfileForm()
     return render(request, 'filter_profile_form.html', {'form': form})
+
+
+def filtered_list(request, pk):
+    filterProfile = get_object_or_404(FilterProfile, pk=pk)
+    filter_result = filter_from_profile(filterProfile)
+    return render(request, 'filtered_list.html', {"filterProfile": filterProfile, "applicationServers": filter_result})
