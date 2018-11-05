@@ -218,6 +218,16 @@ def filter_from_profile(filter_profile):
     return filter_result
 
 
+def prep_filter_for_save(user, filter):
+    filter.user = user
+    # setting any empty field to have a null value
+    fields = FilterProfile._meta.get_all_field_names()
+    for field in fields:
+        if getattr(filter, field) == "":
+            if ApplicationServer._meta.get_field(field).null:
+                setattr(filter, field, None)
+    return filter
+
 
 #view functions
 
@@ -405,21 +415,48 @@ def filter_profile_form(request):
         form = FilterProfileForm(request.POST, instance=FilterProfile())
         if form.is_valid():
             filter = form.save(commit=False)
-            filter.user = request.user
-            #setting any empty field to have a null value
-            fields = FilterProfile._meta.get_all_field_names()
-            for field in fields:
-                if getattr(filter, field) == "":
-                    if ApplicationServer._meta.get_field(field).null:
-                        setattr(filter, field, None)
+            filter = prep_filter_for_save(request.user, filter)
             filter.save()
-            return redirect('/infrastructureinventory/applicationserver/filterprofiles')
+            return redirect('/infrastructureinventory/applicationserver/filterprofile')
     else:
         form = FilterProfileForm()
     return render(request, 'filter_profile_form.html', {'form': form})
 
 
+@login_required()
 def filtered_list(request, pk):
     filterProfile = get_object_or_404(FilterProfile, pk=pk)
     filter_result = filter_from_profile(filterProfile)
     return render(request, 'filtered_list.html', {"filterProfile": filterProfile, "applicationServers": filter_result})
+
+
+@login_required()
+def filter_profile_delete_confirm(request, pk):
+    filterProfile = get_object_or_404(FilterProfile, pk=pk)
+    return render(request, 'filter_profile_delete_confirm.html', {"filterProfile": filterProfile})
+
+
+@login_required()
+def filter_profile_delete(request, pk):
+    get_object_or_404(FilterProfile, pk=pk).delete()
+    return redirect('/infrastructureinventory/applicationserver/filterprofile')
+
+
+@login_required()
+def filter_profile_edit(request, pk):
+    filterProfile = get_object_or_404(FilterProfile, pk=pk)
+    print(filterProfile.is_virtual_machine)
+    if request.method == "POST":
+        form = FilterProfileForm(request.POST, instance=filterProfile)
+        if form.is_valid():
+            filter = form.save(commit=False)
+            filter = prep_filter_for_save(request.user, filter)
+            filter.save()
+            return redirect('filter-profile-view')
+    else:
+        form = FilterProfileForm(instance=filterProfile)
+    args = {"form": form, "filterProfile": filterProfile}
+    return render(request, "filter_profile_edit.html", args)
+
+
+

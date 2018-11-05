@@ -24,11 +24,15 @@ urlpatterns = [
     url(r'^applicationserver/delete/confirm/(?P<pk>\d+)/$', views.application_server_delete_confirm, name="delete-confirmation-view"),
     url(r'^applicationserver/delete/(?P<pk>\d+)/$', views.delete_application_server, name="delete-view"),
 
+    url(r'^applicationserver/filterprofile/delete/confirm/(?P<pk>\d+)/$', views.filter_profile_delete_confirm, name="filter-profile-delete-confirm-view"),
+    url(r'^applicationserver/filterprofile/delete/(?P<pk>\d+)/$', views.filter_profile_delete, name="filter-profile-delete"),
+
     #search urls
-    url(r'^applicationserver/search', views.search_application_server),
+    url(r'^applicationserver/search', views.search_application_server, name="search-view"),
 
     #filter profile urls
     url(r'^applicationserver/filteredlist/(?P<pk>\d+)/$', views.filtered_list, name="filtered-list-view"),
-    url(r'^applicationserver/filterprofiles/$', views.filter_profile),
+    url(r'^applicationserver/filterprofile/$', views.filter_profile, name="filter-profile-view"),
     url(r'^applicationserver/filterform/$', views.filter_profile_form),
+    url(r'^applicationserver/filterprofile/edit/(?P<pk>\d+)/$', views.filter_profile_edit, name="filter-profile-detail-view"),
 ]
