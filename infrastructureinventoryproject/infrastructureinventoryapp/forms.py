@@ -125,6 +125,7 @@ class FilterProfileForm(forms.ModelForm):
             #Profile Info Form Widgets
 
             'profile_name': forms.TextInput(attrs={'size': 45}),
+            'all_fields': forms.TextInput(attrs={'size': 45}),
 
             #General Info Form Widgets
 

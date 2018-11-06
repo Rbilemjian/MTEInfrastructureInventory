@@ -41,23 +41,20 @@
 
             {{ form.non_field_errors }}
             <div class="row">
-
                 <div class="col-md-4">
                     {{ form.profile_name.errors }}
                     <label for="{{ form.profile_name.id_for_label }}">* Profile Name</label><br>
                     {{ form.profile_name }}
                 </div>
-
+                <div class="col-md-4">
+                    {{ form.all_fields.errors }}
+                    <label for="{{ form.all_fields.id_for_label }}">Filter all Fields</label><br>
+                    {{ form.all_fields }}
+                </div>
                 <div class="col-md-4">
                     {{ form.service.errors }}
                     <label for="{{ form.service.id_for_label }}">Service</label><br>
                     {{ form.service }}
-                </div>
-
-                <div class="col-md-4">
-                    {{ form.hostname.errors }}
-                    <label for="{{ form.hostname.id_for_label }}">Hostname</label><br>
-                    {{ form.hostname }}
                 </div>
 
             </div>
@@ -65,6 +62,11 @@
             <div class="my-padding"></div>
 
             <div class="row">
+                <div class="col-md-4">
+                    {{ form.hostname.errors }}
+                    <label for="{{ form.hostname.id_for_label }}">Hostname</label><br>
+                    {{ form.hostname }}
+                </div>
                 <div class="col-md-4">
                     {{ form.primary_application.errors }}
                     <label for="{{ form.category.id_for_label }}">Primary Application </label><br>
@@ -75,18 +77,16 @@
                     <label for="{{ form.operating_system.id_for_label }}">Operating System</label><br>
                     {{ form.operating_system }}
                 </div>
-
-                <div class="col-md-4">
-                    {{ form.model.errors }}
-                    <label for="{{ form.model.id_for_label }}">Model</label><br>
-                    {{ form.model }}
-                </div>
-
             </div>
 
             <div class="my-padding"></div>
 
             <div class="row">
+                <div class="col-md-4">
+                    {{ form.model.errors }}
+                    <label for="{{ form.model.id_for_label }}">Model</label><br>
+                    {{ form.model }}
+                </div>
                 <div class="col-md-4">
                     {{ form.serial_number.errors }}
                     <label for="{{ form.operating_system.id_for_label }}">Serial Number</label><br>
@@ -98,16 +98,16 @@
                     <label for="{{ form.purchase_order.id_for_label }}">Purchase Order</label><br>
                     {{ form.purchase_order }}
                 </div>
+            </div>
+            <div class="my-padding"></div>
+            <div class="row">
                 <div class="col-md-4">
                     {{ form.environment.errors }}
                     <label for="{{ form.environment.id_for_label }}">Environment</label><br>
                     {{ form.environment }}
                 </div>
+                                <div class="col-md-4">
 
-            </div>
-            <div class="my-padding"></div>
-            <div class="row">
-                <div class="col-md-4">
                     {{ form.is_virtual_machine.errors }}
                     <label for="{{ form.is_virtual_machine.id_for_label }}">Is Virtual Machine</label><br>
                     {{ form.is_virtual_machine }}

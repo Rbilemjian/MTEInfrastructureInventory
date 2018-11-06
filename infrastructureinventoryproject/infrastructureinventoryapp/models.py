@@ -98,6 +98,7 @@ class FilterProfile(models.Model):
 
     user = models.ForeignKey(User, related_name='filter_profile_owner', null=True, blank=True)
     profile_name = models.CharField(max_length=100)
+    all_fields = models.CharField(max_length=100, null=True, blank=True)
 
     #General Information
     service = models.CharField(max_length=100, null=True, blank=True)
@@ -127,4 +128,3 @@ class FilterProfile(models.Model):
     port = models.CharField(max_length=40, null=True, blank=True)
 
 
-    #TODO: Create filter profile form, and page to display a user's clickable filter profiles

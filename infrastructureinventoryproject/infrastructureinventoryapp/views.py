@@ -150,6 +150,17 @@ def filter_servers(data):
 
 def filter_from_profile(filter_profile):
     filter_result = ApplicationServer.objects.all()
+    if filter_profile.all_fields is not None:
+        fields = filter_profile._meta.get_all_field_names()
+        results = ApplicationServer.objects.none()
+        for field in fields:
+            if field == "user_id" or field == "user" or field == "profile_name" or field == "all_fields":
+                continue
+            lookup = "%s__icontains" % field
+            query = {lookup: filter_profile.all_fields}
+            results = results | ApplicationServer.objects.filter(**query)
+        filter_result = results
+
 
     if filter_profile.service is not None:
         filter_result = filter_result.filter(service__icontains=filter_profile.service)
@@ -214,6 +225,7 @@ def filter_from_profile(filter_profile):
     if filter_profile.purchase_order is not None:
         filter_result = filter_result.filter(purchase_order__icontains=filter_profile.purchase_order)
 
+
     return filter_result
 
 
@@ -223,7 +235,7 @@ def prep_filter_for_save(user, filter):
     fields = FilterProfile._meta.get_all_field_names()
     for field in fields:
         if getattr(filter, field) == "":
-            if ApplicationServer._meta.get_field(field).null:
+            if FilterProfile._meta.get_field(field).null:
                 setattr(filter, field, None)
     return filter
 
