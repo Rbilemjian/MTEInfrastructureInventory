@@ -151,68 +151,67 @@ def filter_servers(data):
 def filter_from_profile(filter_profile):
     filter_result = ApplicationServer.objects.all()
 
-    if filter_profile.service != None:
-        print(filter_profile.service)
+    if filter_profile.service is not None:
         filter_result = filter_result.filter(service__icontains=filter_profile.service)
 
-    if filter_profile.hostname != None:
+    if filter_profile.hostname is not None:
         filter_result = filter_result.filter(hostname__icontains=filter_profile.hostname)
 
-    if filter_profile.primary_application != None:
+    if filter_profile.primary_application is not None:
         filter_result = filter_result.filter(primary_application__icontains=filter_profile.primary_application)
 
-    if filter_profile.is_virtual_machine != None:
+    if filter_profile.is_virtual_machine is not None:
         filter_result = filter_result.filter(is_virtual_machine=filter_profile.is_virtual_machine)
 
-    if filter_profile.environment != None:
+    if filter_profile.environment is not None:
         filter_result = filter_result.filter(environment=filter_profile.environment)
 
-    if filter_profile.location != None:
+    if filter_profile.location is not None:
         filter_result = filter_result.filter(location__icontains=filter_profile.location)
 
-    if filter_profile.data_center != None:
+    if filter_profile.data_center is not None:
         filter_result = filter_result.filter(data_center__icontains=filter_profile.data_center)
 
-    if filter_profile.operating_system != None:
+    if filter_profile.operating_system is not None:
         filter_result = filter_result.filter(operating_system__icontains=filter_profile.operating_system)
 
-    if filter_profile.rack != None:
+    if filter_profile.rack is not None:
         filter_result = filter_result.filter(rack__icontains=filter_profile.rack)
 
-    if filter_profile.model != None:
+    if filter_profile.model is not None:
         filter_result = filter_result.filter(model__icontains=filter_profile.model)
 
-    if filter_profile.serial_number != None:
+    if filter_profile.serial_number is not None:
         filter_result = filter_result.filter(serial_number__icontains=filter_profile.serial_number)
 
-    if filter_profile.network != None:
+    if filter_profile.network is not None:
         filter_result = filter_result.filter(network__icontains=filter_profile.network)
 
-    if filter_profile.private_ip != None:
+    if filter_profile.private_ip is not None:
         filter_result = filter_result.filter(private_ip__icontains=filter_profile.private_ip)
 
-    if filter_profile.dmz_public_ip != None:
+    if filter_profile.dmz_public_ip is not None:
         filter_result = filter_result.filter(dmz_public_ip__icontains=filter_profile.dmz_public_ip)
 
-    if filter_profile.virtual_ip != None:
+    if filter_profile.virtual_ip is not None:
         filter_result = filter_result.filter(virtual_ip__icontains=filter_profile.virtual_ip)
 
-    if filter_profile.nat_ip != None:
+    if filter_profile.nat_ip is not None:
         filter_result = filter_result.filter(nat_ip__icontains=filter_profile.nat_ip)
 
-    if filter_profile.ilo_or_cimc != None:
+    if filter_profile.ilo_or_cimc is not None:
         filter_result = filter_result.filter(ilo_or_cimc__icontains=filter_profile.ilo_or_cimc)
 
-    if filter_profile.nic_mac_address != None:
+    if filter_profile.nic_mac_address is not None:
         filter_result = filter_result.filter(nic_mac_address__icontains=filter_profile.nic_mac_address)
 
-    if filter_profile.switch != None:
+    if filter_profile.switch is not None:
         filter_result = filter_result.filter(switch__icontains=filter_profile.switch)
 
-    if filter_profile.port != None:
+    if filter_profile.port is not None:
         filter_result = filter_result.filter(port__icontains=filter_profile.port)
 
-    if filter_profile.purchase_order != None:
+    if filter_profile.purchase_order is not None:
         filter_result = filter_result.filter(purchase_order__icontains=filter_profile.purchase_order)
 
     return filter_result
