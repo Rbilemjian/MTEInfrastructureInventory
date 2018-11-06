@@ -1,8 +1,8 @@
 from django.shortcuts import render, redirect, get_object_or_404, HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.utils import timezone
-from .models import ApplicationServer, FilterProfile
-from .forms import ServerForm, ServerImportForm, ServerSearchForm, FilterProfileForm
+from .models import ApplicationServer, FilterProfile, AdditionalIPs
+from .forms import ServerForm, ServerImportForm, ServerSearchForm, FilterProfileForm, AdditionalIPForm
 import xlrd
 import datetime
 
@@ -386,7 +386,17 @@ def edit_application_server(request, pk):
 @login_required()
 def details_application_server(request, pk):
     applicationServer = get_object_or_404(ApplicationServer, pk=pk)
-    return render(request, 'application_server_details.html', {'applicationServer': applicationServer})
+    IPs = AdditionalIPs.objects.filter(application_server_id=pk)
+    if request.method == "POST":
+        form = AdditionalIPForm(request.POST)
+        if form.is_valid():
+            ip = form.save(commit=False)
+            ip.application_server_id = pk
+            ip.save()
+            form = AdditionalIPForm()
+    else:
+        form = AdditionalIPForm()
+    return render(request, 'application_server_details.html', {'applicationServer': applicationServer, "IPs": IPs, "form": form})
 
 
 @login_required()
@@ -456,7 +466,6 @@ def filter_profile_delete(request, pk):
 @login_required()
 def filter_profile_edit(request, pk):
     filterProfile = get_object_or_404(FilterProfile, pk=pk)
-    print(filterProfile.is_virtual_machine)
     if request.method == "POST":
         form = FilterProfileForm(request.POST, instance=filterProfile)
         if form.is_valid():

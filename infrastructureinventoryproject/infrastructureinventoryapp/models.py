@@ -94,6 +94,13 @@ class ApplicationServer(models.Model):
     last_editor = models.ForeignKey(User, null=True, related_name='last_application_server_editor')
 
 
+class AdditionalIPs(models.Model):
+    application_server = models.ForeignKey(ApplicationServer, related_name="application_server", null=True, blank=True)
+    label = models.CharField(max_length=100)
+    ip = models.GenericIPAddressField()
+
+
+
 class FilterProfile(models.Model):
 
     user = models.ForeignKey(User, related_name='filter_profile_owner', null=True, blank=True)

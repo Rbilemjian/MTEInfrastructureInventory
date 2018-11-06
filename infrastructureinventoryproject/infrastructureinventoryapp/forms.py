@@ -1,6 +1,6 @@
 from django import forms
 from . import models
-from .models import ApplicationServer, FilterProfile
+from .models import ApplicationServer, FilterProfile, AdditionalIPs
 import floppyforms
 
 #Getting list of unique values for certain columns in the database for use in floppyforms
@@ -114,6 +114,12 @@ class ServerSearchForm(forms.Form):
     #Warranty Information Search Form Fields
 
     purchase_order = forms.CharField(required=False, widget=floppyforms.widgets.Input(datalist=purchase_orders, attrs={'size': 45}))
+
+
+class AdditionalIPForm(forms.ModelForm):
+    class Meta:
+        model = AdditionalIPs
+        fields = ['label', 'ip']
 
 
 class FilterProfileForm(forms.ModelForm):
