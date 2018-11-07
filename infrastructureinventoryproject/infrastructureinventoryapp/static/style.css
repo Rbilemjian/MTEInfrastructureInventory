@@ -216,7 +216,13 @@ td, tr {
     border-collapse: separate;
 }
 
+.nested-table {
+    display: none;
+}
 
+a:hover + .nested-table {
+    display: block;
+}
 /* colored backgrounds */
  
 .red {

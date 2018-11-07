@@ -120,6 +120,10 @@ class AdditionalIPForm(forms.ModelForm):
     class Meta:
         model = AdditionalIPs
         fields = ['label', 'ip']
+        widgets = {
+            'label': forms.TextInput(attrs={'size': 45}),
+            'ip': forms.TextInput(attrs={'size': 45}),
+        }
 
 
 class FilterProfileForm(forms.ModelForm):

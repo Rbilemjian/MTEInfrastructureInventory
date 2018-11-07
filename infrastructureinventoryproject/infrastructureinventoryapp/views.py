@@ -246,7 +246,8 @@ def prep_filter_for_save(user, filter):
 @login_required
 def view_application_servers(request):
     application_servers = ApplicationServer.objects.filter(visible=True)
-    return render(request, 'application_server_list.html', {'applicationServers': application_servers})
+    additional_ips = AdditionalIPs.objects.all()
+    return render(request, 'application_server_list.html', {'applicationServers': application_servers, 'additionalIPs': additional_ips})
 
 
 @login_required

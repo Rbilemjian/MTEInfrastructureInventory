@@ -68,28 +68,35 @@
     <br>
 
 
-
-    <form method="post">
-        {% csrf_token %}
-
-        {{ form.non_field_errors }}
-        <div class="row" style="text-align: center">
-            <div class="col-md-3"></div>
-            <div class="col-md-2">
-                {{ form.label.errors }}
-                <label for="{{ form.label.id_for_label }}">Label</label><br>
-                {{ form.label }}
-            </div>
-
-            <div class="col-md-2">
-                {{ form.ip.errors }}
-                <label for="{{ form.ip.id_for_label }}">IP</label><br>
-                {{ form.ip }}
-            </div>
-            <div class="col-md-2"><button type="submit" class="btn btn-success btn-md">Submit<span style="padding-left: 7px" class="glyphicon glyphicon-share-alt" aria-hidden="true">
-            </span></button></div>
+    {{ form.non_field_errors }}
+    <div class="row" style="text-align: center">
+        <div class="col-md-5"></div>
+        <div class="col-md-2">
+            <h4 style="border-bottom: 1px solid #609">Add Additional IP</h4>
         </div>
-    </form>
+    </div>
+    <div class="row" style="text-align: center">
+            <form method="post">
+                {% csrf_token %}
+                <div class="col-md-1"></div>
+                <div class="col-md-4">
+                    {{ form.label.errors }}
+                    <label for="{{ form.label.id_for_label }}">Label: </label>
+                    {{ form.label }}
+                </div>
+
+                <div class="col-md-4">
+                    {{ form.ip.errors }}
+                    <label for="{{ form.ip.id_for_label }}">IP: </label>
+                    {{ form.ip }}
+                </div>
+                <div class="col-md-2">
+                    <button type="submit" style="margin-top:0px" class="btn btn-success btn-md">Submit<span style="padding-left: 7px" class="glyphicon glyphicon-share-alt" aria-hidden="true">
+                    </span></button>
+                </div>
+            </form>
+        </div>
+    </div>
 
     <div class="my-padding"></div>
 
@@ -252,23 +259,33 @@
 
             <div class="my-padding"></div>
 
-            <h4 style="border-bottom: 1px solid #609">Notes</h4>
-            {{ applicationServer.notes }}
-
-            <div class="my-padding"></div>
-
             <h4 style="border-bottom: 1px solid #609">Additional IPs</h4>
 
             {%if IPs.count > 0%}
-            <ul>
-                {%for ip in IPs%}
-                    <li>{{ip.label}} -- {{ip.ip}}</li>
-                {%endfor%}
-            </ul>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col" style="text-align:center">Label</th>
+                        <th scope="col" style="text-align:center">IP Address</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for IP in IPs %}
+                    <tr>
+                        <td>{{IP.label}}</td>
+                        <td>{{IP.ip}}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
             {%else%}
                 None
             {%endif%}
         </div>
+    </div>
+    <div class="row container-fluid" style="text-align: center;">
+            <h4 style="border-bottom: 1px solid #609">Notes</h4>
+            {{ applicationServer.notes }}
     </div>
 
 </div>

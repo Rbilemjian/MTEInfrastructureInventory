@@ -51,7 +51,7 @@
             <table id="example" class="table table-bordered" style="width: 100%;">
                 <thead style="background-color: #580084; color: white">
                 <a href="/infrastructureinventory/applicationserver/">
-                    <tr>
+                    <tr
                         <th class="select-filter">Server Function</th>
                         <th class="select-filter">Primary Application</th>
                         <th class="select-filter">Hostname</th>
@@ -60,6 +60,7 @@
                         <th class="select-filter">Location</th>
                         <th class="select-filter">Virtual Machine</th>
                         <th class="select-filter">Environment</th>
+                        <th class="select-filter">Additional IPs</th>
                         <th class="select-filter">Datacenter</th>
                         <th class="select-filter">Operating System</th>
                         <th class="select-filter">Rack</th>
@@ -96,6 +97,29 @@
                             <td>{{applicationServer.location}}</td>
                             <td>{{applicationServer.is_virtual_machine}}</td>
                             <td>{{applicationServer.get_environment_display}}</td>
+                            <td>
+                                <a>View IPs</a>
+                                <div class="nested-table">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col" style="text-align:center">Label</th>
+                                                <th scope="col" style="text-align:center">IP Address</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for ip in additionalIPs %}
+                                                {% if ip.application_server_id == applicationServer.id %}
+                                                    <tr>
+                                                        <td>{{ip.label}}</td>
+                                                        <td>{{ip.ip}}</td>
+                                                    </tr>
+                                                {% endif %}
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </td>
                             <td>{{applicationServer.data_center}}</td>
                             <td>{{applicationServer.operating_system}}</td>
                             <td>{{applicationServer.rack}}</td>
