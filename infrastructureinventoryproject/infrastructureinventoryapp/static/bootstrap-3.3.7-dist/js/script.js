@@ -20,7 +20,7 @@ $(document).ready(function() {
             }
     }
 
-    $('#example').DataTable( {
+    var table = $('#example').DataTable( {
         "scrollX": true,
         "select": true,
         "paging": false,
@@ -95,6 +95,15 @@ $(document).ready(function() {
 
     });
 
+    $(':checkbox').change(function(e) {
+        e.preventDefault();
+
+        // Get the column API object
+        var column = table.column( $(this).attr('data-column') );
+
+        // Toggle the visibility
+        column.visible( ! column.visible() );
+    });
 });
 
 
