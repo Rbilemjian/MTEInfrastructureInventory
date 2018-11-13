@@ -229,8 +229,7 @@ def filter_from_profile(filter_profile):
     return filter_result
 
 
-def prep_filter_for_save(user, filter):
-    filter.user = user
+def prep_filter_for_save(filter):
     # setting any empty field to have a null value
     fields = FilterProfile._meta.get_all_field_names()
     for field in fields:
@@ -427,7 +426,7 @@ def application_server_delete_confirm(request, pk):
 
 @login_required()
 def filter_profile(request):
-    filterProfiles = FilterProfile.objects.filter(user = request.user)
+    filterProfiles = FilterProfile.objects.all()
     return render(request, 'filter_profiles.html', {"filterProfiles": filterProfiles})
 
 
@@ -437,7 +436,7 @@ def filter_profile_form(request):
         form = FilterProfileForm(request.POST, instance=FilterProfile())
         if form.is_valid():
             filter = form.save(commit=False)
-            filter = prep_filter_for_save(request.user, filter)
+            filter = prep_filter_for_save(filter)
             filter.save()
             return redirect('/infrastructureinventory/applicationserver/filterprofile')
     else:
@@ -471,7 +470,7 @@ def filter_profile_edit(request, pk):
         form = FilterProfileForm(request.POST, instance=filterProfile)
         if form.is_valid():
             filter = form.save(commit=False)
-            filter = prep_filter_for_save(request.user, filter)
+            filter = prep_filter_for_save(filter)
             filter.save()
             return redirect('filter-profile-view')
     else:
