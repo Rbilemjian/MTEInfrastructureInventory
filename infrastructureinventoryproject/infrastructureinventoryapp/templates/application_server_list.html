@@ -310,27 +310,31 @@
                             <td>{{applicationServer.is_virtual_machine}}</td>
                             <td>{{applicationServer.get_environment_display}}</td>
                             <td>
-                                <a>View IPs</a>
-                                <div class="nested-table">
-                                    <table class="table">
+                                {% if applicationServer.getAdditionalIPs.count > 0 %}
+
+                                <a class="link">View IPs</a>
+                                <div class="nested-table" style="padding-bottom:0px">
+                                    <table class="table" style="padding-bottom:0px">
                                         <thead>
-                                            <tr>
-                                                <th scope="col" style="text-align:center">Label</th>
-                                                <th scope="col" style="text-align:center">IP Address</th>
+                                            <tr style="background-color:whitesmoke">
+                                                <th scope="col" style="text-align:center;">Label</th>
+                                                <th scope="col" style="text-align:center;">IP Address</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            {% for ip in additionalIPs %}
-                                                {% if ip.application_server_id == applicationServer.id %}
-                                                    <tr>
-                                                        <td>{{ip.label}}</td>
-                                                        <td>{{ip.ip}}</td>
-                                                    </tr>
-                                                {% endif %}
-                                            {% endfor %}
+                                                {% for ip in applicationServer.getAdditionalIPs %}
+                                                        <tr style="background-color:whitesmoke">
+                                                            <td>{{ip.label}}</td>
+                                                            <td>{{ip.ip}}</td>
+                                                        </tr>
+                                                {% endfor %}
+
                                         </tbody>
                                     </table>
                                 </div>
+                                {% else %}
+                                    None
+                                {% endif %}
                             </td>
                             <td>{{applicationServer.data_center}}</td>
                             <td>{{applicationServer.operating_system}}</td>
@@ -364,3 +368,19 @@
 <div class="my-padding"></div>
 
 {% endblock %}
+
+<script type="text/javascript">
+    $('.nested-table').stop().animate({
+        opacity: '0',
+        display: 'none'
+    }, 600, function() {
+        });
+    });
+    $('#link').mouseover(function(event) {
+        $('.nested-table').stop().animate({
+            opacity: '1',
+            display: 'block'
+        }, 300, function() {
+        });
+    });
+</script>

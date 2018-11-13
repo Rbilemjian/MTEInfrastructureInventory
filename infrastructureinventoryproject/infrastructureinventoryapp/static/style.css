@@ -217,16 +217,28 @@ td, tr {
 }
 
 .nested-table {
-    display: none;
+    visibility:hidden;
+    opacity:0;
+    max-height:0px;
+    overflow:hidden;
+    transition: visibility 1s, max-height 0.5s, opacity 0.25s ease-out;
 }
 
 a:hover + .nested-table {
-    display: block;
+    visibility:visible;
+    opacity:1;
+    max-height:300px;
+    transition: visibility 0s, max-height 0.5s, opacity 0.25s ease-in;
+}
+
+
+#nested-table + #table {
+    background:transparent !important;
 }
 /* colored backgrounds */
  
 .red {
-  background-color: rgba(255, 79, 79, 0.48) !important;
+  color: darkred;
 }
 
 .green {
@@ -234,7 +246,7 @@ a:hover + .nested-table {
 }
 
 .orange {
-    background-color: rgba(255, 165, 0, 0.46) !important;
+    color: darkorange;
 }
 
 /* fix table header misalignment */

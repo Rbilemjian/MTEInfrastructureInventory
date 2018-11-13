@@ -93,6 +93,10 @@ class ApplicationServer(models.Model):
     last_edited = models.DateTimeField(null=True, blank=True)
     last_editor = models.ForeignKey(User, null=True, related_name='last_application_server_editor')
 
+    def getAdditionalIPs(self):
+        additional_ips = AdditionalIPs.objects.filter(application_server_id = self.id)
+        return additional_ips
+
 
 class AdditionalIPs(models.Model):
     application_server = models.ForeignKey(ApplicationServer, related_name="application_server", null=True, blank=True)
