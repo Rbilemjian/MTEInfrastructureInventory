@@ -43,24 +43,24 @@ BOOL_WITH_NULL = [
 class ApplicationServer(models.Model):
 
     #General Information
-    service = models.CharField(max_length=100)
-    hostname = models.CharField(max_length=100)
-    primary_application = models.CharField(max_length=100)
-    is_virtual_machine = models.BooleanField(default=False)
-    environment = models.CharField(max_length=4, choices=ENVIRONMENTS, default="Prod")
-    operating_system = models.CharField(max_length=100)
+    service = models.CharField(max_length=100, null=True, blank=True)
+    hostname = models.CharField(max_length=100, null=True, blank=True)
+    primary_application = models.CharField(max_length=100, null=True, blank=True)
+    is_virtual_machine = models.NullBooleanField(choices=BOOL_WITH_NULL, default=None, null=True, blank=True)
+    environment = models.CharField(max_length=4, choices=ENVIRONMENTS_WITH_NULL, default=None, null=True, blank=True)
+    operating_system = models.CharField(max_length=100, null=True, blank=True)
     model = models.CharField(max_length=100, null=True, blank=True)
     serial_number = models.CharField(max_length=100, null=True, blank=True)
     notes = models.TextField(null=True, blank=True)
 
     #Location Information
-    location = models.CharField(max_length=40)
-    data_center = models.CharField(max_length=30)
+    location = models.CharField(max_length=40, null=True, blank=True)
+    data_center = models.CharField(max_length=30, null=True, blank=True)
     rack = models.CharField(max_length=20, null=True, blank=True)
 
 
     #Network Information
-    network = models.CharField(max_length=4, choices=NETWORKS, default="Corp")
+    network = models.CharField(max_length=4, choices=NETWORKS_WITH_NULL, default=None, null=True, blank=True)
     private_ip = models.GenericIPAddressField(null=True, blank=True)
     dmz_public_ip = models.GenericIPAddressField(null=True, blank=True)
     virtual_ip = models.GenericIPAddressField(null=True, blank=True)

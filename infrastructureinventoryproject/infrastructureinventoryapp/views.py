@@ -26,9 +26,9 @@ def sanitize_server(server, request):
             else:
                 setattr(server, field, "TBD")
     if server.is_virtual_machine == "TBD":
-        server.is_virtual_machine = 0
+        server.is_virtual_machine = None
     if server.environment == "TBD":
-        server.environment = "Prod"
+        server.environment = None
     server.published_by = request.user
     server.published_date = timezone.now()
 
@@ -257,10 +257,8 @@ def create_application_server_form(request):
             server = form.save(commit=False)
             sanitization_result = sanitize_server(server, request)
             server = sanitization_result['server']
-            if sanitization_result['exists_in_database'] is False:
-                server = sanitization_result['server']
-                server.save()
-            return render(request, 'application_server_details.html', {'applicationServer': server})
+            server.save()
+            return redirect('/infrastructureinventory/applicationserver/')
     else:
         form = ServerForm()
     # if form invalid or GET request
@@ -405,7 +403,6 @@ def delete_application_server(request, pk):
     return redirect('/infrastructureinventory/applicationserver/')
 
 
-#TODO: Refactor to be a filterprofile form variation to remove redundancy in helper function for filtering
 @login_required()
 def search_application_server(request):
     if request.method == "POST":
