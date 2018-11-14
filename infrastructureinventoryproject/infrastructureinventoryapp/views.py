@@ -399,7 +399,9 @@ def details_application_server(request, pk):
 
 @login_required()
 def delete_application_server(request, pk):
-    get_object_or_404(ApplicationServer, pk=pk).delete()
+    application_server = get_object_or_404(ApplicationServer, pk=pk)
+    AdditionalIPs.objects.filter(application_server_id=application_server.id).delete()
+    application_server.delete()
     return redirect('/infrastructureinventory/applicationserver/')
 
 
