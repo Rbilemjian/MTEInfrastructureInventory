@@ -46,7 +46,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-xs-12">
-                    <table id="example" class="table table-bordered" style="width: 100%;">
+                    <table id="filters" class="table table-bordered" style="width: 100%;">
                         <tbody>
                             {% for filterProfile in filterProfiles %}
                                 <tr data-href="{% url 'filtered-list-view' pk=filterProfile.pk  %}" class="my-hover" style="text-align: center">
@@ -82,7 +82,7 @@
 
 
                 <p style="text-align: center; margin-bottom:0px;">
-                    No filter profiles have been created under the current user's account.<br>
+                    No filter profiles have been created yet.<br>
                     Click the button below in order to create <one class=""></one>
                 </p>
 
@@ -106,10 +106,10 @@
 
     <script type="text/javascript">
 
-        $('#example').DataTable( {
+$(document).ready(function() {
+        $('#filters').DataTable( {
         "select": true,
         "paging": true,
-        "scrollX: true,
 
 
 
@@ -136,6 +136,7 @@
         },
 
     });
+});
 
     </script>
 
@@ -157,5 +158,11 @@
     <!-- our custom style -->
     <script type="text/javascript" src="{% static 'bootstrap-3.3.7-dist/js/script.js' %}"></script>
 
+    <script type="text/javascript">
+        //table click redirect to filtered server list page
+        $('#filters').on( 'click', 'tbody tr', function () {
+          window.location.href = $(this).data('href');
+        });
+    </script>
 
 {% endblock %}

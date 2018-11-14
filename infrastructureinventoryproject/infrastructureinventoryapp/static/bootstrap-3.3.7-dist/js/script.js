@@ -104,12 +104,20 @@ $(document).ready(function() {
         // Toggle the visibility
         column.visible( ! column.visible() );
     });
-});
 
+    $('#uncheck-all').on('click', function() {
+        $('input[type="checkbox"]:checked').prop('checked', false);
+        table.columns().every(function() {
+            this.visible(false);
+        });
+});
 
 //table click redirect to details page
 $('#example').on( 'click', 'tbody tr', function () {
   window.location.href = $(this).data('href');
+});
+
+
 });
 
 
