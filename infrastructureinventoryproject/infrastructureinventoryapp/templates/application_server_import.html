@@ -8,24 +8,25 @@
 
 {% block body %}
 
-<div class="container-fluid" style="background-color: white; padding-left: 15px; padding-right: 15px; padding-bottom: 10px; margin-bottom: 50px;">
-    <div style="style: inline-block; float:none; text-align: center">
-        <h2>Import Servers from Excel
-            <span style="color: black; font-size: 22px"></span>
-            </h2>
-            <p style="margin-bottom: 0px;">
-                Select the excel file with the server information you would like to import into the site.<br>
-                Excel sheet must follow the exact format of the example available for download below.
-            </p>
+<div class="container" style="border-bottom: 3px inset #c4cedb; border-bottom-left-radius: 5px; border-bottom-right-radius: 5px; border-top-left-radius: 5px; border-top-right-radius: 5px">
+    <div class = "row">
+        <div class="col-md-5">
+            <h2>Import Servers from Excel</h2>
 
-            <div style="style: inline-block; float:none; text-align: center; ">
-                <a role="button" id = "download-btn" class="btn btn-primary" href="{% static "FormatSample.xlsx" %}">
-                    Download Sample Sheet
-                <span style="padding-left: 7px" class="glyphicon glyphicon-save" aria-hiddne="true"></span></a>
-            </div>
+        </div>
+        <div class="col-md-7 text-right">
+            <a role="button" id = "download-btn" class="btn btn-primary" href="{% static "FormatSample.xlsx" %}">
+                Download Sample Sheet
+            <span style="padding-left: 7px" class="glyphicon glyphicon-save" aria-hiddne="true"></span></a>
+        </div>
     </div>
 </div>
 
+<p style="text-align:center; margin-top:25px;">
+    Select the excel file with the server information you would like to import into the site.<br>
+    The excel sheet must follow the exact format of the sample sheet available for download on this page.
+</p>
+<br><br><br>
 <form method="post" enctype="multipart/form-data">
     <div class="row">
         <div class="col-md-12">
