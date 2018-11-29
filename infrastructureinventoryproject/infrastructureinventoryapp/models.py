@@ -41,7 +41,8 @@ BOOL_WITH_NULL = [
 
 RECORD_TYPES = [
     ('record:host', 'Host Record'),
-    ('record:a', 'A Record')
+    ('record:a', 'A Record'),
+    ('record:cname', 'CNAME Record'),
 ]
 
 CRED_TYPES = [
@@ -99,7 +100,6 @@ HOST_FIELDS = {
     'disable',
     'disable_discovery',
     'dns_aliases',
-    'dns_name',
     'extattrs',
     'ipv4addrs',
     'ipv6addrs',
@@ -192,12 +192,34 @@ A_FIELDS = {
     'ddns_principal',
     'disable',
     'discovered_data',
-    'dns_name',
     'extattrs',
     'forbid_reclamation',
     'ipv4addr',
     'last_queried',
     'ms_ad_user_data',
+    'name',
+    'reclaimable',
+    'shared_record_group',
+    'ttl',
+    'use_ttl',
+    'view',
+    'zone'
+}
+
+CNAME_FIELDS = {
+    'aws_rte53_record_info',
+    'canonical',
+    'cloud_info',
+    'comment',
+    'creation_time',
+    'creator',
+    'ddns_principal',
+    'ddns_protected',
+    'disable',
+    'dns_canonical',
+    'extattrs',
+    'forbid_reclamation',
+    'last_queried',
     'name',
     'reclaimable',
     'shared_record_group',
@@ -423,9 +445,10 @@ class ApplicationServer(models.Model):
     visible = models.BooleanField(default=True)
 
     #Logistical Information
-    last_edited = models.DateTimeField(null=True, blank=True)
+    last_pulled = models.DateTimeField(null=True, blank=True)
 
-    #Infoblox Record Information
+    #Infoblox Record Information (In two or more record types)
+    record_type=models.CharField(max_length=15, null=True, blank=True)
     cloud_information = models.ForeignKey(CloudInformation, null=True, blank=True)
     comment = models.TextField(null=True, blank=True)
     ddns_protected = models.NullBooleanField(null=True, blank=True)
@@ -437,8 +460,14 @@ class ApplicationServer(models.Model):
     use_ttl = models.NullBooleanField(null=True, blank=True)
     view = models.CharField(max_length=100, null=True, blank=True)
     zone = models.CharField(max_length=100, null=True, blank=True)
+    creation_time = models.DateTimeField(null=True, blank=True)
+    creator = models.CharField(max_length=100, null=True, blank=True)
+    ddns_principal = models.CharField(max_length=100, null=True, blank=True)
+    reclaimable = models.NullBooleanField(null=True, blank=True)
+    shared_record_group = models.CharField(max_length=300, null=True, blank=True)
+    forbid_reclamation = models.NullBooleanField(null=True, blank=True)
 
-    #Infoblox Host Record Information
+    #Infoblox Host Record Information (only for host records)
     ref = models.CharField(max_length=300, null=True, blank=True)
     allow_telnet = models.NullBooleanField(default=None, null=True, blank=True)
     configure_for_dns = models.NullBooleanField(null=True, blank=True)
@@ -454,17 +483,15 @@ class ApplicationServer(models.Model):
     use_snmp3_credential = models.NullBooleanField(null=True, blank=True)
     use_snmp_credential = models.NullBooleanField(null=True, blank=True)
 
-
-    #Infoblox A Record Information
+    #Infoblox A Record Information (only for a records)
     aws_rte53_record_info = models.ForeignKey(AWSRTE53RecordInfo, null=True, blank=True)
-    creation_time = models.DateTimeField(null=True, blank=True)
-    creator = models.CharField(max_length=100, null=True, blank=True)
-    ddns_principal = models.CharField(max_length=100, null=True, blank=True)
     discovered_data = models.ForeignKey(DiscoveredData, null=True, blank=True)
-    forbid_reclamation = models.NullBooleanField(null=True, blank=True)
     ipv4addr = models.GenericIPAddressField(protocol='ipv4', null=True, blank=True)
-    reclaimable = models.NullBooleanField(null=True, blank=True)
-    shared_record_group = models.CharField(max_length=300, null=True, blank=True)
+
+    #Infoblox CName Record Information (Only for cname records)
+    canonical = models.CharField(max_length=100, null=True, blank=True)
+    dns_canonical = models.CharField(max_length=100, null=True, blank=True)
+
 
 
     def getAdditionalIPs(self):

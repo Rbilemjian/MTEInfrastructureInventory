@@ -5,13 +5,12 @@ from django.contrib.auth.decorators import login_required
 from .models import ApplicationServer, DHCPMember, CloudInformation, HOST_FIELDS, IPV4_FIELDS, IPV6_FIELDS, A_FIELDS
 from .models import SNMP3Credential, SNMPCredential, ExtensibleAttribute, DiscoveredData, IPv4HostAddress
 from .models import IPv6HostAddress, DomainNameServer, LogicFilterRule, Alias, CliCredential, DHCPOption
-from .models import AWSRTE53RecordInfo
+from .models import AWSRTE53RecordInfo, CNAME_FIELDS
 from .forms import InfobloxImportForm
 import requests
 import json
 import urllib3
 
-#TODO: Double check all of the table populating logic
 
 
 #Helper functions
@@ -25,21 +24,10 @@ def nullifyAsNeeded(date):
 
 
 def clearAllInvisible():
-    CliCredential.objects.filter(visible=False).delete()
-    Alias.objects.filter(visible=False).delete()
-    ExtensibleAttribute.objects.filter(visible=False).delete()
-    DHCPOption.objects.filter(visible=False).delete()
-    DomainNameServer.objects.filter(visible=False).delete()
-    LogicFilterRule.objects.filter(visible=False).delete()
-    IPv6HostAddress.objects.filter(visible=False).delete()
-    IPv4HostAddress.objects.filter(visible=False).delete()
-    DiscoveredData.objects.filter(visible=False).delete()
-    AWSRTE53RecordInfo.objects.filter(visible=False).delete()
-    SNMP3Credential.objects.filter(visible=False).delete()
-    SNMPCredential.objects.filter(visible=False).delete()
-    CloudInformation.objects.filter(visible=False).delete()
-    DHCPMember.objects.filter(visible=False).delete()
-    ApplicationServer.objects.filter(visible=False).delete()
+    application_servers = ApplicationServer.objects.filter(visible=False)
+    for application_server in application_servers:
+        application_server.deleteWithForeign()
+
 
 
 def setAllVisible():
@@ -194,7 +182,32 @@ def databaseDiff():
 
 
 
-
+def saveCNAMERecord(record):
+    curr_rec = ApplicationServer(
+        ref=record.get('_ref'),
+        canonical=record.get('canonical'),
+        comment=record.get('comment'),
+        creation_time=nullifyAsNeeded(record.get('creation_time')),
+        creator=record.get('creator'),
+        ddns_principal=record.get('ddns_principal'),
+        ddns_protected=record.get('ddns_protected'),
+        disable=record.get('disable'),
+        dns_canonical=record.get('dns_canonical'),
+        forbid_reclamation=record.get('forbid_reclamation'),
+        last_queried=nullifyAsNeeded(record.get('last_queried')),
+        name=record.get('name'),
+        reclaimable=record.get('reclaimable'),
+        shared_record_group=record.get('shared_record_group'),
+        ttl=record.get('ttl'),
+        use_ttl=record.get('use_ttl'),
+        view=record.get('view'),
+        zone=record.get('zone'),
+        last_pulled=timezone.now(),
+        record_type="CNAME Record",
+        visible=False,
+    )
+    curr_rec.save()
+    return curr_rec
 
 
 
@@ -223,7 +236,8 @@ def saveARecord(record):
         use_ttl=record.get('use_ttl'),
         view=record.get('view'),
         zone=record.get('zone'),
-        last_edited=timezone.now(),
+        last_pulled=timezone.now(),
+        record_type="A Record",
         visible=False,
     )
     curr_rec.save()
@@ -284,7 +298,8 @@ def saveHostRecord(host):
         use_ttl=host.get('use_ttl'),
         view=host.get('view'),
         zone=host.get('zone'),
-        last_edited=timezone.now(),
+        last_pulled=timezone.now(),
+        record_type="Host Record",
         visible=False,
     )
     currHost.save()
@@ -578,7 +593,17 @@ def saveSNMPCredential(host, currHost):
         currHost.save()
 
 
-
+def saveExtAttributes(host, currHost):
+    ext_attrs = host.get('extattrs')
+    if ext_attrs is None: return
+    for ext_attr in ext_attrs:
+        ext_attr_value = ext_attrs.get(ext_attr).get('value')
+        new_ext_attr = ExtensibleAttribute(
+            application_server=currHost,
+            attribute_name=ext_attr,
+            attribute_value=ext_attr_value
+        )
+        new_ext_attr.save()
 
 
 
@@ -594,7 +619,6 @@ def infoblox(request):
         if request.POST.get('confirmed') == "true":
 
 
-            #TODO: NEED TO HANDLE DIFF, MAKE EVERYTHING VISIBLE HERE
             databaseDiff()
             setAllVisible()
             applicationServers = ApplicationServer.objects.filter(visible=True)
@@ -618,22 +642,24 @@ def infoblox(request):
             additional_fields = '&_return_fields='
 
             if record_type == 'record:host':
-                for field in HOST_FIELDS:
-                    additional_fields += field + ','
+                fields = HOST_FIELDS
 
             if record_type == 'record:a':
-                for field in A_FIELDS:
-                    additional_fields += field + ','
+                fields = A_FIELDS
+
+            if record_type == 'record:cname':
+                fields = CNAME_FIELDS
+
+            for field in fields:
+                additional_fields += field + ','
 
             get_url = base_url + static_args + additional_fields
 
             urllib3.disable_warnings()
 
             r = requests.get(get_url, auth=('206582055', 'miketysonpunchout'), verify=False)
-            records = r.json()
             result = r.json()
             records = result.get('result')
-            # print(records)
             next_page_id = result.get('next_page_id')
 
             #"Infinite" loop which ends when no pages to query remain
@@ -650,6 +676,8 @@ def infoblox(request):
                         saveIPv6HostAddresses(record, currHost)
                         saveSNMP3Credential(record, currHost)
                         saveSNMPCredential(record, currHost)
+                        saveExtAttributes(record, currHost)
+
 
 
                     if record_type == "record:a":
@@ -657,13 +685,18 @@ def infoblox(request):
                         saveAWSRTE53RecordInfo(record, currRecord)
                         saveCloudInfo(record, currRecord)
                         saveDiscoveredData(record, currRecord)
+                        saveExtAttributes(record, currRecord)
 
 
-                    #TODO: Deal with this extattrs nightmare
-                    # extattrs = host.get('extattrs')
-                    # if len(extattrs) > 0:
-                    #     if extattrs.get('Owner') is not None:
-                    #         print(extattrs.get('Owner').get('value'))
+
+                    if record_type == "record:cname":
+                        currRecord = saveCNAMERecord(record)
+                        saveAWSRTE53RecordInfo(record, currRecord)
+                        saveCloudInfo(record, currRecord)
+                        saveExtAttributes(record, currRecord)
+
+
+                    #TODO: Deal with extattrs
 
 
 
