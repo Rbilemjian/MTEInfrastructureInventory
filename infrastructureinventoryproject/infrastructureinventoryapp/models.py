@@ -257,6 +257,7 @@ class SNMPCredential(models.Model):
         db_table = "snmpcredential"
 
 
+#One of these to each ApplicationServer
 class AWSRTE53RecordInfo(models.Model):
     alias_target_dns_name = models.CharField(max_length=100, null=True, blank=True)
     alias_target_evaluate_target_health = models.NullBooleanField(null=True, blank=True)
@@ -375,6 +376,7 @@ class DiscoveredData(models.Model):
 
 class ApplicationServer(models.Model):
 
+    #TODO: Get rid of all these irrelevant fields
     #General Information
     service = models.CharField(max_length=100, null=True, blank=True)
     hostname = models.CharField(max_length=100, null=True, blank=True)
@@ -421,10 +423,7 @@ class ApplicationServer(models.Model):
     visible = models.BooleanField(default=True)
 
     #Logistical Information
-    published_by = models.ForeignKey(User, null=True, related_name='application_server_owner')
-    published_date = models.DateTimeField(null=True, blank=True, editable=False)
     last_edited = models.DateTimeField(null=True, blank=True)
-    last_editor = models.ForeignKey(User, null=True, related_name='last_application_server_editor')
 
     #Infoblox Record Information
     cloud_information = models.ForeignKey(CloudInformation, null=True, blank=True)
@@ -471,6 +470,34 @@ class ApplicationServer(models.Model):
     def getAdditionalIPs(self):
         additional_ips = AdditionalIPs.objects.filter(application_server_id=self.id)
         return additional_ips
+
+    def deleteWithForeign(self):
+        ipv4addrs = self.ipv4hostaddress_set.all()
+        for ipv4addr in ipv4addrs:
+            if ipv4addr.discovered_data is not None:
+                ipv4addr.discovered_data.delete()
+
+        ipv6addrs = self.ipv6hostaddress_set.all()
+        for ipv6addr in ipv6addrs:
+            if ipv6addr.discovered_data is not None:
+                ipv6addr.discovered_data.delete()
+
+        if self.cloud_information is not None:
+            cloud_info = self.cloud_information
+            if cloud_info.delegated_member is not None:
+                cloud_info.delegated_member.delete()
+            cloud_info.delete()
+
+        if self.discovered_data is not None:
+            self.discovered_data.delete()
+        if self.aws_rte53_record_info is not None:
+            self.aws_rte53_record_info.delete()
+        if self.snmp3_credential is not None:
+            self.snmp3_credential.delete()
+        if self.snmp_credential is not None:
+            self.snmp_credential.delete()
+
+        self.delete()
 
     class Meta:
         db_table = "applicationserver"
@@ -560,6 +587,11 @@ class IPv4HostAddress(models.Model):
     use_pxe_lease_time = models.NullBooleanField(null=True, blank=True)
     visible = models.BooleanField(default=False)
 
+    def deleteWithForeign(self):
+        if self.discovered_data is not None:
+            self.discovered_data.delete()
+        self.delete()
+
     class Meta:
         db_table = "ipv4hostaddress"
 
@@ -593,6 +625,11 @@ class IPv6HostAddress(models.Model):
     use_valid_lifetime = models.NullBooleanField(null=True, blank=True)
     valid_lifetime = models.PositiveIntegerField(null=True, blank=True)
     visible = models.BooleanField(default=False)
+
+    def deleteWithForeign(self):
+        if self.discovered_data is not None:
+            self.discovered_data.delete()
+        self.delete()
 
     class Meta:
         db_table = "ipv6hostaddress"
@@ -653,7 +690,7 @@ class ExtensibleAttribute(models.Model):
 #Many of these to each ApplicationServer
 class Alias(models.Model):
     application_server = models.ForeignKey(ApplicationServer, null=True, blank=True)
-    alias = models.CharField(max_length=100, null=True, blank=True, unique=True)
+    alias = models.CharField(max_length=100, null=True, blank=True)
     visible = models.BooleanField(default=False)
 
     class Meta:
@@ -673,16 +710,7 @@ class CliCredential(models.Model):
 
 
 
-
-
-
-
-
-
-
-
-#TODO: Create model for A records (might not be needed)
-
+#TODO: Handle CNAME records
 
 
 

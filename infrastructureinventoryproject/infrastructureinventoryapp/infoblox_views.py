@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404, HttpResponse
-
+from django.utils import timezone
 
 from django.contrib.auth.decorators import login_required
 from .models import ApplicationServer, DHCPMember, CloudInformation, HOST_FIELDS, IPV4_FIELDS, IPV6_FIELDS, A_FIELDS
@@ -42,11 +42,164 @@ def clearAllInvisible():
     ApplicationServer.objects.filter(visible=False).delete()
 
 
+def setAllVisible():
+    cli_creds = CliCredential.objects.filter(visible=False)
+    setVisible(cli_creds)
+
+    aliases = Alias.objects.filter(visible=False)
+    setVisible(aliases)
+
+    ext_attrs = ExtensibleAttribute.objects.filter(visible=False)
+    setVisible(ext_attrs)
+
+    dhcp_options = DHCPOption.objects.filter(visible=False)
+    setVisible(dhcp_options)
+
+    domain_name_servers = DomainNameServer.objects.filter(visible=False)
+    setVisible(domain_name_servers)
+
+    logic_filter_rules = LogicFilterRule.objects.filter(visible=False)
+    setVisible(logic_filter_rules)
+
+    ipv6_host_addresses = IPv6HostAddress.objects.filter(visible=False)
+    setVisible(ipv6_host_addresses)
+
+    ipv4_host_addresses = IPv4HostAddress.objects.filter(visible=False)
+    setVisible(ipv4_host_addresses)
+
+    discovered_datas = DiscoveredData.objects.filter(visible=False)
+    setVisible(discovered_datas)
+
+    aws_record_infos = AWSRTE53RecordInfo.objects.filter(visible=False)
+    setVisible(aws_record_infos)
+
+    snmp3_credentials = SNMP3Credential.objects.filter(visible=False)
+    setVisible(snmp3_credentials)
+
+    snmp_credentials = SNMPCredential.objects.filter(visible=False)
+    setVisible(snmp_credentials)
+
+    cloud_informations = CloudInformation.objects.filter(visible=False)
+    setVisible(cloud_informations)
+
+    dhcp_members = DHCPMember.objects.filter(visible=False)
+    setVisible(dhcp_members)
+
+    app_servers = ApplicationServer.objects.filter(visible=False)
+    setVisible(app_servers)
+
+
+
+def setVisible(items):
+    for item in items:
+        item.visible = True
+        item.save()
+
+
+
+def applicationServerDiff(c, n):
+    #TODO: This function does not actually work. Will get it working after basic functionality is achieved
+    #TODO: For now not taking diff. Just updating
+    #c is the current application server to be updated
+    #n is the new application server pulled from infoblox to update from
+
+    c.comment = n.comment
+    c.ddns_protected = n.ddns_protected
+    c.disable = n.disable
+    c.last_queried = n.last_queried
+    c.ms_ad_user_data = n.ms_ad_user_data
+    c.name = n.name
+    c.ttl = n.ttl
+    c.use_ttl = n.use_ttl
+    c.view = n.view
+    c.zone = n.zone
+    c.allow_telnet = n.allow_telnet
+    c.configure_for_dns = n.configure_for_dns
+    c.device_description = n.device_description
+    c.device_type = n.device_type
+    c.device_vendor = n.device_vendor
+    c.disable_discover = n.disable_discovery
+    c.network_view = n.network_view
+    c.rrset_order = n.rrset_order
+    c.use_cli_credentials = n.use_cli_credentials
+    c.use_snmp3_credential = n.use_snmp3_credential
+    c.use_snmp_credential = n.use_snmp3_credential
+    c.creation_time = n.creation_time
+    c.creator = n.creator
+    c.ddns_principal = n.ddns_principal
+    c.forbid_reclamation = n.forbid_reclamation
+    c.ipv4addr = n.ipv4addr
+    c.reclaimable = n.reclaimable
+    c.shared_record_group = n.shared_record_group
+
+    #Handling one-to-one models
+
+    c.snmp_credential = n.snmp3_credential
+
+    #Handling many-to-one models
+    curr_ipv4hosts = c.ipv4hostaddress_set.all()
+    curr_ipv4hosts.delete()
+    new_ipv4hosts = n.ipv4hostaddress_set.all()
+    for new_ipv4host in new_ipv4hosts:
+        new_ipv4host.application_server = c
+
+    curr_ipv6hosts = c.ipv6hostaddress_set.all()
+    curr_ipv6hosts.delete()
+    new_ipv6hosts = n.ipv6hostaddress_set.all()
+    for new_ipv6host in new_ipv6hosts:
+        new_ipv6host.application_server = c
+
+    curr_ext_attrs = c.extensibleattribute_set.all()
+    curr_ext_attrs.delete()
+    new_ext_attrs = n.extensibleattribute_set.all()
+    for new_ext_attr in new_ext_attrs:
+        new_ext_attr.application_server = c
+
+    curr_aliases = c.alias_set.all()
+    curr_aliases.delete()
+    new_aliases = n.alias_set.all()
+    for new_alias in new_aliases:
+        new_alias.application_server = c
+
+    curr_cli_creds = c.clicredential_set.all()
+    curr_cli_creds.delete()
+    new_cli_creds = n.clicredential_set.all()
+    for new_cli_cred in new_cli_creds:
+        new_cli_cred.application_server = c
+
+    c.save()
+    n.delete()
+
+
+
+
+
+
+
+
+
+
+
+
+
+def databaseDiff():
+
+    currAppServers = ApplicationServer.objects.filter(visible=True)
+    newAppServers = ApplicationServer.objects.filter(visible=False)
+
+    for newAppServer in newAppServers:
+        if currAppServers.filter(ref=newAppServer.ref).count() == 1:
+            currAppServer = currAppServers.get(ref=newAppServer.ref)
+            currAppServer.deleteWithForeign()
+
+
+
+
+
 
 
 
 def saveARecord(record):
-    #TODO: deal with aws_rte53_record_info, cloud_finfo, discovered_data, ms_ad_user_data, , lastqueried
     if record.get('ms_ad_user_data') is None:
         ms_ad_user_data=None
     else:
@@ -70,7 +223,8 @@ def saveARecord(record):
         use_ttl=record.get('use_ttl'),
         view=record.get('view'),
         zone=record.get('zone'),
-        visible=False
+        last_edited=timezone.now(),
+        visible=False,
     )
     curr_rec.save()
     return curr_rec
@@ -130,7 +284,8 @@ def saveHostRecord(host):
         use_ttl=host.get('use_ttl'),
         view=host.get('view'),
         zone=host.get('zone'),
-        visible=False
+        last_edited=timezone.now(),
+        visible=False,
     )
     currHost.save()
     return currHost
@@ -436,12 +591,12 @@ def saveSNMPCredential(host, currHost):
 @login_required()
 def infoblox(request):
     if request.method == "POST":
-        print(request.POST)
         if request.POST.get('confirmed') == "true":
 
 
             #TODO: NEED TO HANDLE DIFF, MAKE EVERYTHING VISIBLE HERE
-
+            databaseDiff()
+            setAllVisible()
             applicationServers = ApplicationServer.objects.filter(visible=True)
             return render(request, "application_server_list.html", {"applicationServers": applicationServers})
 

@@ -350,7 +350,6 @@ def import_application_server(request):
     # if form invalid or GET request
     return render(request, 'application_server_import.html', {"form": form})
 
-
 @login_required()
 def confirm_import_application_server(request):
     parsed_servers = ApplicationServer.objects.filter(visible=False)
