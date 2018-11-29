@@ -1,6 +1,6 @@
 from django import forms
 from . import models
-from .models import ApplicationServer, FilterProfile, AdditionalIPs
+from .models import ApplicationServer, FilterProfile, AdditionalIPs, RECORD_TYPES
 import floppyforms
 
 #Getting list of unique values for certain columns in the database for use in floppyforms
@@ -80,6 +80,14 @@ class ServerForm(forms.ModelForm):
 class ServerImportForm(forms.Form):
     file = forms.FileField()
 
+
+#defines form for importing records from a user-designated zone in infoblox
+
+class InfobloxImportForm(forms.Form):
+    view = forms.CharField(min_length=1, max_length=50, required=True)
+    zone = forms.CharField(min_length=1, max_length=50, required=True)
+    record_type = forms.ChoiceField(choices=RECORD_TYPES, required=True, widget=forms.Select())
+
 #defines form for advanced search of application servers
 
 class ServerSearchForm(forms.Form):
@@ -97,7 +105,7 @@ class ServerSearchForm(forms.Form):
     model = forms.CharField(required=False, widget=floppyforms.widgets.Input(datalist=server_models, attrs={'size': 45}))
     serial_number = forms.CharField(required=False, widget=floppyforms.widgets.Input(datalist=serial_numbers, attrs={'size': 45}))
     environment = forms.ChoiceField(required=False, choices=models.ENVIRONMENTS_WITH_NULL, widget=forms.Select())
-    notes = forms.CharField(required=False, widget=forms.Textarea(attrs={'rows': 5, 'cols': 2000, 'style': 'resize: none; width: 99%', 'class': 'container'}))
+    comment = forms.CharField(required=False, widget=forms.Textarea(attrs={'rows': 5, 'cols': 2000, 'style': 'resize: none; width: 99%', 'class': 'container'}))
 
     #Network Information Search Form Fields
 

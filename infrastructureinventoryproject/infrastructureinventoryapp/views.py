@@ -1,12 +1,16 @@
 from django.shortcuts import render, redirect, get_object_or_404, HttpResponse
+
+
 from django.contrib.auth.decorators import login_required
 from django.utils import timezone
-from .models import ApplicationServer, FilterProfile, AdditionalIPs
-from .forms import ServerForm, ServerImportForm, ServerSearchForm, FilterProfileForm, AdditionalIPForm
+from .models import ApplicationServer, FilterProfile, AdditionalIPs, HOST_FIELDS, DHCPMember, CloudInformation
+from .models import SNMP3Credential, SNMPCredential, ExtensibleAttribute, DiscoveredData, IPv4HostAddress
+from .models import IPv6HostAddress, DomainNameServer, LogicFilterRule, Alias, CliCredential, DHCPOption
+from .forms import ServerForm, ServerImportForm, ServerSearchForm, FilterProfileForm, AdditionalIPForm, InfobloxImportForm
 import xlrd
-import datetime
-
-
+import requests
+import json
+import urllib3
 
 #helper functions
 
@@ -20,11 +24,9 @@ def sanitize_server(server, request):
     #correcting fields
     fields = ApplicationServer._meta.get_all_field_names()
     for field in fields:
-        if getattr(server, field) == "":
-            if ApplicationServer._meta.get_field(field).null:
-                setattr(server, field, None)
-            else:
-                setattr(server, field, "TBD")
+        if hasattr(server, field):
+            if getattr(server, field) == "":
+                    setattr(server, field, None)
     if server.is_virtual_machine == "TBD":
         server.is_virtual_machine = None
     if server.environment == "TBD":
@@ -45,7 +47,7 @@ def sanitize_server(server, request):
         rack=server.rack,
         model=server.model,
         serial_number=server.serial_number,
-        notes=server.notes,
+        comment=server.comment,
         network=server.network,
         private_ip=server.private_ip,
         dmz_public_ip=server.dmz_public_ip,
@@ -64,11 +66,9 @@ def sanitize_server(server, request):
 def update_server(server, request):
     fields = ApplicationServer._meta.get_all_field_names()
     for field in fields:
-        if getattr(server, field) == "":
-            if ApplicationServer._meta.get_field(field).null:
-                setattr(server, field, None)
-            else:
-                setattr(server, field, "TBD")
+        if hasattr(server, field):
+            if getattr(server, field) == "":
+                    setattr(server, field, None)
     if server.is_virtual_machine == "TBD":
         server.is_virtual_machine = 0
     if server.environment == "TBD":
@@ -332,9 +332,9 @@ def import_application_server(request):
                 app_server.e_drive = worksheet.cell_value(i, 28)
 
                 if worksheet.cell_value(i, 29) == "":
-                    app_server.notes = None
+                    app_server.comment = None
                 else:
-                    app_server.notes = worksheet.cell_value(i, 29)
+                    app_server.comment = worksheet.cell_value(i, 29)
 
                 sanitization_result = sanitize_server(app_server, request)
                 if sanitization_result['exists_in_database'] is False:
@@ -411,6 +411,7 @@ def search_application_server(request):
         form = ServerSearchForm(request.POST)
         if form.is_valid:
             search_result = filter_servers(form.data)
+            search_result = search_result.filter(visible=True)
             return render(request, 'application_server_search_result.html', {'applicationServers': search_result})
     else:
         form = ServerSearchForm()
@@ -447,6 +448,7 @@ def filter_profile_form(request):
 def filtered_list(request, pk):
     filterProfile = get_object_or_404(FilterProfile, pk=pk)
     filter_result = filter_from_profile(filterProfile)
+    filter_result = filter_result.filter(visible=True)
     return render(request, 'filtered_list.html', {"filterProfile": filterProfile, "applicationServers": filter_result})
 
 
@@ -476,6 +478,8 @@ def filter_profile_edit(request, pk):
         form = FilterProfileForm(instance=filterProfile)
     args = {"form": form, "filterProfile": filterProfile}
     return render(request, "filter_profile_edit.html", args)
+
+#InfoBlox views
 
 
 

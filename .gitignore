@@ -8,3 +8,5 @@ infrastructureinventoryproject/infrastructureinventoryapp/__pycache__/
 *.pyc
 
 infrastructureinventoryproject/infrastructureinventoryapp/migrations/
+
+infrastructureinventoryproject/__init__\.py

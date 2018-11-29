@@ -1,5 +1,5 @@
 from django.conf.urls import url
-from . import views
+from . import views, infoblox_views
 from django.contrib.auth.views import login, logout
 
 urlpatterns = [
@@ -35,4 +35,7 @@ urlpatterns = [
     url(r'^applicationserver/filterprofile/$', views.filter_profile, name="filter-profile-view"),
     url(r'^applicationserver/filterform/$', views.filter_profile_form),
     url(r'^applicationserver/filterprofile/edit/(?P<pk>\d+)/$', views.filter_profile_edit, name="filter-profile-detail-view"),
+
+    #infoblox urls
+    url(r'^applicationserver/infoblox', infoblox_views.infoblox)
 ]

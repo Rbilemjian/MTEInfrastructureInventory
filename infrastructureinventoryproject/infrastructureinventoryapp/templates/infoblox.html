@@ -1,0 +1,142 @@
+
+
+
+
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block links %}
+
+<!-- this css is for the datatable without the exports
+<link rel="stylesheet" type="text/css" href="{% static 'bootstrap-3.3.7-dist/css/dataTables.bootstrap.css' %}"> -->
+
+<!-- DataTable file export css -->
+<link rel="stylesheet" type="text/css" href="{% static 'bootstrap-3.3.7-dist/css/jquery.dataTables.min.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'bootstrap-3.3.7-dist/css/buttons.dataTables.min.css' %}">
+
+<!-- rowGroup API -->
+<link rel="stylesheet" type="text/css" href="{% static 'bootstrap-3.3.7-dist/css/rowGroup.dataTables.min.css' %}">
+
+
+{% endblock %}
+
+{% block scripts %}
+
+    <!-- Datatables js and jquery -->
+
+
+
+    <!-- this js was for the datatable without the exports -->
+    <!--<script type="text/javascript" src="{% static 'bootstrap-3.3.7-dist/js/dataTables.bootstrap.js' %}"></script>-->
+
+    <script type="text/javascript" src="{% static 'bootstrap-3.3.7-dist/js/jquery.dataTables.js' %}"></script>
+
+    <!-- For the export buttons functionality -->
+    <script type="text/javascript" src="{% static 'bootstrap-3.3.7-dist/js/jszip.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'bootstrap-3.3.7-dist/js/pdfmake.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'bootstrap-3.3.7-dist/js/vfs_fonts.js' %}"></script>
+    <script type="text/javascript" src="{% static 'bootstrap-3.3.7-dist/js/dataTables.buttons.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'bootstrap-3.3.7-dist/js/buttons.flash.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'bootstrap-3.3.7-dist/js/buttons.html5.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'bootstrap-3.3.7-dist/js/buttons.print.min.js' %}"></script>
+
+    <!-- our custom style -->
+    <script type="text/javascript" src="{% static 'bootstrap-3.3.7-dist/js/script.js' %}"></script>
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+{% endblock %}
+
+{% block body %}
+
+    <div class="container" style="border-bottom: 3px inset #c4cedb; border-bottom-left-radius: 5px; border-bottom-right-radius: 5px; border-top-left-radius: 5px; border-top-right-radius: 5px">
+        <div class="row">
+            <div class="col-md-4">
+                <h2>Infoblox API Page</h2>
+            </div>
+        </div>
+    </div>
+
+
+    <!--TODO: FIX ERROR MESSAGES-->
+
+
+    <div class="my-padding"></div>
+    <div class="row" style="text-align:center">
+        <form method="post" autocomplete="off">
+            {% csrf_token %}
+
+            {{ form.non_field_errors }}
+
+            {{ form.view.errors }}
+            <label for="{{ form.view.id_for_label }}">View: </label>
+            {{ form.view }}
+
+            &nbsp&nbsp&nbsp
+
+            {{ form.zone.errors }}
+            <label for="{{ form.zone.id_for_label }}">Zone: </label>
+            {{ form.zone }}
+
+            &nbsp&nbsp&nbsp
+
+            {{ form.record_type.errors }}
+            <label for="{{ form.record_type.id_for_label }}">Record Type: </label>
+            {{ form.record_type }}
+
+            &nbsp&nbsp&nbsp
+
+            <button type="submit" class="btn btn-success" style="margin-bottom:23px;">
+                Import from Zone
+            <span style="padding-left:7px" class="glyphicon glyphicon-import" aria-hidden="true"></span></button>
+
+        </form>
+    </div>
+
+{% if records.count > 0 %}
+
+    <div style="text-align:center;">
+        <form method="POST">
+            {% csrf_token %}
+            <input name="confirmed" type="hidden" value="true">
+            <button type="submit" class="btn btn-success" style="margin-bottom:23px;">
+                        Confirm Import
+                    <span style="padding-left:7px" class="glyphicon glyphicon-ok-sign" aria-hidden="true"></span></button>
+        </form>
+    </div>
+
+
+    <div class="container">
+                <div class="col-xs-12">
+                <table id="example" class="table table-bordered" style="width: 100%;">
+                    <thead style="background-color: #580084; color: white">
+                        <tr>
+                            <th class="select-filter">Name</th>
+                            <th class="select-filter">IPv4 Address</th>
+
+                        </tr>
+                        </a>
+                    </thead>
+                    <tbody>
+
+                        {% for record in records %}
+                            <tr data-href="javascript:void(0)">
+                                <td>{{record.name}}</td>
+                                <td>{{record.ipv4addr}}</td>
+                            </tr>
+                        {% endfor %}
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+
+    <br>
+{% endif %}
+
+
+
+<div class="my-padding"></div>
+
+{% endblock %}
