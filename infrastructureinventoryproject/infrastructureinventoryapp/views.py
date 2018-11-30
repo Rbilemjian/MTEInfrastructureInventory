@@ -261,7 +261,7 @@ def view_application_servers(request):
             visible_columns = VisibleColumns.objects.filter(user=request.user).get()
 
     else:
-        form = VisibleColumnForm()
+        form = VisibleColumnForm(instance=VisibleColumns.objects.filter(user=request.user).get())
 
     fields = VisibleColumns._meta.get_all_field_names()
     field_iter = VisibleColumns._meta.get_all_field_names()

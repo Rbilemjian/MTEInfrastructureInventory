@@ -20,8 +20,160 @@
                     {% for applicationServer in applicationServers %}
                         <tr data-href="{%url 'details-view' pk=applicationServer.pk%}" class="my-hover">
                             {% for field in fields %}
+
+
+
                                 {% if field|getfield != None %}
-                                    <td>{{ applicationServer|getattribute:field }}</td>
+
+
+
+                                    {% if field|getfield == "IPv4 Addresses" %}
+
+                                        {% if applicationServer.getIPv4Addresses.0 != null %}
+                                            <td>
+                                                <a class="link">View IPv4 Addresses</a>
+                                                <div class="nested-table" style="padding-bottom:0px">
+                                                    <table class="table" style="padding-bottom:0px">
+                                                        <thead>
+                                                            <tr style="background-color:whitesmoke">
+                                                                <th scope="col" style="text-align:center">Host</th>
+                                                                <th scope="col" style="text-align:center">IPv4</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            {% for ip in applicationServer.getIPv4Addresses %}
+                                                                <tr style="background-color:whitesmoke">
+                                                                    <td style="text-align:center">{{ip.0}}</td>
+                                                                    <td style="text-align:center">{{ip.1}}</td>
+                                                                </tr>
+                                                            {% endfor %}
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </td>
+
+                                        {% else %}
+                                            <td>None</td>
+                                        {% endif %}
+
+
+
+                                    {% elif field|getfield == "IPv6 Addresses" %}
+
+                                        {% if applicationServer.getIPv6Addresses.0 != null %}
+                                                <td>
+                                                    <a class="link">View IPv6 Addresses</a>
+                                                    <div class="nested-table" style="padding-bottom:0px">
+                                                        <table class="table" style="padding-bottom:0px">
+                                                            <thead>
+                                                                <tr style="background-color:whitesmoke">
+                                                                    <th scope="col" style="text-align:center">Host</th>
+                                                                    <th scope="col" style="text-align:center">IPv4</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                {% for ip in applicationServer.getIPv6Addresses %}
+                                                                    <tr style="background-color:whitesmoke">
+                                                                        <td style="text-align:center">{{ip.0}}</td>
+                                                                        <td style="text-align:center">{{ip.1}}</td>
+                                                                    </tr>
+                                                                {% endfor %}
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </td>
+                                            {% else %}
+                                                <td>None</td>
+                                            {% endif %}
+
+
+                                    {% elif field|getfield == "Aliases" %}
+
+                                        {% if applicationServer.getAliases.0 != null %}
+                                                <td>
+                                                    <a class="link">View Aliases</a>
+                                                    <div class="nested-table" style="padding-bottom:0px">
+                                                        <table class="table" style="padding-bottom:0px">
+                                                            <thead>
+                                                                <tr style="background-color:whitesmoke">
+                                                                    <th scope="col" style="text-align:center">Alias</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                {% for alias in applicationServer.getAliases %}
+                                                                    <tr style="background-color:whitesmoke">
+                                                                        <td style="text-align:center">{{alias.0}}</td>
+                                                                    </tr>
+                                                                {% endfor %}
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </td>
+                                            {% else %}
+                                                <td>None</td>
+                                            {% endif %}
+
+
+                                    {% elif field|getfield == "Extensible Attributes" %}
+
+                                        {% if applicationServer.getExtensibleAttributes.0 != null %}
+                                                <td>
+                                                    <a class="link">View Extensible Attributes</a>
+                                                    <div class="nested-table" style="padding-bottom:0px">
+                                                        <table class="table" style="padding-bottom:0px">
+                                                            <thead>
+                                                                <tr style="background-color:whitesmoke">
+                                                                    <th scope="col" style="text-align:center">Attribute Name</th>
+                                                                    <th scope="col" style="text-align:center">Attribute Value</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                {% for extattr in applicationServer.getExtensibleAttributes %}
+                                                                    <tr style="background-color:whitesmoke">
+                                                                        <td style="text-align:center">{{extattr.0}}</td>
+                                                                        <td style="text-align:center">{{extattr.1}}</td>
+                                                                    </tr>
+                                                                {% endfor %}
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </td>
+                                            {% else %}
+                                                <td>None</td>
+                                            {% endif %}
+
+
+                                    {% elif field|getfield == "CLI Credentials" %}
+
+                                        {% if applicationServer.getCliCredentials.0 != null %}
+                                                <td>
+                                                    <a class="link">View CLI Credentials</a>
+                                                    <div class="nested-table" style="padding-bottom:0px">
+                                                        <table class="table" style="padding-bottom:0px">
+                                                            <thead>
+                                                                <tr style="background-color:whitesmoke">
+                                                                    <th scope="col" style="text-align:center">Credential Type</th>
+                                                                    <th scope="col" style="text-align:center">User</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                {% for cli_cred in applicationServer.getCliCredentials %}
+                                                                    <tr style="background-color:whitesmoke">
+                                                                        <td style="text-align:center">{{cli_cred.0}}</td>
+                                                                        <td style="text-align:center">{{cli_cred.1}}</td>
+                                                                    </tr>
+                                                                {% endfor %}
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </td>
+                                            {% else %}
+                                                <td>None</td>
+                                            {% endif %}
+
+                                    {% else %}
+                                        <td>{{ applicationServer|getattribute:field }}</td>
+                                    {% endif %}
                                 {% endif %}
                             {% endfor %}
                         </tr>

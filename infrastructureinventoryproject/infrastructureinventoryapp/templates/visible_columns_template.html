@@ -225,6 +225,18 @@
                                 {{ form.canonical }}
                                 <label for="{{ form.canonical.id_for_label">Canonical</label>
                             </div>
+
+                            <div class="col-md-2">
+                                {{ form.aliases.errors }}
+                                {{ form.aliases }}
+                                <label for="{{ form.aliases.id_for_label">Aliases</label>
+                            </div>
+
+                            <div class="col-md-2">
+                                {{ form.cli_credentials.errors }}
+                                {{ form.cli_credentials }}
+                                <label for="{{ form.cli_credentials.id_for_label">CLI Credentials</label>
+                            </div>
                         </div>
                         <div class="row">
                             <div class="col-md-3"></div>

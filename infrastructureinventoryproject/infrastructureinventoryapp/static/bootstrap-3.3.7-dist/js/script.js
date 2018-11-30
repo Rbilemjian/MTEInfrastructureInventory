@@ -23,7 +23,7 @@ $(document).ready(function() {
     var table = $('#example').DataTable( {
         "scrollX": true,
         "select": true,
-        "paging": false,
+        "paging": true,
 
         //export datatable columns
         dom: 'Bfrtip',

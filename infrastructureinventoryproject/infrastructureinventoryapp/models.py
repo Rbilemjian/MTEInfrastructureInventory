@@ -189,6 +189,8 @@ CNAME_FIELDS = {
     'zone'
 }
 
+
+#TODO: Use the ordering defined here in the future to make the ordering of the display of the columns consistent
 APPLICATION_SERVER_FIELDS = [
     ('record_type', 'Record Type'),
     ('zone', 'Zone'),
@@ -226,6 +228,7 @@ APPLICATION_SERVER_FIELDS = [
     ('ipv6addrs', 'IPv6 Addresses'),
     ('extattrs', 'Extensible Attributes'),
     ('aliases', 'Aliases'),
+    ('cli_credentials', 'CLI Credentials'),
 ]
 
 
@@ -424,6 +427,7 @@ class VisibleColumns(models.Model):
     ipv6addrs = models.BooleanField(default=True)
     extattrs = models.BooleanField(default=True)
     aliases = models.BooleanField(default=True)
+    cli_credentials = models.BooleanField(default=True)
 
     #Infoblox A Record Information (Only for A Records)
     ipv4addr = models.BooleanField(default=True)
@@ -510,12 +514,6 @@ class ApplicationServer(models.Model):
     #Infoblox CName Record Information (Only for cname records)
     canonical = models.CharField(max_length=100, null=True, blank=True)
 
-
-
-    def getAdditionalIPs(self):
-        additional_ips = AdditionalIPs.objects.filter(application_server_id=self.id)
-        return additional_ips
-
     def deleteWithForeign(self):
         ipv4addrs = self.ipv4hostaddress_set.all()
         for ipv4addr in ipv4addrs:
@@ -544,10 +542,23 @@ class ApplicationServer(models.Model):
 
         self.delete()
 
-    def getFieldValue(self, field):
-        if self.hasattr(field):
-            return getattr(self, field)
-        return None
+    def getIPv4Addresses(self):
+        return self.ipv4hostaddress_set.values_list('host', 'ipv4addr').all()
+
+    def getIPv6Addresses(self):
+        return self.ipv6hostaddress_set.values_list('host', 'ipv6addr').all()
+
+    def getAliases(self):
+        return self.alias_set.values_list('alias').all()
+
+    def getExtensibleAttributes(self):
+        # print(self.extensibleattribute_set.values.all())
+        return self.extensibleattribute_set.values_list('attribute_name', 'attribute_value').all()
+
+    def getCliCredentials(self):
+        return self.clicredential_set.values_list('credential_type', 'user').all()
+
+
 
     class Meta:
         db_table = "applicationserver"
