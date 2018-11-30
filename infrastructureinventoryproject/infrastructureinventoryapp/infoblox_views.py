@@ -621,8 +621,7 @@ def infoblox(request):
 
             databaseDiff()
             setAllVisible()
-            applicationServers = ApplicationServer.objects.filter(visible=True)
-            return render(request, "application_server_list.html", {"applicationServers": applicationServers})
+            return redirect('/infrastructureinventory/applicationserver')
 
         form = InfobloxImportForm(request.POST)
         if form.is_valid and len(request.POST.get('view')) > 0 and len(request.POST.get('zone')) > 0:

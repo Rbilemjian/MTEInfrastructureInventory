@@ -448,7 +448,7 @@ class ApplicationServer(models.Model):
     last_pulled = models.DateTimeField(null=True, blank=True)
 
     #Infoblox Record Information (In two or more record types)
-    record_type=models.CharField(max_length=15, null=True, blank=True)
+    record_type = models.CharField(max_length=15, null=True, blank=True)
     cloud_information = models.ForeignKey(CloudInformation, null=True, blank=True)
     comment = models.TextField(null=True, blank=True)
     ddns_protected = models.NullBooleanField(null=True, blank=True)

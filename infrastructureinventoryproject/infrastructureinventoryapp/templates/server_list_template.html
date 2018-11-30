@@ -1,103 +1,25 @@
 {% block 'list' %}
-<div class="row">
+<div class="container">
             <div class="col-xs-12">
             <table id="example" class="table table-bordered" style="width: 100%;">
                 <thead style="background-color: #580084; color: white">
                 <a href="/infrastructureinventory/applicationserver/">
                     <tr>
-                        <th class="select-filter">Server Function</th>
-                        <th class="select-filter">Primary Application</th>
-                        <th class="select-filter">Hostname</th>
-                        <th class="select-filter">Serial Number</th>
-                        <th class="select-filter">Private IP</th>
-                        <th class="select-filter">Location</th>
-                        <th class="select-filter">Virtual Machine</th>
-                        <th class="select-filter">Environment</th>
-                        <th class="select-filter">Additional IPs</th>
-                        <th class="select-filter">Datacenter</th>
-                        <th class="select-filter">Operating System</th>
-                        <th class="select-filter">Rack</th>
-                        <th class="select-filter">Model</th>
-                        <th class="select-filter">Network</th>
-                        <th class="select-filter">DMZ Public IP</th>
-                        <th class="select-filter">Virtual IP</th>
-                        <th class="select-filter">Nat IP</th>
-                        <th class="select-filter">ILO or CIMC</th>
-                        <th class="select-filter">NIC MAC Address</th>
-                        <th class="select-filter">Switch</th>
-                        <th class="select-filter">Port</th>
-                        <th class="select-filter">Purchase Order</th>
-                        <th class="select-filter">Start Date</th>
-                        <th class="select-filter">Next Hardware Support Date</th>
-                        <th class="select-filter">Base Warranty</th>
-                        <th class="select-filter">CPU</th>
-                        <th class="select-filter">RAM (GB)</th>
-                        <th class="select-filter">C: (GB)</th>
-                        <th class="select-filter">D: (GB)</th>
-                        <th class="select-filter">E: (GB)</th>
+                        <th class="select-filter">Name</th>
+                        <th class="select-filter">Record Type</th>
+                        <th class="select-filter">View</th>
+                        <th class="select-filter">Zone</th>
                     </tr>
                     </a>
                 </thead>
                 <tbody>
-
+                    <!--TODO:Make this dynamic in which columns it shows-->
                     {% for applicationServer in applicationServers %}
                         <tr data-href="{%url 'details-view' pk=applicationServer.pk%}" class="my-hover">
-                            <td>{{applicationServer.service}}</td>
-                            <td>{{applicationServer.primary_application}}</td>
-                            <td>{{applicationServer.hostname}}</td>
-                            <td>{{applicationServer.serial_number}}</td>
-                            <td>{{applicationServer.private_ip}}</td>
-                            <td>{{applicationServer.location}}</td>
-                            <td>{{applicationServer.is_virtual_machine}}</td>
-                            <td>{{applicationServer.get_environment_display}}</td>
-                            <td>
-                                {% if applicationServer.getAdditionalIPs.count > 0 %}
-
-                                <a class="link">View IPs</a>
-                                <div class="nested-table" style="padding-bottom:0px">
-                                    <table class="table" style="padding-bottom:0px">
-                                        <thead>
-                                            <tr style="background-color:whitesmoke">
-                                                <th scope="col" style="text-align:center;">Label</th>
-                                                <th scope="col" style="text-align:center;">IP Address</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                                {% for ip in applicationServer.getAdditionalIPs %}
-                                                        <tr style="background-color:whitesmoke">
-                                                            <td style="text-align:center">{{ip.label}}</td>
-                                                            <td style="text-align:center">{{ip.ip}}</td>
-                                                        </tr>
-                                                {% endfor %}
-
-                                        </tbody>
-                                    </table>
-                                </div>
-                                {% else %}
-                                    None
-                                {% endif %}
-                            </td>
-                            <td>{{applicationServer.data_center}}</td>
-                            <td>{{applicationServer.operating_system}}</td>
-                            <td>{{applicationServer.rack}}</td>
-                            <td>{{applicationServer.model}}</td>
-                            <td>{{applicationServer.network}}</td>
-                            <td>{{applicationServer.dmz_public_ip}}</td>
-                            <td>{{applicationServer.virtual_ip}}</td>
-                            <td>{{applicationServer.nat_ip}}</td>
-                            <td>{{applicationServer.ilo_or_cimc}}</td>
-                            <td>{{applicationServer.nic_mac_address}}</td>
-                            <td>{{applicationServer.switch}}</td>
-                            <td>{{applicationServer.port}}</td>
-                            <td>{{applicationServer.purchase_order}}</td>
-                            <td>{{applicationServer.start_date}}</td>
-                            <td>{{applicationServer.next_hardware_support_date}}</td>
-                            <td>{{applicationServer.base_warranty}}</td>
-                            <td>{{applicationServer.cpu}}</td>
-                            <td>{{applicationServer.ram}}</td>
-                            <td>{{applicationServer.c_drive}}</td>
-                            <td>{{applicationServer.d_drive}}</td>
-                            <td>{{applicationServer.e_drive}}</td>
+                            <td>{{applicationServer.name}}</td>
+                            <td>{{applicationServer.record_type}}</td>
+                            <td>{{applicationServer.view}}</td>
+                            <td>{{applicationServer.zone}}</td>
                         </tr>
                     {% endfor %}
 
