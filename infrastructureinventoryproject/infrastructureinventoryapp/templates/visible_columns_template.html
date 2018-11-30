@@ -9,175 +9,242 @@
 
               <div id="collapse1" class="panel-collapse collapse" style="width:100%;">
                 <div class="panel-body">
-                    <form action="" id="myform">
+                    <form action="" method="POST" id="myform">
+                        {% csrf_token %}
+                        {{ form.non_field_errors }}
+
                         <div class="row">
                             <div class="col-md-2">
-                                <input type="checkbox" checked="checked" id="cb1" data-column='0'>
-                                <label for="cb1">Server Function</label>
+                                {{ form.name.errors }}
+                                {{ form.name }}
+                                <label for="{{ form.name.id_for_label">Name</label>
                             </div>
-                            <div class="col-md-2">
-                                <input type="checkbox" checked="checked" data-column='1' id="cb2">
-                                <label for="cb2">Primary Application</label>
-                            </div>
-                            <div class="col-md-2">
 
-                                <input type="checkbox" checked="checked" data-column='2' id="cb3">
-                                <label for="cb3">Hostname</label>
-                            </div>
                             <div class="col-md-2">
-
-                                <input type="checkbox" checked="checked" data-column='3' id="cb4">
-                                <label for="cb4">Serial Number</label>
+                                {{ form.view.errors }}
+                                {{ form.view }}
+                                <label for="{{ form.view.id_for_label">View</label>
                             </div>
-                            <div class="col-md-2">
 
-                                <input type="checkbox" checked="checked" data-column='4' id="cb5">
-                                <label for="cb5">Private IP</label>
+                            <div class="col-md-2">
+                                {{ form.zone.errors }}
+                                {{ form.zone }}
+                                <label for="{{ form.zone.id_for_label">Zone</label>
                             </div>
-                            <div class="col-md-2">
 
-                                <input type="checkbox" checked="checked" data-column='5' id="cb6">
-                                <label for="cb6">Location</label>
+                            <div class="col-md-2">
+                                {{ form.record_type.errors }}
+                                {{ form.record_type }}
+                                <label for="{{ form.record_type.id_for_label">Record Type</label>
+                            </div>
+
+                            <div class="col-md-2">
+                                {{ form.ddns_protected.errors }}
+                                {{ form.ddns_protected }}
+                                <label for="{{ form.ddns_protected.id_for_label">DDNS Protected</label>
+                            </div>
+
+                            <div class="col-md-2">
+                                {{ form.disable.errors }}
+                                {{ form.disable }}
+                                <label for="{{ form.disable.id_for_label">Disable</label>
                             </div>
 
                           </div>
 
                           <div class="row">
                               <div class="col-md-2">
-
-                                    <input type="checkbox" checked="checked" data-column='6' id="cb7">
-                                    <label for="cb7">Virtual Machine</label>
+                                {{ form.last_queried.errors }}
+                                {{ form.last_queried }}
+                                <label for="{{ form.last_queried.id_for_label">Last Queried</label>
                               </div>
-                              <div class="col-md-2">
 
-                                    <input type="checkbox" checked="checked" data-column='7' id="cb8">
-                                    <label for="cb8">Environment</label>
+                              <div class="col-md-2">
+                                {{ form.ms_ad_user_data.errors }}
+                                {{ form.ms_ad_user_data }}
+                                <label for="{{ form.ms_ad_user_data.id_for_label">MS Ad User Data</label>
                               </div>
-                              <div class="col-md-2">
 
-                                    <input type="checkbox" checked="checked" data-column='8' id="cb9">
-                                    <label for="cb9">Additional IPs</label>
+                              <div class="col-md-2">
+                                {{ form.ttl.errors }}
+                                {{ form.ttl }}
+                                <label for="{{ form.ttl.id_for_label">TTL</label>
                               </div>
-                              <div class="col-md-2">
 
-                                    <input type="checkbox" checked="checked" data-column='9' id="cb10">
-                                    <label for="cb10">Datacenter</label>
+                              <div class="col-md-2">
+                                {{ form.use_ttl.errors }}
+                                {{ form.use_ttl }}
+                                <label for="{{ form.use_ttl.id_for_label">Use TTL</label>
                               </div>
-                              <div class="col-md-2">
 
-                                    <input type="checkbox" checked="checked" data-column='10' id="cb11">
-                                    <label for="cb11">Operating System</label>
+                              <div class="col-md-2">
+                                {{ form.creation_time.errors }}
+                                {{ form.creation_time }}
+                                <label for="{{ form.creation_time.id_for_label">Creation Time</label>
                               </div>
-                              <div class="col-md-2">
 
-                                    <input type="checkbox" checked="checked" data-column='11' id="cb12">
-                                    <label for="cb12">Rack</label>
+                              <div class="col-md-2">
+                                {{ form.creator.errors }}
+                                {{ form.creator }}
+                                <label for="{{ form.creator.id_for_label">Creator</label>
                               </div>
                           </div>
-                              <div class="row">
-                              <div class="col-md-2">
 
-                                    <input type="checkbox" checked="checked" data-column='12' id="cb13">
-                                    <label for="cb13">Model</label>
-                              </div>
-                              <div class="col-md-2">
-
-                                    <input type="checkbox" checked="checked" data-column='13' id="cb14">
-                                    <label for="cb14">Network</label>
-                              </div>
-                              <div class="col-md-2">
-
-                                    <input type="checkbox" checked="checked" data-column='14' id="cb15">
-                                    <label for="cb15">DMZ Public IP</label>
-                              </div>
-                              <div class="col-md-2">
-
-                                    <input type="checkbox" checked="checked" data-column='15' id="cb16">
-                                    <label for="cb16">Virtual IP</label>
-                              </div>
-                              <div class="col-md-2">
-
-                                    <input type="checkbox" checked="checked" data-column='16' id="cb17">
-                                    <label for="cb17">Nat IP</label>
-                              </div>
-                              <div class="col-md-2">
-
-                                    <input type="checkbox" checked="checked" data-column='17' id="cb18">
-                                    <label for="cb18">ILO or CIMC</label>
-                              </div>
-                          </div>
-                              <div class="row">
-                              <div class="col-md-2">
-
-                                    <input type="checkbox" checked="checked" data-column='18' id="cb19">
-                                    <label for="cb19">NIC MAC Address</label>
-                              </div>
-                              <div class="col-md-2">
-
-                                    <input type="checkbox" checked="checked" data-column='19' id="cb20">
-                                    <label for="cb20">Switch</label>
-                              </div>
-                              <div class="col-md-2">
-
-                                    <input type="checkbox" checked="checked" data-column='20' id="cb21">
-                                    <label for="cb21">Port</label>
-                              </div>
-                              <div class="col-md-2">
-
-                                    <input type="checkbox" checked="checked" data-column='21' id="cb22">
-                                    <label for="cb22">Purchase Order</label>
-                              </div>
-                              <div class="col-md-2">
-
-                                    <input type="checkbox" checked="checked" data-column='22' id="cb23">
-                                    <label for="cb23">Start Date</label>
-                              </div>
-                              <div class="col-md-2">
-
-                                    <input type="checkbox" checked="checked" data-column='23' id="cb24">
-                                    <label for="cb24">HW Support Date</label>
-                              </div>
-
-                          </div>
                           <div class="row">
                               <div class="col-md-2">
+                                {{ form.ddns_principal.errors }}
+                                {{ form.ddns_principal }}
+                                <label for="{{ form.ddns_principal.id_for_label">DDNS Principal</label>
+                            </div>
 
-                                    <input type="checkbox" checked="checked" data-column='24' id="cb25">
-                                    <label for="cb25">Base Warranty</label>
-                              </div>
                               <div class="col-md-2">
+                                {{ form.reclaimable.errors }}
+                                {{ form.reclaimable }}
+                                <label for="{{ form.reclaimable.id_for_label">Reclaimable</label>
+                            </div>
 
-                                    <input type="checkbox" checked="checked" data-column='25' id="cb26">
-                                    <label for="cb26">CPU</label>
-                              </div>
                               <div class="col-md-2">
+                                {{ form.shared_record_group.errors }}
+                                {{ form.shared_record_group }}
+                                <label for="{{ form.shared_record_group.id_for_label">Shared Rcrd Group</label>
+                            </div>
 
-                                    <input type="checkbox" checked="checked" data-column='26' id="cb27">
-                                    <label for="cb27">RAM</label>
-                              </div>
                               <div class="col-md-2">
+                                {{ form.forbid_reclamation.errors }}
+                                {{ form.forbid_reclamation }}
+                                <label for="{{ form.forbid_reclamation.id_for_label">Forbid Reclamation</label>
+                            </div>
 
-                                    <input type="checkbox" checked="checked" data-column='27' id="cb28">
-                                    <label for="cb28">C:</label>
-                              </div>
                               <div class="col-md-2">
+                                {{ form.ipv4addrs.errors }}
+                                {{ form.ipv4addrs }}
+                                <label for="{{ form.ipv4addrs.id_for_label">IPv4 Addresses</label>
+                            </div>
 
-                                    <input type="checkbox" checked="checked" data-column='28' id="cb29">
-                                    <label for="cb29">D:</label>
-                              </div>
                               <div class="col-md-2">
+                                {{ form.ipv6addrs.errors }}
+                                {{ form.ipv6addrs }}
+                                <label for="{{ form.ipv6addrs.id_for_label">IPv6 Addresses</label>
+                            </div>
+                          </div>
+                        <div class="row">
+                            <div class="col-md-2">
+                                {{ form.extattrs.errors }}
+                                {{ form.extattrs }}
+                                <label for="{{ form.extattrs.id_for_label">Extensible Attributes</label>
+                            </div>
 
-                                    <input type="checkbox" checked="checked" data-column='29' id="cb30">
-                                    <label for="cb30">E:</label>
-                              </div>
+                            <div class="col-md-2">
+                                {{ form.ipv4addr.errors }}
+                                {{ form.ipv4addr }}
+                                <label for="{{ form.ipv4addr.id_for_label">IPv4 Address</label>
+                            </div>
 
+                            <div class="col-md-2">
+                                {{ form.last_pulled.errors }}
+                                {{ form.last_pulled }}
+                                <label for="{{ form.last_pulled.id_for_label">Last Pulled</label>
+                            </div>
+
+                            <div class="col-md-2">
+                                {{ form.ref.errors }}
+                                {{ form.ref }}
+                                <label for="{{ form.ref.id_for_label">Reference</label>
+                            </div>
+
+                            <div class="col-md-2">
+                                {{ form.allow_telnet.errors }}
+                                {{ form.allow_telnet }}
+                                <label for="{{ form.allow_telnet.id_for_label">Allow Telnet</label>
+                            </div>
+
+                            <div class="col-md-2">
+                                {{ form.configure_for_dns.errors }}
+                                {{ form.configure_for_dns }}
+                                <label for="{{ form.configure_for_dns.id_for_label">Configure for DNS</label>
+                            </div>
                         </div>
+                        <div class="row">
+                            <div class="col-md-2">
+                                {{ form.device_location.errors }}
+                                {{ form.device_location }}
+                                <label for="{{ form.device_location.id_for_label">Device Location</label>
+                            </div>
+
+                            <div class="col-md-2">
+                                {{ form.device_type.errors }}
+                                {{ form.device_type }}
+                                <label for="{{ form.device_type.id_for_label">Device Type</label>
+                            </div>
+
+                            <div class="col-md-2">
+                                {{ form.device_vendor.errors }}
+                                {{ form.device_vendor }}
+                                <label for="{{ form.device_vendor.id_for_label">Device Vendor</label>
+                            </div>
+
+                            <div class="col-md-2">
+                                {{ form.disable_discovery.errors }}
+                                {{ form.disable_discovery }}
+                                <label for="{{ form.disable_discovery.id_for_label">Disable Discovery</label>
+                            </div>
+
+                            <div class="col-md-2">
+                                {{ form.network_view.errors }}
+                                {{ form.network_view }}
+                                <label for="{{ form.network_view.id_for_label">Network View</label>
+                            </div>
+
+                            <div class="col-md-2">
+                                {{ form.rrset_order.errors }}
+                                {{ form.rrset_order }}
+                                <label for="{{ form.rrset_order.id_for_label">RRSet Order</label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-2">
+                                {{ form.use_cli_credential.errors }}
+                                {{ form.use_cli_credential }}
+                                <label for="{{ form.use_cli_credential.id_for_label">Use CLI Credntl</label>
+                            </div>
+
+                            <div class="col-md-2">
+                                {{ form.use_snmp3_credential.errors }}
+                                {{ form.use_snmp3_credential }}
+                                <label for="{{ form.use_snmp3_credential.id_for_label">Use SNMP3 Credntl</label>
+                            </div>
+
+                            <div class="col-md-2">
+                                {{ form.use_snmp_credential.errors }}
+                                {{ form.use_snmp_credential }}
+                                <label for="{{ form.use_snmp_credential.id_for_label">Use SNMP Credntl</label>
+                            </div>
+
+                            <div class="col-md-2">
+                                {{ form.canonical.errors }}
+                                {{ form.canonical }}
+                                <label for="{{ form.canonical.id_for_label">Canonical</label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-3"></div>
+                            <div class="col-md-6 text-center">
+                                <button type="button" id="uncheck-all" class="btn btn-primary">
+                                    Uncheck All
+                                <span style="padding-left:7px" class="glyphicon glyphicon-unchecked" aria-hidden="true"></span></button>
+                                <button type="button" id="check-all" class="btn btn-primary">
+                                    Check All
+                                <span style="padding-left:7px" class="glyphicon glyphicon-check" aria-hidden="true"></span></button>
+
+                            </div>
+                        </div>
+
                         <div class="row">
                             <div class="col-md-4"></div>
                             <div class="col-md-4 text-center">
-                                <button type="button" id="uncheck-all" class="btn btn-primary">
-                                    Uncheck All
-                                <span style="padding-left:7px" class="glyphicon glyphicon-check" aria-hidden="true"></span></button>
+                                <button type="submit" class="btn btn-success btn-md">
+                                    Save Visible Columns
+                                    <span style="padding-left: 7px" class="glyphicon glyphicon-save" aria-hidden="true"></span></button>
                             </div>
                         </div>
                     </form>

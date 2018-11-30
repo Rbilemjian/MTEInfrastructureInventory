@@ -192,7 +192,6 @@ def saveCNAMERecord(record):
         ddns_principal=record.get('ddns_principal'),
         ddns_protected=record.get('ddns_protected'),
         disable=record.get('disable'),
-        dns_canonical=record.get('dns_canonical'),
         forbid_reclamation=record.get('forbid_reclamation'),
         last_queried=nullifyAsNeeded(record.get('last_queried')),
         name=record.get('name'),
@@ -216,7 +215,7 @@ def saveARecord(record):
     if record.get('ms_ad_user_data') is None:
         ms_ad_user_data=None
     else:
-        ms_ad_user_data=record.get('ms_ad_user_data').get('active_users_count')
+        ms_ad_user_data = record.get('ms_ad_user_data').get('active_users_count')
     curr_rec = ApplicationServer(
         ref=record.get('_ref'),
         comment=record.get('comment'),
@@ -282,7 +281,7 @@ def saveHostRecord(host):
         configure_for_dns=host.get('configure_for_dns'),
         ddns_protected=host.get('ddns_protected'),
         device_description=host.get('device_description'),
-        location=host.get('device_location'),
+        device_location=host.get('device_location'),
         device_type=host.get('device_type'),
         device_vendor=host.get('device_vendor'),
         disable=host.get('disable'),

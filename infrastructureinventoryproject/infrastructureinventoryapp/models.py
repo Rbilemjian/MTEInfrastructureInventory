@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.db.models.signals import post_save
 
 
 ENVIRONMENTS = [
@@ -43,46 +44,6 @@ RECORD_TYPES = [
     ('record:host', 'Host Record'),
     ('record:a', 'A Record'),
     ('record:cname', 'CNAME Record'),
-]
-
-CRED_TYPES = [
-    ('ENABLE_SSH', 'ENABLE_SSH'),
-    ('ENABLE_TELNET', 'ENABLE_TELNET'),
-    ('SSH', 'SSH'),
-    ('TELNET', 'TELNET')
-]
-
-AUTH_TYPES = [
-    ('CP', 'CP'),
-    ('GM', 'GM'),
-    (None, 'NONE')
-]
-
-DELEGATED_SCOPES = [
-    (None, 'NONE'),
-    ('RECLAIMING', 'RECLAIMING'),
-    ('ROOT', 'ROOT'),
-    ('SUBTREE', 'SUBTREE)')
-]
-
-USAGE_CHOICES = [
-    ('ADAPTER', 'ADAPTER'),
-    ('DELEGATED', 'DELEGATED'),
-    (None, 'NONE'),
-    ('USED_BY', 'USED_BY')
-]
-
-AUTH_PROTOCOLS = [
-    ('MD5', 'MD5'),
-    (None, 'NONE'),
-    ('SHA', 'SHA')
-]
-
-PRIVACY_PROTOCOLS = [
-    ('3DES', '3DES'),
-    ('AES', 'AES'),
-    ('DES', 'DES'),
-    (None, 'NONE')
 ]
 
 HOST_FIELDS = {
@@ -216,7 +177,6 @@ CNAME_FIELDS = {
     'ddns_principal',
     'ddns_protected',
     'disable',
-    'dns_canonical',
     'extattrs',
     'forbid_reclamation',
     'last_queried',
@@ -228,6 +188,46 @@ CNAME_FIELDS = {
     'view',
     'zone'
 }
+
+APPLICATION_SERVER_FIELDS = [
+    ('record_type', 'Record Type'),
+    ('zone', 'Zone'),
+    ('name', 'Name'),
+    ('view', 'View'),
+    ('last_pulled', 'Last Pulled'),
+    ('ddns_protected', 'DDNS Protected'),
+    ('disable', 'Disable'),
+    ('last_queried', 'Last Queried'),
+    ('ms_ad_user_data', 'MS Ad User Data'),
+    ('ttl', 'TTL'),
+    ('use_ttl', 'Use TTL'),
+    ('creation_time', 'Creation Time'),
+    ('creator', 'Creator'),
+    ('ddns_principal', 'DDNS Principal'),
+    ('reclaimable', 'Reclaimable'),
+    ('shared_record_group', 'Shared Record Group'),
+    ('forbid_reclamation', 'Forbid Reclamation'),
+    ('ref', 'Reference'),
+    ('allow_telnet', 'Allow Telnet'),
+    ('configure_for_dns', 'Configure for DNS'),
+    ('device_location', 'Device Location'),
+    ('device_description', 'Device Description'),
+    ('device_type', 'Device Type'),
+    ('device_vendor', 'Device Vendor'),
+    ('disable_discovery', 'Disable Discovery'),
+    ('network_view', 'Network View'),
+    ('rrset_order', 'RRSet Order'),
+    ('use_cli_credentials', 'Use CLI Credentials'),
+    ('use_snmp3_credential', 'Use SNMP3 Credential'),
+    ('use_snmp_credential', 'Use SNMP Credential'),
+    ('ipv4addr', 'IPv4 Address'),
+    ('canonical', 'Canonical'),
+    ('ipv4addrs', 'IPv4 Addresses'),
+    ('ipv6addrs', 'IPv6 Addresses'),
+    ('extattrs', 'Extensible Attributes'),
+    ('aliases', 'Aliases'),
+]
+
 
 
 # One of these to each CloudInformation
@@ -243,14 +243,14 @@ class DHCPMember(models.Model):
 
 #One of these to each ApplicationServer
 class CloudInformation(models.Model):
-    authority_type = models.CharField(max_length=4, choices=AUTH_TYPES)
+    authority_type = models.CharField(max_length=4)
     delegated_member = models.ForeignKey(DHCPMember, null=True, blank=True)
     delegated_root = models.CharField(max_length=100, null=True, blank=True)
-    delegated_scope = models.CharField(max_length=10, choices=DELEGATED_SCOPES, null=True, blank=True)
+    delegated_scope = models.CharField(max_length=10, null=True, blank=True)
     mgmt_platform = models.CharField(max_length=100, null=True, blank=True)
     owned_by_adaptor = models.NullBooleanField(null=True, blank=True)
     tenant = models.CharField(max_length=100, null=True, blank=True)
-    usage = models.CharField(max_length=9, choices=USAGE_CHOICES, null=True, blank=True)
+    usage = models.CharField(max_length=9, null=True, blank=True)
     visible = models.BooleanField(default=False)
 
     class Meta:
@@ -259,9 +259,9 @@ class CloudInformation(models.Model):
 
 #One of these to each ApplicationServer
 class SNMP3Credential(models.Model):
-    authentication_protocol = models.CharField(max_length=4, null=True, blank=True, choices=AUTH_PROTOCOLS)
+    authentication_protocol = models.CharField(max_length=4, null=True, blank=True)
     comment = models.TextField(null=True, blank=True)
-    privacy_protocol = models.CharField(max_length=4, null=True, blank=True, choices=PRIVACY_PROTOCOLS)
+    privacy_protocol = models.CharField(max_length=4, null=True, blank=True)
     user = models.CharField(max_length=100, null=True, blank=True)
     visible = models.BooleanField(default=False)
 
@@ -395,51 +395,69 @@ class DiscoveredData(models.Model):
         db_table = "discovereddata"
 
 
+#One of these to each user - defines column visibility preferences
+class VisibleColumns(models.Model):
+
+    #Associate Visible Column Preference with a User
+    user = models.OneToOneField(User, null=True, blank=True)
+
+    #Infoblox Record Information
+    name = models.BooleanField(default=True)
+    view = models.BooleanField(default=True)
+    zone = models.BooleanField(default=True)
+    record_type = models.BooleanField(default=True)
+    ddns_protected = models.BooleanField(default=True)
+    disable = models.BooleanField(default=True)
+    last_queried = models.BooleanField(default=True)
+    ms_ad_user_data = models.BooleanField(default=True)
+    ttl = models.BooleanField(default=True)
+    use_ttl = models.BooleanField(default=True)
+    creation_time = models.BooleanField(default=True)
+    creator = models.BooleanField(default=True)
+    ddns_principal = models.BooleanField(default=True)
+    reclaimable = models.BooleanField(default=True)
+    shared_record_group = models.BooleanField(default=True)
+    forbid_reclamation = models.BooleanField(default=True)
+
+    #One-to-Many Fields
+    ipv4addrs = models.BooleanField(default=True)
+    ipv6addrs = models.BooleanField(default=True)
+    extattrs = models.BooleanField(default=True)
+    aliases = models.BooleanField(default=True)
+
+    #Infoblox A Record Information (Only for A Records)
+    ipv4addr = models.BooleanField(default=True)
+
+    #Logistical Information
+    last_pulled = models.BooleanField(default=True)
+
+    #Infoblox Host Record Information (Only for Host Records)
+    ref = models.BooleanField(default=True)
+    allow_telnet = models.BooleanField(default=True)
+    configure_for_dns = models.BooleanField(default=True)
+    device_location = models.BooleanField(default=True)
+    device_description = models.BooleanField(default=True)
+    device_type = models.BooleanField(default=True)
+    device_vendor = models.BooleanField(default=True)
+    disable_discovery = models.BooleanField(default=True)
+    network_view = models.BooleanField(default=True)
+    rrset_order = models.BooleanField(default=True)
+    use_cli_credential = models.BooleanField(default=True)
+    use_snmp3_credential = models.BooleanField(default=True)
+    use_snmp_credential = models.BooleanField(default=True)
+
+    #Infoblox CName Record Information (Only for CNAME Records)
+    canonical = models.BooleanField(default=True)
+
+    class Meta:
+        db_table = "visiblecolumns"
+
+
+
+
+
 
 class ApplicationServer(models.Model):
-
-    #TODO: Get rid of all these irrelevant fields
-    #General Information
-    service = models.CharField(max_length=100, null=True, blank=True)
-    hostname = models.CharField(max_length=100, null=True, blank=True)
-    primary_application = models.CharField(max_length=100, null=True, blank=True)
-    is_virtual_machine = models.NullBooleanField(choices=BOOL_WITH_NULL, default=None, null=True, blank=True)
-    environment = models.CharField(max_length=4, choices=ENVIRONMENTS_WITH_NULL, default=None, null=True, blank=True)
-    operating_system = models.CharField(max_length=100, null=True, blank=True)
-    model = models.CharField(max_length=100, null=True, blank=True)
-    serial_number = models.CharField(max_length=100, null=True, blank=True)
-    notes = models.TextField(null=True, blank=True)
-
-    #Location Information
-    location = models.CharField(max_length=40, null=True, blank=True)
-    data_center = models.CharField(max_length=30, null=True, blank=True)
-    rack = models.CharField(max_length=20, null=True, blank=True)
-
-
-    #Network Information
-    network = models.CharField(max_length=4, choices=NETWORKS_WITH_NULL, default=None, null=True, blank=True)
-    private_ip = models.GenericIPAddressField(null=True, blank=True)
-    dmz_public_ip = models.GenericIPAddressField(null=True, blank=True)
-    virtual_ip = models.GenericIPAddressField(null=True, blank=True)
-    nat_ip = models.GenericIPAddressField(null=True, blank=True)
-    ilo_or_cimc = models.GenericIPAddressField(null=True, blank=True)
-    nic_mac_address = models.CharField(max_length=23, null=True, blank=True)
-    switch = models.CharField(max_length=40, null=True, blank=True)
-    port = models.CharField(max_length=40, null=True, blank=True)
-
-    #Warranty Information
-
-    purchase_order = models.CharField(max_length=20, null=True, blank=True)
-    start_date = models.DateField(null=True, blank=True)
-    next_hardware_support_date = models.DateField(null=True, blank=True)
-    base_warranty = models.DateField(null=True, blank=True)
-
-    #Storage Information
-    cpu = models.IntegerField(null=True, blank=True)
-    ram = models.IntegerField(null=True, blank=True)
-    c_drive = models.DecimalField(null=True, blank=True, decimal_places=2, max_digits=10)
-    d_drive = models.DecimalField(null=True, blank=True, decimal_places=2, max_digits=10)
-    e_drive = models.DecimalField(null=True, blank=True, decimal_places=2, max_digits=10)
 
     #Visible Boolean
     visible = models.BooleanField(default=True)
@@ -471,6 +489,7 @@ class ApplicationServer(models.Model):
     ref = models.CharField(max_length=300, null=True, blank=True)
     allow_telnet = models.NullBooleanField(default=None, null=True, blank=True)
     configure_for_dns = models.NullBooleanField(null=True, blank=True)
+    device_location = models.CharField(max_length=100, null=True, blank=True)
     device_description = models.CharField(max_length=500, null=True, blank=True)
     device_type = models.CharField(max_length=100, null=True, blank=True)
     device_vendor = models.CharField(max_length=100, null=True, blank=True)
@@ -490,7 +509,6 @@ class ApplicationServer(models.Model):
 
     #Infoblox CName Record Information (Only for cname records)
     canonical = models.CharField(max_length=100, null=True, blank=True)
-    dns_canonical = models.CharField(max_length=100, null=True, blank=True)
 
 
 
@@ -525,6 +543,11 @@ class ApplicationServer(models.Model):
             self.snmp_credential.delete()
 
         self.delete()
+
+    def getFieldValue(self, field):
+        if self.hasattr(field):
+            return getattr(self, field)
+        return None
 
     class Meta:
         db_table = "applicationserver"
@@ -728,7 +751,7 @@ class Alias(models.Model):
 class CliCredential(models.Model):
     application_server = models.ForeignKey(ApplicationServer, null=True, blank=True)
     comment = models.TextField(null=True, blank=True)
-    credential_type = models.CharField(max_length=13, null=True, blank=True, choices=CRED_TYPES)
+    credential_type = models.CharField(max_length=13, null=True, blank=True)
     user = models.CharField(max_length=100, null=True, blank=True)
     visible = models.BooleanField(default=False)
 
@@ -736,8 +759,16 @@ class CliCredential(models.Model):
         db_table = "clicredential"
 
 
+#When user is created, make a visiblecolumn preference for them
+def create_visible_column(sender, **kwargs):
+    if kwargs['created']:
+        VisibleColumns.objects.create(user=kwargs['instance'])
 
-#TODO: Handle CNAME records
+
+post_save.connect(create_visible_column, sender=User)
+
+
+
 
 
 

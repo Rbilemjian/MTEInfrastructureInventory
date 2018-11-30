@@ -95,21 +95,11 @@ $(document).ready(function() {
 
     });
 
-    $(':checkbox').change(function(e) {
-        e.preventDefault();
-
-        // Get the column API object
-        var column = table.column( $(this).attr('data-column') );
-
-        // Toggle the visibility
-        column.visible( ! column.visible() );
-    });
-
     $('#uncheck-all').on('click', function() {
-        $('input[type="checkbox"]:checked').prop('checked', false);
-        table.columns().every(function() {
-            this.visible(false);
+        $('input[type="checkbox"]').prop('checked', false);
         });
+    $('#check-all').on('click', function() {
+        $('input[type="checkbox"]').prop('checked', true);
 });
 
 //table click redirect to details page

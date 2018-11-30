@@ -1,3 +1,5 @@
+{% load getattribute %}
+{% load getfield %}
 {% block 'list' %}
 <div class="container">
             <div class="col-xs-12">
@@ -5,10 +7,11 @@
                 <thead style="background-color: #580084; color: white">
                 <a href="/infrastructureinventory/applicationserver/">
                     <tr>
-                        <th class="select-filter">Name</th>
-                        <th class="select-filter">Record Type</th>
-                        <th class="select-filter">View</th>
-                        <th class="select-filter">Zone</th>
+                        {% for field in fields %}
+                            {% if field|getfield != None %}
+                                <th class="select-filter">{{ field|getfield }}</th>
+                            {% endif %}
+                        {% endfor %}
                     </tr>
                     </a>
                 </thead>
@@ -16,10 +19,11 @@
                     <!--TODO:Make this dynamic in which columns it shows-->
                     {% for applicationServer in applicationServers %}
                         <tr data-href="{%url 'details-view' pk=applicationServer.pk%}" class="my-hover">
-                            <td>{{applicationServer.name}}</td>
-                            <td>{{applicationServer.record_type}}</td>
-                            <td>{{applicationServer.view}}</td>
-                            <td>{{applicationServer.zone}}</td>
+                            {% for field in fields %}
+                                {% if field|getfield != None %}
+                                    <td>{{ applicationServer|getattribute:field }}</td>
+                                {% endif %}
+                            {% endfor %}
                         </tr>
                     {% endfor %}
 
