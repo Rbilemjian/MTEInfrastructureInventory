@@ -3,6 +3,8 @@
 
 
 {% extends 'base.html' %}
+{% load getattribute %}
+{% load getfield %}
 
 {% load static %}
 
@@ -21,32 +23,6 @@
 
 {% endblock %}
 
-{% block scripts %}
-
-    <!-- Datatables js and jquery -->
-
-
-
-    <!-- this js was for the datatable without the exports -->
-    <!--<script type="text/javascript" src="{% static 'bootstrap-3.3.7-dist/js/dataTables.bootstrap.js' %}"></script>-->
-
-    <script type="text/javascript" src="{% static 'bootstrap-3.3.7-dist/js/jquery.dataTables.js' %}"></script>
-
-    <!-- For the export buttons functionality -->
-    <script type="text/javascript" src="{% static 'bootstrap-3.3.7-dist/js/jszip.min.js' %}"></script>
-    <script type="text/javascript" src="{% static 'bootstrap-3.3.7-dist/js/pdfmake.min.js' %}"></script>
-    <script type="text/javascript" src="{% static 'bootstrap-3.3.7-dist/js/vfs_fonts.js' %}"></script>
-    <script type="text/javascript" src="{% static 'bootstrap-3.3.7-dist/js/dataTables.buttons.min.js' %}"></script>
-    <script type="text/javascript" src="{% static 'bootstrap-3.3.7-dist/js/buttons.flash.min.js' %}"></script>
-    <script type="text/javascript" src="{% static 'bootstrap-3.3.7-dist/js/buttons.html5.min.js' %}"></script>
-    <script type="text/javascript" src="{% static 'bootstrap-3.3.7-dist/js/buttons.print.min.js' %}"></script>
-
-    <!-- our custom style -->
-    <script type="text/javascript" src="{% static 'bootstrap-3.3.7-dist/js/script.js' %}"></script>
-    <script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.js"></script>
-    <script type="text/javascript" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
-{% endblock %}
-
 {% block body %}
 
     <div class="container" style="border-bottom: 3px inset #c4cedb; border-bottom-left-radius: 5px; border-bottom-right-radius: 5px; border-top-left-radius: 5px; border-top-right-radius: 5px">
@@ -63,9 +39,188 @@
 {% include 'visible_columns_template.html' %}
 
 <br>
+<div class="container">
+            <div class="col-xs-12">
+            <table id="example" class="table table-bordered" style="width: 100%;">
+                <thead style="background-color: #580084; color: white">
+                <a href="/infrastructureinventory/applicationserver/">
+                    <tr>
+                        {% for field in fields %}
+                            {% if field|getfield != None %}
+                                <th class="select-filter">{{ field|getfield }}</th>
+                            {% endif %}
+                        {% endfor %}
+                    </tr>
+                    </a>
+                </thead>
+                <tbody>
+                    <!--TODO:Make this dynamic in which columns it shows-->
+                    {% for applicationServer in applicationServers %}
+                        <tr data-href="{%url 'details-view' pk=applicationServer.pk%}" class="my-hover">
+                            {% for field in fields %}
 
 
-{% include 'server_list_template.html' %}
+
+                                {% if field|getfield != None %}
+
+
+
+                                    {% if field|getfield == "IPv4 Addresses" %}
+
+                                        {% if applicationServer.getIPv4Addresses.0 != null %}
+                                            <td>
+                                                <a class="link">View IPv4 Addresses</a>
+                                                <div class="nested-table" style="padding-bottom:0px">
+                                                    <table class="table" style="padding-bottom:0px">
+                                                        <thead>
+                                                            <tr style="background-color:whitesmoke">
+                                                                <th scope="col" style="text-align:center">Host</th>
+                                                                <th scope="col" style="text-align:center">IPv4</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            {% for ip in applicationServer.getIPv4Addresses %}
+                                                                <tr style="background-color:whitesmoke">
+                                                                    <td style="text-align:center">{{ip.0}}</td>
+                                                                    <td style="text-align:center">{{ip.1}}</td>
+                                                                </tr>
+                                                            {% endfor %}
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </td>
+
+                                        {% else %}
+                                            <td>None</td>
+                                        {% endif %}
+
+
+
+                                    {% elif field|getfield == "IPv6 Addresses" %}
+
+                                        {% if applicationServer.getIPv6Addresses.0 != null %}
+                                                <td>
+                                                    <a class="link">View IPv6 Addresses</a>
+                                                    <div class="nested-table" style="padding-bottom:0px">
+                                                        <table class="table" style="padding-bottom:0px">
+                                                            <thead>
+                                                                <tr style="background-color:whitesmoke">
+                                                                    <th scope="col" style="text-align:center">Host</th>
+                                                                    <th scope="col" style="text-align:center">IPv4</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                {% for ip in applicationServer.getIPv6Addresses %}
+                                                                    <tr style="background-color:whitesmoke">
+                                                                        <td style="text-align:center">{{ip.0}}</td>
+                                                                        <td style="text-align:center">{{ip.1}}</td>
+                                                                    </tr>
+                                                                {% endfor %}
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </td>
+                                            {% else %}
+                                                <td>None</td>
+                                            {% endif %}
+
+
+                                    {% elif field|getfield == "Aliases" %}
+
+                                        {% if applicationServer.getAliases.0 != null %}
+                                                <td>
+                                                    <a class="link">View Aliases</a>
+                                                    <div class="nested-table" style="padding-bottom:0px">
+                                                        <table class="table" style="padding-bottom:0px">
+                                                            <thead>
+                                                                <tr style="background-color:whitesmoke">
+                                                                    <th scope="col" style="text-align:center">Alias</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                {% for alias in applicationServer.getAliases %}
+                                                                    <tr style="background-color:whitesmoke">
+                                                                        <td style="text-align:center">{{alias.0}}</td>
+                                                                    </tr>
+                                                                {% endfor %}
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </td>
+                                            {% else %}
+                                                <td>None</td>
+                                            {% endif %}
+
+
+                                    {% elif field|getfield == "Extensible Attributes" %}
+
+                                        {% if applicationServer.getExtensibleAttributes.0 != null %}
+                                                <td>
+                                                    <a class="link">View Extensible Attributes</a>
+                                                    <div class="nested-table" style="padding-bottom:0px">
+                                                        <table class="table" style="padding-bottom:0px">
+                                                            <thead>
+                                                                <tr style="background-color:whitesmoke">
+                                                                    <th scope="col" style="text-align:center">Attribute Name</th>
+                                                                    <th scope="col" style="text-align:center">Attribute Value</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                {% for extattr in applicationServer.getExtensibleAttributes %}
+                                                                    <tr style="background-color:whitesmoke">
+                                                                        <td style="text-align:center">{{extattr.0}}</td>
+                                                                        <td style="text-align:center">{{extattr.1}}</td>
+                                                                    </tr>
+                                                                {% endfor %}
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </td>
+                                            {% else %}
+                                                <td>None</td>
+                                            {% endif %}
+
+
+                                    {% elif field|getfield == "CLI Credentials" %}
+
+                                        {% if applicationServer.getCliCredentials.0 != null %}
+                                                <td>
+                                                    <a class="link">View CLI Credentials</a>
+                                                    <div class="nested-table" style="padding-bottom:0px">
+                                                        <table class="table" style="padding-bottom:0px">
+                                                            <thead>
+                                                                <tr style="background-color:whitesmoke">
+                                                                    <th scope="col" style="text-align:center">Credential Type</th>
+                                                                    <th scope="col" style="text-align:center">User</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                {% for cli_cred in applicationServer.getCliCredentials %}
+                                                                    <tr style="background-color:whitesmoke">
+                                                                        <td style="text-align:center">{{cli_cred.0}}</td>
+                                                                        <td style="text-align:center">{{cli_cred.1}}</td>
+                                                                    </tr>
+                                                                {% endfor %}
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </td>
+                                            {% else %}
+                                                <td>None</td>
+                                            {% endif %}
+
+                                    {% else %}
+                                        <td>{{ applicationServer|getattribute:field }}</td>
+                                    {% endif %}
+                                {% endif %}
+                            {% endfor %}
+                        </tr>
+                    {% endfor %}
+
+                </tbody>
+            </table>
+        </div>
+    </div>
 
 
 <br>
@@ -73,5 +228,30 @@
 
 
 <div class="my-padding"></div>
+
+{% endblock %}
+
+{% block scripts %}
+
+    <!-- Datatables js and jquery -->
+
+    <!-- this js was for the datatable without the exports -->
+    <!--<script type="text/javascript" src="{% static 'bootstrap-3.3.7-dist/js/dataTables.bootstrap.js' %}"></script>-->
+
+    <script type="text/javascript" src="{% static 'bootstrap-3.3.7-dist/js/jquery.dataTables.js' %}"></script>
+    <script type="text/javascript" src="{% static 'bootstrap-3.3.7-dist/js/dataTables.rowGroup.min.js' %}"></script>
+
+    <!-- For the export buttons functionality -->
+    <script type="text/javascript" src="{% static 'bootstrap-3.3.7-dist/js/jszip.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'bootstrap-3.3.7-dist/js/pdfmake.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'bootstrap-3.3.7-dist/js/vfs_fonts.js' %}"></script>
+    <script type="text/javascript" src="{% static 'bootstrap-3.3.7-dist/js/dataTables.buttons.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'bootstrap-3.3.7-dist/js/buttons.flash.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'bootstrap-3.3.7-dist/js/buttons.html5.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'bootstrap-3.3.7-dist/js/buttons.print.min.js' %}"></script>
+
+    <!-- our custom style -->
+    <script type="text/javascript" src="{% static 'bootstrap-3.3.7-dist/js/script.js' %}"></script>
+
 
 {% endblock %}

@@ -3,7 +3,7 @@ from django.shortcuts import render, redirect, get_object_or_404, HttpResponse
 
 from django.contrib.auth.decorators import login_required
 from django.utils import timezone
-from .models import ApplicationServer, FilterProfile, AdditionalIPs, HOST_FIELDS, DHCPMember, CloudInformation
+from .models import ApplicationServer, FilterProfile, HOST_FIELDS, DHCPMember, CloudInformation, DISCOVERED_DATA_FIELDS
 from .models import SNMP3Credential, SNMPCredential, ExtensibleAttribute, DiscoveredData, IPv4HostAddress
 from .models import IPv6HostAddress, DomainNameServer, LogicFilterRule, Alias, CliCredential, DHCPOption, VisibleColumns
 from .forms import InfobloxImportForm, VisibleColumnForm
@@ -409,15 +409,17 @@ def view_application_servers(request):
 @login_required()
 def details_application_server(request, pk):
     applicationServer = get_object_or_404(ApplicationServer, pk=pk)
-    return render(request, 'application_server_details.html', {'applicationServer': applicationServer})
+    dd_fields = DISCOVERED_DATA_FIELDS
+    args = {"applicationServer": applicationServer, "dd_fields": dd_fields}
+    return render(request, 'application_server_details.html', args)
 #
 #
-# @login_required()
-# def delete_application_server(request, pk):
-#     application_server = get_object_or_404(ApplicationServer, pk=pk)
-#     AdditionalIPs.objects.filter(application_server_id=application_server.id).delete()
-#     application_server.delete()
-#     return redirect('/infrastructureinventory/applicationserver/')
+@login_required()
+def delete_application_server(request, pk):
+    application_server = get_object_or_404(ApplicationServer, pk=pk)
+    AdditionalIPs.objects.filter(application_server_id=application_server.id).delete()
+    application_server.delete()
+    return redirect('/infrastructureinventory/applicationserver/')
 #
 #
 # @login_required()
@@ -433,10 +435,10 @@ def details_application_server(request, pk):
 #     return render(request, 'application_server_search_form.html', {'form': form})
 #
 #
-# @login_required()
-# def application_server_delete_confirm(request, pk):
-#     applicationServer = get_object_or_404(ApplicationServer, pk=pk)
-#     return render(request, 'application_server_delete_confirm.html', {'applicationServer': applicationServer})
+@login_required()
+def application_server_delete_confirm(request, pk):
+    applicationServer = get_object_or_404(ApplicationServer, pk=pk)
+    return render(request, 'application_server_delete_confirm.html', {'applicationServer': applicationServer})
 #
 #
 # @login_required()

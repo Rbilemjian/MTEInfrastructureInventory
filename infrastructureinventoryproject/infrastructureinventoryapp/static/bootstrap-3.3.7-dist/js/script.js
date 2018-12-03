@@ -53,8 +53,8 @@ $(document).ready(function() {
                 }
             }
         ],
-        
-        
+
+
 // individual column searching
         initComplete: function () {
             this.api().columns('.select-filter').every( function () {
@@ -65,12 +65,12 @@ $(document).ready(function() {
                         var val = $.fn.dataTable.util.escapeRegex(
                             $(this).val()
                         );
- 
+
                         column
                             .search( val ? '^'+val+'$' : '', true, false )
                             .draw();
                     } );
- 
+
                 column.data().unique().sort().each( function ( d, j ) {
                     select.append( '<option value="'+d+'">'+d+'</option>' )
                 } );

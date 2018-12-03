@@ -231,6 +231,100 @@ APPLICATION_SERVER_FIELDS = [
     ('cli_credentials', 'CLI Credentials'),
 ]
 
+DISCOVERED_DATA_FIELDS = [
+    ('ap_ip_address', 'AP IP Address'),
+    ('ap_name', 'AP Name'),
+    ('ap_ssid', 'AP SSID'),
+    ('bridge_domain', 'Bridge Domain'),
+    ('cisco_ise_endpoint', 'Cisco ISE Endpoint'),
+    ('cisco_ise_security_group', 'Cisco ISE Security Group'),
+    ('cisco_ise_session_store', 'Cisco ISE Session Store'),
+    ('cisco_ise_ssid', 'Cisco ISE SSID'),
+    ('cmp_type', 'CMP Type'),
+    ('device_contact', 'Device Contact'),
+    ('device_model', 'Device Model'),
+    ('device_port_name', 'Device Port Name'),
+    ('device_port_type', 'Device Port Type'),
+    ('device_type', 'Device Type'),
+    ('device_vendor', 'Device Vendor'),
+    ('discovered_name', 'Discovered Name'),
+    ('discoverer', 'Discoverer'),
+    ('duid', 'DUID'),
+    ('endpoint_groups', 'Endpoint Groups'),
+    ('first_discovered', 'First Discovered'),
+    ('iprg_no', 'IPRG Number'),
+    ('iprg_state', 'IPRG State'),
+    ('iprg_type', 'IPRG Type'),
+    ('last_discovered', 'Last Discovered'),
+    ('mac_address', 'Mac Address'),
+    ('mgmt_ip_address', 'Management IP Address'),
+    ('netbios_name', 'Netbios Name'),
+    ('network_component_contact', 'Network Component Contact'),
+    ('network_component_description', 'Network Component Description'),
+    ('network_component_ip', 'Network Component IP'),
+    ('network_component_location', 'Network Component Location'),
+    ('network_component_model', 'Network Component Model'),
+    ('network_component_name', 'Network Component Name'),
+    ('network_component_port_description', 'Network Component Port Description'),
+    ('network_component_port_name', 'Network Component Port Name'),
+    ('network_component_port_number', 'Network Component Port Number'),
+    ('network_component_type', 'Network Component Type'),
+    ('network_component_vendor', 'Network Component Vendor'),
+    ('open_ports', 'Open Ports'),
+    ('os', 'OS'),
+    ('port_duplex', 'Port Duplex'),
+    ('port_link_status', 'Port Link Status'),
+    ('port_speed', 'Port Speed'),
+    ('port_status', 'Port Status'),
+    ('port_type', 'Port Type'),
+    ('port_vlan_description', 'Port VLAN Description'),
+    ('port_vlan_name', 'Port VLAN Name'),
+    ('port_vlan_number', 'Port VLAN Number'),
+    ('task_name', 'Task Name'),
+    ('tenant', 'Tenant'),
+    ('v_adapter', 'V Adapter'),
+    ('v_cluster', 'V Cluster'),
+    ('v_datacenter', 'V Datacenter'),
+    ('v_entity_name', 'V Entity Name'),
+    ('v_entity_type', 'V_Entity Type'),
+    ('v_host', 'V Host'),
+    ('v_switch', 'V Switch'),
+    ('vlan_port_group', 'VLAN Port Group'),
+    ('vmhost_ip_address', 'VM Host IP Address'),
+    ('vmhost_mac_address', 'VM Host Mac Address'),
+    ('vmhost_ip_address', 'VM Host IP Address'),
+    ('vmhost_mac_address', 'VM Host IP Address'),
+    ('vmhost_name', 'VM Host Name'),
+    ('vmhost_nic_names', 'VM Host NIC Names'),
+    ('vmhost_subnet_cidr', 'VM Host Subnet CIDR'),
+    ('vmi_id', 'VMI ID'),
+    ('vmi_ip_type', 'VMI IP Type'),
+    ('vmi_is_public_address', 'VMI Is Public Address'),
+    ('tenant_id', 'Tenant ID'),
+    ('vport_conf_mode', 'VPort Conf Mode'),
+    ('vport_conf_speed', 'VPort Conf Speed'),
+    ('vport_link_status', 'VPort Link Status'),
+    ('vport_mac_address', 'VPort Mac Address'),
+    ('vport_mode', 'VPort Mode'),
+    ('vport_name', 'VPort Name'),
+    ('vport_speed', 'VPort Speed'),
+    ('vswitch_available_ports_count', 'VSwitch Available Port Count'),
+    ('vswitch_id', 'VSwitch ID'),
+    ('vswitch_ipv6_enabled', 'VSwitch IPv6 Enabled'),
+    ('vswitch_name', 'VSwitch Name'),
+    ('vswitch_segment_id', 'VSwitch Segment ID'),
+    ('vswitch_segment_name', 'VSwitch Segment Name'),
+    ('vswitch_segment_port_group', 'VSwitch Segment Port Group'),
+    ('vswitch_segment_type', 'VSwitch Segment Type'),
+    ('vswitch_tep_dhcp_server', 'VSwitch TEP DHCP Server'),
+    ('vswitch_tep_ip', 'VSwitch TEP IP'),
+    ('vswitch_tep_multicast', 'VSwitch TEP Multicast'),
+    ('vswitch_tep_port_group', 'VSwitch TEP Port Group'),
+    ('vswitch_tep_type', 'VSwitch TEP Type'),
+    ('vswitch_tep_vlan', 'VSwitch TEP VLAN'),
+    ('vswitch_type', 'VSwitch Type')
+]
+
 
 
 # One of these to each CloudInformation
@@ -389,7 +483,7 @@ class DiscoveredData(models.Model):
     vswitch_tep_ip = models.GenericIPAddressField(null=True, blank=True)
     vswitch_tep_multicast = models.CharField(max_length=100, null=True, blank=True)
     vswitch_tep_port_group = models.CharField(max_length=100, null=True, blank=True)
-    vswitch_type_type = models.CharField(max_length=100, null=True, blank=True)
+    vswitch_tep_type = models.CharField(max_length=100, null=True, blank=True)
     vswitch_tep_vlan = models.CharField(max_length=100, null=True, blank=True)
     vswitch_type = models.CharField(max_length=100, null=True, blank=True)
     visible = models.BooleanField(default=False)
@@ -562,15 +656,6 @@ class ApplicationServer(models.Model):
 
     class Meta:
         db_table = "applicationserver"
-
-
-class AdditionalIPs(models.Model):
-    application_server = models.ForeignKey(ApplicationServer, related_name="application_server", null=True, blank=True)
-    label = models.CharField(max_length=100)
-    ip = models.GenericIPAddressField()
-
-    class Meta:
-        db_table = "additionalips"
 
 
 

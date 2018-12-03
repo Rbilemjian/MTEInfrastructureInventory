@@ -22,15 +22,12 @@
         <div class="row">
 
             <div class="col-md-8">
-                <h2>{{applicationServer.service}} </h2>
+                <h2>{{applicationServer.name}} </h2>
             </div>
 
             <div class="col-md-4 text-right">
-                <a role="button" class="btn btn-primary btn-md" href="{% url 'edit-view' pk=applicationServer.pk %}">
-                    Edit Server
-                    <span style="padding-left: 7px" class="glyphicon glyphicon-edit" aria-hiddne="true">
-                    </span></a>
-                    {% if user.is_staff %}
+
+                {% if user.is_staff %}
 
                 <a class="btn btn-danger btn-md" data-toggle="modal" data-target="#modal">
                     Delete Server
@@ -63,269 +60,25 @@
             </div>
         {% else %}
             <div>
-                <font style="font-weight: bold;">Published By: </font>
-                {{applicationServer.published_by.username}}
-                <font style="font-weight: bold; margin-left: 30px;">Published On: </font>
-                {{applicationServer.published_date}} PST
+                <font style="font-weight: bold;">Last Pulled: </font>
+                {{applicationServer.last_pulled}} PST
             </div>
         {% endif %}
     </p>
 </div>
 
-    <br>
+<div class="my-padding"></div>
 
-
-{{ form.non_field_errors }}
-{% if form.errors %}
-    <div  style="color:red; text-align:center; padding-bottom:10px;">
-    Your form has errors. Click below and expand form to see why.
-    </div>
-{% endif %}
-
-<div class="container">
-        <div class="panel-group">
-          <div class="panel panel-default">
-            <div class="panel-heading">
-              <h4 class="panel-title" style="text-align:center; width:100%;">
-                <a data-toggle="collapse" href="#collapse1">Add Additional IP</a>
-              </h4>
-            </div>
-
-              <div id="collapse1" class="panel-collapse collapse" style="width:100%;">
-                <div class="panel-body">
-
-
-                    <div class="row" style="text-align: center">
-                        <div class="col-md-5"></div>
-                        <div class="col-md-2">
-                        </div>
-                    </div>
-                    <div class="row" style="text-align:center;">
-                        <div class="col-md-1"></div>
-                        <div class="col-md-4">
-                            {{ form.label.errors }}
-                        </div>
-                        <div class="col-md-4">
-                            {{ form.ip.errors }}
-                        </div>
-                    </div>
-                    <div class="row" style="text-align: center">
-                            <form method="post">
-                                {% csrf_token %}
-                                <div class="col-md-1"></div>
-                                <div class="col-md-4">
-                                    <label for="{{ form.label.id_for_label }}">Label: </label>
-                                    {{ form.label }}
-                                </div>
-
-                                <div class="col-md-4">
-                                    <label for="{{ form.ip.id_for_label }}">IP: </label>
-                                    {{ form.ip }}
-                                </div>
-                                <div class="col-md-2" style="margin-top:5px;">
-                                    <button type="submit" class="btn btn-success btn-md">Submit<span style="padding-left: 7px" class="glyphicon glyphicon-share-alt" aria-hidden="true">
-                                    </span></button>
-                                </div>
-                            </form>
-                        </div>
-
-                </div>
-              </div>
-            </div>
-          </div>
+<div class="container" style="background-color:white;">
+    <div class="row">
+        <div class="col-md-6">
+            <h3>Record Information</h3>
         </div>
+        <div class="col-md-6">
+            <h3>Discovered Data</h3>
 
-
-    <div class="my-padding"></div>
-
-
-
-    <div class="row" style=" width: 100%; text-align: center; display: inline-block; margin: auto;" >
-
-        <div class="col-md-3 col-centered">
-            <h4 style="border-bottom: 1px solid #609">Service</h4>
-            {{applicationServer.service}}
-            
-            <div class="my-padding"></div>
-            
-            <h4 style="border-bottom: 1px solid #609">Primary Application</h4>
-            {{applicationServer.primary_application}}
-            
-            <div class="my-padding"></div>
-            
-            <h4 style="border-bottom: 1px solid #609">Hostname</h4>
-            {{ applicationServer.hostname }}
-            
-            <div class="my-padding"></div>
-            
-            <h4 style="border-bottom: 1px solid #609">Is Virtual Machine</h4>
-            {{applicationServer.is_virtual_machine}}
-            
-            <div class="my-padding"></div>
-            
-            <h4 style="border-bottom: 1px solid #609">Environment</h4>
-            {{applicationServer.get_environment_display}}
-            
-            <div class="my-padding"></div>
-            
-            <h4 style="border-bottom: 1px solid #609">Location</p></h4>
-            {{applicationServer.location}}
-            
-            <div class="my-padding"></div>
-            
-            <h4 style="border-bottom: 1px solid #609">Datacenter</h4>
-            {{applicationServer.data_center}}
-
-            <div class="my-padding"></div>
-
-            <h4 style="border-bottom: 1px solid #609">C Drive</p></h4>
-            {{applicationServer.c_drive}}
-            {% if applicationServer.d_drive %} GB {% endif %}
-        </div>
-
-        
-        
-        <div class="col-md-3 col-centered">
-            <h4 style="border-bottom: 1px solid #609">Operating System</h4>
-            {{applicationServer.operating_system}}
-
-            <div class="my-padding"></div>
-
-            <h4 style="border-bottom: 1px solid #609">Rack</h4>
-            {{applicationServer.rack}}
-
-            <div class="my-padding"></div>
-
-            <h4 style="border-bottom: 1px solid #609">Model</h4>
-            {{ applicationServer.model }}
-
-            <div class="my-padding"></div>
-
-            <h4 style="border-bottom: 1px solid #609">Serial Number</h4>
-            {{ applicationServer.serial_number }}
-
-            <div class="my-padding"></div>
-
-            <h4 style="border-bottom: 1px solid #609">Network</h4>
-            {{ applicationServer.network}}
-
-            <div class="my-padding"></div>
-
-            <h4 style="border-bottom: 1px solid #609">Private IP</p></h4>
-            {{applicationServer.private_ip}}
-
-            <div class="my-padding"></div>
-
-            <h4 style="border-bottom: 1px solid #609">DMZ Public IP</h4>
-            {{applicationServer.dmz_public_ip}}
-
-            <div class="my-padding"></div>
-
-            <h4 style="border-bottom: 1px solid #609">E Drive</h4>
-            {{applicationServer.e_drive}}
-            {% if applicationServer.d_drive %} GB {% endif %}
-        </div>
-
-
-
-        <div class="col-md-3 col-centered">
-            <h4 style="border-bottom: 1px solid #609">Virtual IP</h4>
-            {{applicationServer.virtual_ip}}
-
-            <div class="my-padding"></div>
-
-            <h4 style="border-bottom: 1px solid #609">Nat IP</h4>
-            {{applicationServer.nat_ip}}
-
-            <div class="my-padding"></div>
-
-            <h4 style="border-bottom: 1px solid #609">ILO or CIMC</h4>
-            {{ applicationServer.ilo_or_cimc }}
-
-            <div class="my-padding"></div>
-
-            <h4 style="border-bottom: 1px solid #609">NIC MAC Address</h4>
-            {{ applicationServer.nic_mac_address }}
-
-            <div class="my-padding"></div>
-
-            <h4 style="border-bottom: 1px solid #609">Switch</h4>
-            {{ applicationServer.switch}}
-
-            <div class="my-padding"></div>
-
-            <h4 style="border-bottom: 1px solid #609">Port</p></h4>
-            {{applicationServer.port}}
-
-            <div class="my-padding"></div>
-
-            <h4 style="border-bottom: 1px solid #609">Purchase Order</h4>
-            {{applicationServer.purchase_order}}
-
-            <div class="my-padding"></div>
-
-            <h4 style="border-bottom: 1px solid #609">D Drive</h4>
-            {{applicationServer.d_drive}}
-            {% if applicationServer.d_drive %} GB {% endif %}
-        </div>
-
-
-        <div class="col-md-3 col-centered">
-            <h4 style="border-bottom: 1px solid #609">Start Date</h4>
-            {{applicationServer.start_date}}
-
-            <div class="my-padding"></div>
-
-            <h4 style="border-bottom: 1px solid #609">Next Hardware Support Date</h4>
-            <div id="hw-support">{{applicationServer.next_hardware_support_date}}</div>
-
-            <div class="my-padding"></div>
-
-            <h4 style="border-bottom: 1px solid #609">Base Warranty</h4>
-            {{ applicationServer.base_warranty }}
-
-            <div class="my-padding"></div>
-
-            <h4 style="border-bottom: 1px solid #609">CPU</h4>
-            {{ applicationServer.cpu }}
-
-            <div class="my-padding"></div>
-
-            <h4 style="border-bottom: 1px solid #609">RAM</h4>
-            {{ applicationServer.ram}}
-            {% if applicationServer.d_drive %} GB {% endif %}
-
-            <div class="my-padding"></div>
-
-            <h4 style="border-bottom: 1px solid #609">Additional IPs</h4>
-
-            {%if IPs.count > 0%}
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th scope="col" style="text-align:center">Label</th>
-                        <th scope="col" style="text-align:center">IP Address</th>
-                    </tr>
-                </thead>
-                <tbody>
-                {% for IP in IPs %}
-                    <tr>
-                        <td>{{IP.label}}</td>
-                        <td>{{IP.ip}}</td>
-                    </tr>
-                {% endfor %}
-                </tbody>
-            </table>
-            {%else%}
-                None
-            {%endif%}
         </div>
     </div>
-    <div class="row container-fluid" style="text-align: center;">
-            <h4 style="border-bottom: 1px solid #609">Notes</h4>
-            {{ applicationServer.notes }}
-    </div>
-
 </div>
 
 <div class="my-padding"></div>

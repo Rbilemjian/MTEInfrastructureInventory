@@ -1,6 +1,6 @@
 from django import forms
 from . import models
-from .models import ApplicationServer, FilterProfile, AdditionalIPs, RECORD_TYPES
+from .models import ApplicationServer, FilterProfile, RECORD_TYPES
 import floppyforms
 
 #Getting list of unique values for certain columns in the database for use in floppyforms
