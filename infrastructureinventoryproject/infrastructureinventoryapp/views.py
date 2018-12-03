@@ -6,7 +6,8 @@ from django.utils import timezone
 from .models import ApplicationServer, FilterProfile, HOST_FIELDS, DHCPMember, CloudInformation, DISCOVERED_DATA_FIELDS
 from .models import SNMP3Credential, SNMPCredential, ExtensibleAttribute, DiscoveredData, IPv4HostAddress
 from .models import IPv6HostAddress, DomainNameServer, LogicFilterRule, Alias, CliCredential, DHCPOption, VisibleColumns
-from .forms import InfobloxImportForm, VisibleColumnForm
+from .models import HOST_FIELDS
+from .forms import InfobloxImportForm, VisibleColumnForm, FilterProfileForm, AdvancedSearchForm
 import xlrd
 import requests
 import json
@@ -79,73 +80,30 @@ import urllib3
 #     return server
 #
 #
-# def filter_servers(data):
-#     search_result = ApplicationServer.objects.all()
-#
-#     if data.get('service') != '':
-#         search_result = search_result.filter(service__icontains=data.get('service'))
-#
-#     if data.get('hostname') != '':
-#         search_result = search_result.filter(hostname__icontains=data.get('hostname'))
-#
-#     if data.get('primary_application') != '':
-#         search_result = search_result.filter(primary_application__icontains=data.get('primary_application'))
-#
-#     if data.get('is_virtual_machine') != '':
-#         search_result = search_result.filter(is_virtual_machine=data.get('is_virtual_machine'))
-#
-#     if data.get('environment') != '':
-#         search_result = search_result.filter(environment=data.get('environment'))
-#
-#     if data.get('location') != '':
-#         search_result = search_result.filter(location__icontains=data.get('location'))
-#
-#     if data.get('data_center') != '':
-#         search_result = search_result.filter(data_center__icontains=data.get('data_center'))
-#
-#     if data.get('operating_system') != '':
-#         search_result = search_result.filter(operating_system__icontains=data.get('operating_system'))
-#
-#     if data.get('rack') != '':
-#         search_result = search_result.filter(rack__icontains=data.get('rack'))
-#
-#     if data.get('model') != '':
-#         search_result = search_result.filter(model__icontains=data.get('model'))
-#
-#     if data.get('serial_number') != '':
-#         search_result = search_result.filter(serial_number__icontains=data.get('serial_number'))
-#
-#     if data.get('network') != '':
-#         search_result = search_result.filter(network__icontains=data.get('network'))
-#
-#     if data.get('private_ip') != '':
-#         search_result = search_result.filter(private_ip__icontains=data.get('private_ip'))
-#
-#     if data.get('dmz_public_ip') != '':
-#         search_result = search_result.filter(dmz_public_ip__icontains=data.get('dmz_public_ip'))
-#
-#     if data.get('virtual_ip') != '':
-#         search_result = search_result.filter(virtual_ip__icontains=data.get('virtual_ip'))
-#
-#     if data.get('nat_ip') != '':
-#         search_result = search_result.filter(nat_ip__icontains=data.get('nat_ip'))
-#
-#     if data.get('ilo_or_cimc') != '':
-#         search_result = search_result.filter(ilo_or_cimc__icontains=data.get('ilo_or_cimc'))
-#
-#     if data.get('nic_mac_address') != '':
-#         search_result = search_result.filter(nic_mac_address__icontains=data.get('nic_mac_address'))
-#
-#     if data.get('switch') != '':
-#         search_result = search_result.filter(switch__icontains=data.get('switch'))
-#
-#     if data.get('port') != '':
-#         search_result = search_result.filter(port__icontains=data.get('port'))
-#
-#     if data.get('purchase_order') != '':
-#         search_result = search_result.filter(purchase_order__icontains=data.get('purchase_order'))
-#
-#     return search_result
+def filter_servers(filterProfile):
+
+    fields = FilterProfile._meta.get_all_field_names()
+    if filterProfile.all_fields is not None:
+        results = ApplicationServer.objects.none()
+        for field in fields:
+            if field == "profile_name" or field == "all_fields": continue
+            lookup = "%s__icontains" % field
+            query = {lookup: filterProfile.all_fields}
+            results = results | ApplicationServer.objects.filter(**query).filter(visible=True)
+        search_result = results
+    else:
+        search_result = ApplicationServer.objects.filter(visible=True)
+
+    icontains = "__icontains"
+
+    for field in fields:
+        if field == "profile_name" or field == "all_fields": continue
+        if hasattr(filterProfile, field) and getattr(filterProfile, field):
+            filter = field + icontains
+            value = getattr(filterProfile, field)
+            search_result = search_result.filter(**{filter: value})
+
+    return search_result
 #
 #
 # def filter_from_profile(filter_profile):
@@ -229,20 +187,31 @@ import urllib3
 #     return filter_result
 #
 #
-# def prep_filter_for_save(filter):
-#     # setting any empty field to have a null value
-#     fields = FilterProfile._meta.get_all_field_names()
-#     for field in fields:
-#         if getattr(filter, field) == "":
-#             if FilterProfile._meta.get_field(field).null:
-#                 setattr(filter, field, None)
-#     return filter
-#
-#
-# #view functions
-#
+def prep_filter_for_save(filter):
+    # setting any empty field to have a null value
+    fields = FilterProfile._meta.get_all_field_names()
+    for field in fields:
+        if getattr(filter, field) == "":
+            if FilterProfile._meta.get_field(field).null:
+                setattr(filter, field, None)
+    return filter
 
-#TODO: Create visible columns when user is created
+def get_fields(visible_columns):
+    fields = VisibleColumns._meta.get_all_field_names()
+    field_iter = VisibleColumns._meta.get_all_field_names()
+
+    for field in field_iter:
+        if field == 'user': continue
+        if getattr(visible_columns, field) is False:
+            fields.remove(field)
+
+    return fields
+
+
+
+#View Functions
+
+
 
 @login_required
 def view_application_servers(request):
@@ -263,13 +232,7 @@ def view_application_servers(request):
     else:
         form = VisibleColumnForm(instance=VisibleColumns.objects.filter(user=request.user).get())
 
-    fields = VisibleColumns._meta.get_all_field_names()
-    field_iter = VisibleColumns._meta.get_all_field_names()
-
-    for field in field_iter:
-        if field == 'user': continue
-        if getattr(visible_columns, field) is False:
-            fields.remove(field)
+    fields = get_fields(visible_columns)
 
     args = {'applicationServers': application_servers, 'fields': fields, 'form': form}
     return render(request, 'application_server_list.html', args)
@@ -417,22 +380,25 @@ def details_application_server(request, pk):
 @login_required()
 def delete_application_server(request, pk):
     application_server = get_object_or_404(ApplicationServer, pk=pk)
-    AdditionalIPs.objects.filter(application_server_id=application_server.id).delete()
-    application_server.delete()
+    application_server.deleteWithForeign()
     return redirect('/infrastructureinventory/applicationserver/')
 #
 #
-# @login_required()
-# def search_application_server(request):
-#     if request.method == "POST":
-#         form = ServerSearchForm(request.POST)
-#         if form.is_valid:
-#             search_result = filter_servers(form.data)
-#             search_result = search_result.filter(visible=True)
-#             return render(request, 'application_server_search_result.html', {'applicationServers': search_result})
-#     else:
-#         form = ServerSearchForm()
-#     return render(request, 'application_server_search_form.html', {'form': form})
+@login_required()
+def search_application_server(request):
+    if request.method == "POST":
+        form = AdvancedSearchForm(request.POST)
+        if form.is_valid():
+            filterProfile = form.save(commit=False)
+            prep_filter_for_save(filterProfile)
+            search_result = filter_servers(filterProfile)
+            visible_columns = VisibleColumns.objects.filter(user=request.user).get()
+            fields = get_fields(visible_columns)
+            args = {'applicationServers': search_result, 'fields': fields}
+            return render(request, 'application_server_search_result.html', args)
+    else:
+        form = FilterProfileForm()
+    return render(request, 'application_server_search_form.html', {'form': form})
 #
 #
 @login_required()
@@ -441,60 +407,62 @@ def application_server_delete_confirm(request, pk):
     return render(request, 'application_server_delete_confirm.html', {'applicationServer': applicationServer})
 #
 #
-# @login_required()
-# def filter_profile(request):
-#     filterProfiles = FilterProfile.objects.all()
-#     return render(request, 'filter_profiles.html', {"filterProfiles": filterProfiles})
+@login_required()
+def filter_profile(request):
+    filterProfiles = FilterProfile.objects.all()
+    return render(request, 'filter_profiles.html', {"filterProfiles": filterProfiles})
+
+
+@login_required()
+def filter_profile_form(request):
+    if request.method == "POST":
+        form = FilterProfileForm(request.POST)
+        if form.is_valid():
+            filter = form.save(commit=False)
+            filter = prep_filter_for_save(filter)
+            filter.save()
+            return redirect('/infrastructureinventory/applicationserver/filterprofile')
+    else:
+        form = FilterProfileForm()
+    return render(request, 'filter_profile_form.html', {'form': form})
+
+#
+@login_required()
+def filtered_list(request, pk):
+    filterProfile = get_object_or_404(FilterProfile, pk=pk)
+    filter_result = filter_servers(filterProfile)
+    visible_columns = VisibleColumns.objects.filter(user=request.user).get()
+    fields = get_fields(visible_columns)
+    args = {'applicationServers': filter_result, 'fields': fields, "filterProfile": filterProfile}
+    return render(request, 'filtered_list.html', args)
 #
 #
-# @login_required()
-# def filter_profile_form(request):
-#     if request.method == "POST":
-#         form = FilterProfileForm(request.POST, instance=FilterProfile())
-#         if form.is_valid():
-#             filter = form.save(commit=False)
-#             filter = prep_filter_for_save(filter)
-#             filter.save()
-#             return redirect('/infrastructureinventory/applicationserver/filterprofile')
-#     else:
-#         form = FilterProfileForm()
-#     return render(request, 'filter_profile_form.html', {'form': form})
+@login_required()
+def filter_profile_delete_confirm(request, pk):
+    filterProfile = get_object_or_404(FilterProfile, pk=pk)
+    return render(request, 'filter_profile_delete_confirm.html', {"filterProfile": filterProfile})
 #
 #
-# @login_required()
-# def filtered_list(request, pk):
-#     filterProfile = get_object_or_404(FilterProfile, pk=pk)
-#     filter_result = filter_from_profile(filterProfile)
-#     filter_result = filter_result.filter(visible=True)
-#     return render(request, 'filtered_list.html', {"filterProfile": filterProfile, "applicationServers": filter_result})
-#
-#
-# @login_required()
-# def filter_profile_delete_confirm(request, pk):
-#     filterProfile = get_object_or_404(FilterProfile, pk=pk)
-#     return render(request, 'filter_profile_delete_confirm.html', {"filterProfile": filterProfile})
-#
-#
-# @login_required()
-# def filter_profile_delete(request, pk):
-#     get_object_or_404(FilterProfile, pk=pk).delete()
-#     return redirect('/infrastructureinventory/applicationserver/filterprofile')
-#
-#
-# @login_required()
-# def filter_profile_edit(request, pk):
-#     filterProfile = get_object_or_404(FilterProfile, pk=pk)
-#     if request.method == "POST":
-#         form = FilterProfileForm(request.POST, instance=filterProfile)
-#         if form.is_valid():
-#             filter = form.save(commit=False)
-#             filter = prep_filter_for_save(filter)
-#             filter.save()
-#             return redirect('filter-profile-view')
-#     else:
-#         form = FilterProfileForm(instance=filterProfile)
-#     args = {"form": form, "filterProfile": filterProfile}
-#     return render(request, "filter_profile_edit.html", args)
+@login_required()
+def filter_profile_delete(request, pk):
+    get_object_or_404(FilterProfile, pk=pk).delete()
+    return redirect('/infrastructureinventory/applicationserver/filterprofile')
+
+
+@login_required()
+def filter_profile_edit(request, pk):
+    filterProfile = get_object_or_404(FilterProfile, pk=pk)
+    if request.method == "POST":
+        form = FilterProfileForm(request.POST, instance=filterProfile)
+        if form.is_valid():
+            filter = form.save(commit=False)
+            filter = prep_filter_for_save(filter)
+            filter.save()
+            return redirect('filter-profile-view')
+    else:
+        form = FilterProfileForm(instance=filterProfile)
+    args = {"form": form, "filterProfile": filterProfile}
+    return render(request, "filter_profile_edit.html", args)
 #
 # #InfoBlox views
 #

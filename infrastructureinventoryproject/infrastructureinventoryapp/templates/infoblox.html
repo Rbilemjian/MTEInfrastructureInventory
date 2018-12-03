@@ -21,32 +21,6 @@
 
 {% endblock %}
 
-{% block scripts %}
-
-    <!-- Datatables js and jquery -->
-
-
-
-    <!-- this js was for the datatable without the exports -->
-    <!--<script type="text/javascript" src="{% static 'bootstrap-3.3.7-dist/js/dataTables.bootstrap.js' %}"></script>-->
-
-    <script type="text/javascript" src="{% static 'bootstrap-3.3.7-dist/js/jquery.dataTables.js' %}"></script>
-
-    <!-- For the export buttons functionality -->
-    <script type="text/javascript" src="{% static 'bootstrap-3.3.7-dist/js/jszip.min.js' %}"></script>
-    <script type="text/javascript" src="{% static 'bootstrap-3.3.7-dist/js/pdfmake.min.js' %}"></script>
-    <script type="text/javascript" src="{% static 'bootstrap-3.3.7-dist/js/vfs_fonts.js' %}"></script>
-    <script type="text/javascript" src="{% static 'bootstrap-3.3.7-dist/js/dataTables.buttons.min.js' %}"></script>
-    <script type="text/javascript" src="{% static 'bootstrap-3.3.7-dist/js/buttons.flash.min.js' %}"></script>
-    <script type="text/javascript" src="{% static 'bootstrap-3.3.7-dist/js/buttons.html5.min.js' %}"></script>
-    <script type="text/javascript" src="{% static 'bootstrap-3.3.7-dist/js/buttons.print.min.js' %}"></script>
-
-    <!-- our custom style -->
-    <script type="text/javascript" src="{% static 'bootstrap-3.3.7-dist/js/script.js' %}"></script>
-    <script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.js"></script>
-    <script type="text/javascript" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
-{% endblock %}
-
 {% block body %}
 
     <div class="container" style="border-bottom: 3px inset #c4cedb; border-bottom-left-radius: 5px; border-bottom-right-radius: 5px; border-top-left-radius: 5px; border-top-right-radius: 5px">
@@ -138,5 +112,30 @@
 
 
 <div class="my-padding"></div>
+
+{% endblock %}
+
+{% block scripts %}
+
+    <!-- Datatables js and jquery -->
+
+    <!-- this js was for the datatable without the exports -->
+    <!--<script type="text/javascript" src="{% static 'bootstrap-3.3.7-dist/js/dataTables.bootstrap.js' %}"></script>-->
+
+    <script type="text/javascript" src="{% static 'bootstrap-3.3.7-dist/js/jquery.dataTables.js' %}"></script>
+    <script type="text/javascript" src="{% static 'bootstrap-3.3.7-dist/js/dataTables.rowGroup.min.js' %}"></script>
+
+    <!-- For the export buttons functionality -->
+    <script type="text/javascript" src="{% static 'bootstrap-3.3.7-dist/js/jszip.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'bootstrap-3.3.7-dist/js/pdfmake.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'bootstrap-3.3.7-dist/js/vfs_fonts.js' %}"></script>
+    <script type="text/javascript" src="{% static 'bootstrap-3.3.7-dist/js/dataTables.buttons.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'bootstrap-3.3.7-dist/js/buttons.flash.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'bootstrap-3.3.7-dist/js/buttons.html5.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'bootstrap-3.3.7-dist/js/buttons.print.min.js' %}"></script>
+
+    <!-- our custom style -->
+    <script type="text/javascript" src="{% static 'bootstrap-3.3.7-dist/js/script.js' %}"></script>
+
 
 {% endblock %}

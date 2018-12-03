@@ -30,18 +30,61 @@
             <div class="row">
                 <div class="col-md-4">
                     {{ form.profile_name.errors }}
-                    <label for="{{ form.profile_name.id_for_label }}">* Profile Name</label><br>
+                    <label for="{{ form.profile_name.id_for_label }}">Profile Name</label><br>
                     {{ form.profile_name }}
                 </div>
                 <div class="col-md-4">
                     {{ form.all_fields.errors }}
-                    <label for="{{ form.all_fields.id_for_label }}">Filter all Fields</label><br>
+                    <label for="{{ form.all_fields.id_for_label }}">All Fields</label><br>
                     {{ form.all_fields }}
                 </div>
                 <div class="col-md-4">
-                    {{ form.service.errors }}
-                    <label for="{{ form.service.id_for_label }}">Service</label><br>
-                    {{ form.service }}
+                    {{ form.record_type.errors }}
+                    <label for="{{ form.record_type.id_for_label }}">Record Type</label><br>
+                    {{ form.record_type }}
+                </div>
+            </div>
+
+            <div class="my-padding"></div>
+
+            <div class="row">
+                <div class="col-md-4">
+                    {{ form.name.errors }}
+                    <label for="{{ form.name.id_for_label }}">Name</label><br>
+                    {{ form.name }}
+                </div>
+
+                <div class="col-md-4">
+                    {{ form.view.errors }}
+                    <label for="{{ form.view.id_for_label }}">View</label><br>
+                    {{ form.view }}
+                </div>
+                <div class="col-md-4">
+                    {{ form.zone.errors }}
+                    <label for="{{ form.zone.id_for_label }}">Zone</label><br>
+                    {{ form.zone }}
+                </div>
+
+            </div>
+
+            <div class="my-padding"></div>
+
+            <div class="row">
+
+                <div class="col-md-4">
+                    {{ form.ms_ad_user_data.errors }}
+                    <label for="{{ form.ms_ad_user_data.id_for_label }}">MS AD User Count</label><br>
+                    {{ form.ms_ad_user_data }}
+                </div>
+                <div class="col-md-4">
+                    {{ form.ttl.errors }}
+                    <label for="{{ form.ttl.id_for_label }}">Time to Live</label><br>
+                    {{ form.ttl }}
+                </div>
+                <div class="col-md-4">
+                    {{ form.creator.errors }}
+                    <label for="{{ form.creator.id_for_label }}">Creator</label><br>
+                    {{ form.creator }}
                 </div>
 
             </div>
@@ -50,104 +93,43 @@
 
             <div class="row">
                 <div class="col-md-4">
-                    {{ form.hostname.errors }}
-                    <label for="{{ form.hostname.id_for_label }}">Hostname</label><br>
-                    {{ form.hostname }}
+                    {{ form.ddns_principal.errors }}
+                    <label for="{{ form.ddns_principal.id_for_label }}">DDNS Principal</label><br>
+                    {{ form.ddns_principal }}
                 </div>
                 <div class="col-md-4">
-                    {{ form.primary_application.errors }}
-                    <label for="{{ form.category.id_for_label }}">Primary Application </label><br>
-                    {{ form.primary_application }}
+                    {{ form.shared_record_group.errors }}
+                    <label for="{{ form.shared_record_group.id_for_label }}">Shared Record Group</label><br>
+                    {{ form.shared_record_group }}
                 </div>
                 <div class="col-md-4">
-                    {{ form.operating_system.errors }}
-                    <label for="{{ form.operating_system.id_for_label }}">Operating System</label><br>
-                    {{ form.operating_system }}
+                    {{ form.ref.errors }}
+                    <label for="{{ form.ref.id_for_label }}">Ref</label><br>
+                    {{ form.ref }}
                 </div>
+
             </div>
 
             <div class="my-padding"></div>
 
             <div class="row">
-                <div class="col-md-4">
-                    {{ form.model.errors }}
-                    <label for="{{ form.model.id_for_label }}">Model</label><br>
-                    {{ form.model }}
-                </div>
-                <div class="col-md-4">
-                    {{ form.serial_number.errors }}
-                    <label for="{{ form.operating_system.id_for_label }}">Serial Number</label><br>
-                    {{ form.serial_number }}
-                </div>
 
                 <div class="col-md-4">
-                    {{ form.purchase_order.errors }}
-                    <label for="{{ form.purchase_order.id_for_label }}">Purchase Order</label><br>
-                    {{ form.purchase_order }}
-                </div>
-            </div>
-            <div class="my-padding"></div>
-            <div class="row">
-                <div class="col-md-4">
-                    {{ form.environment.errors }}
-                    <label for="{{ form.environment.id_for_label }}">Environment</label><br>
-                    {{ form.environment }}
-                </div>
-                                <div class="col-md-4">
-
-                    {{ form.is_virtual_machine.errors }}
-                    <label for="{{ form.is_virtual_machine.id_for_label }}">Is Virtual Machine</label><br>
-                    {{ form.is_virtual_machine }}
-                </div>
-            </div>
-
-
-
-            <div class="my-padding"></div>
-            <h3>Location Information</h3>
-            <div class="my-padding"></div>
-
-            <div class="row">
-                <div class="col-md-4">
-                    {{ form.location.errors }}
-                    <label for="{{ form.location.id_for_label }}">Location</label><br>
-                    {{ form.location }}
+                    {{ form.device_location.errors }}
+                    <label for="{{ form.device_location.id_for_label }}">Device Location</label><br>
+                    {{ form.device_location }}
                 </div>
                 <div class="col-md-4">
-                    {{ form.data_center.errors }}
-                    <label for="{{ form.data_center.id_for_label }}">Datacenter</label><br>
-                    {{ form.data_center }}
+                    {{ form.device_description.errors }}
+                    <label for="{{ form.device_description.id_for_label }}">Device Description</label><br>
+                    {{ form.device_description }}
                 </div>
                 <div class="col-md-4">
-                    {{ form.rack.errors }}
-                    <label for="{{ form.rack.id_for_label }}">Rack</label><br>
-                    {{ form.rack }}
-                </div>
-            </div>
-
-
-
-            <div class="my-padding"></div>
-            <h3>Network Information</h3>
-            <div class="my-padding"></div>
-
-            <div class="row">
-                <div class="col-md-4">
-                    {{ form.network.errors }}
-                    <label for="{{ form.network.id_for_label }}">Network</label><br>
-                    {{ form.network }}
+                    {{ form.device_type.errors }}
+                    <label for="{{ form.device_type.id_for_label }}">Device Type</label><br>
+                    {{ form.device_type }}
                 </div>
 
-                <div class="col-md-4">
-                    {{ form.private_ip.errors }}
-                    <label for="{{ form.operating_system.id_for_label }}">Private IP</label><br>
-                    {{ form.private_ip }}
-                </div>
-                <div class="col-md-4">
-                    {{ form.dmz_public_ip.errors }}
-                    <label for="{{ form.dmz_public_ip.id_for_label }}">DMZ Public IP</label><br>
-                    {{ form.dmz_public_ip }}
-                </div>
             </div>
 
             <div class="my-padding"></div>
@@ -156,40 +138,90 @@
 
 
                 <div class="col-md-4">
-                    {{ form.virtual_ip.errors }}
-                    <label for="{{ form.virtual_ip.id_for_label }}">Virtual IP</label><br>
-                    {{ form.virtual_ip }}
+                    {{ form.device_vendor.errors }}
+                    <label for="{{ form.device_vendor.id_for_label }}">Device Vendor</label><br>
+                    {{ form.device_vendor }}
                 </div>
                 <div class="col-md-4">
-                    {{ form.nat_ip.errors }}
-                    <label for="{{ form.nat_ip.id_for_label }}">NAT IP</label><br>
-                    {{ form.nat_ip }}
+                    {{ form.network_view.errors }}
+                    <label for="{{ form.network_view.id_for_label }}">Network View</label><br>
+                    {{ form.network_view }}
                 </div>
-                <div class="col-md-4">
-                    {{ form.ilo_or_cimc.errors }}
-                    <label for="{{ form.ilo_or_cimc.id_for_label }}">ILO / CIMC</label><br>
-                    {{ form.ilo_or_cimc }}
+                <div class="col-md-2">
+                    {{ form.rrset_order.errors }}
+                    <label for="{{ form.rrset_order.id_for_label }}">RRSet Order</label><br>
+                    {{ form.rrset_order }}
+                </div>
+                <div class="col-md-2">
+                    {{ form.use_cli_credentials.errors }}
+                    <label for="{{ form.use_cli_credentials.id_for_label }}">Use CLI Credentials</label><br>
+                    {{ form.use_cli_credentials }}
                 </div>
             </div>
 
             <div class="my-padding"></div>
 
             <div class="row">
-                <div class="col-md-4">
-                    {{ form.nic_mac_address.errors }}
-                    <label for="{{ form.nic_mac_address.id_for_label }}">NIC MAC Address</label><br>
-                    {{ form.nic_mac_address }}
+
+                <div class="col-md-1"></div>
+                <div class="col-md-2">
+                    {{ form.use_snmp3_credential.errors }}
+                    <label for="{{ form.use_snmp3_credentials.id_for_label }}">Use SNMP3 Credential</label><br>
+                    {{ form.use_snmp3_credential }}
+                </div>
+                <div class="col-md-2">
+                    {{ form.use_snmp_credential.errors }}
+                    <label for="{{ form.use_snmp_credential.id_for_label }}">Use SNMP Credential</label><br>
+                    {{ form.use_snmp_credential }}
+                </div>
+                <div class="col-md-2">
+                    {{ form.disable_discovery.errors }}
+                    <label for="{{ form.disable_discovery.id_for_label }}">Disable Discovery</label><br>
+                    {{ form.disable_discovery }}
+                </div>
+                <div class="col-md-2">
+                    {{ form.forbid_reclamation.errors }}
+                    <label for="{{ form.forbid_reclamation.id_for_label }}">Forbid Reclamation</label><br>
+                    {{ form.use_snmp_credential }}
+                </div>
+                <div class="col-md-2">
+                    {{ form.ddns_protected.errors }}
+                    <label for="{{ form.ddns_protected.id_for_label }}">DDNS Protected</label><br>
+                    {{ form.ddns_protected }}
+                </div>
+            </div>
+
+            <div class="my-padding"></div>
+
+            <div class="row">
+
+                <div class="col-md-1"></div>
+
+                <div class="col-md-2">
+                    {{ form.disable.errors }}
+                    <label for="{{ form.disable.id_for_label }}">Disable</label><br>
+                    {{ form.disable }}
                 </div>
 
-                <div class="col-md-4">
-                    {{ form.switch.errors }}
-                    <label for="{{ form.switch.id_for_label }}">Switch</label><br>
-                    {{ form.switch }}
+                <div class="col-md-2">
+                    {{ form.use_ttl.errors }}
+                    <label for="{{ form.use_ttl.id_for_label }}">Use TTL</label><br>
+                    {{ form.use_ttl }}
                 </div>
-                <div class="col-md-4">
-                    {{ form.port.errors }}
-                    <label for="{{ form.port.id_for_label }}">Port</label><br>
-                    {{ form.port }}
+                <div class="col-md-2">
+                    {{ form.reclaimable.errors }}
+                    <label for="{{ form.reclaimable.id_for_label }}">Reclaimable</label><br>
+                    {{ form.reclaimable }}
+                </div>
+                <div class="col-md-2">
+                    {{ form.allow_telnet.errors }}
+                    <label for="{{ form.allow_telnet.id_for_label }}">Allow Telnet</label><br>
+                    {{ form.allow_telnet }}
+                </div>
+                <div class="col-md-2">
+                    {{ form.configure_for_dns.errors }}
+                    <label for="{{ form.configure_for_dns.id_for_label }}">Configure For DNS</label><br>
+                    {{ form.configure_for_dns }}
                 </div>
             </div>
 
@@ -198,7 +230,7 @@
             <div class="row" style="padding-bottom: 20px">
                 <div class="col-md-4"></div>
 
-                <div class="col-md-4" style="text-align: center"><button type="submit" class="btn btn-success btn-md">Create Filter Profile<span style="padding-left: 7px" class="glyphicon glyphicon-plus-sign" aria-hidden="true">
+                <div class="col-md-4" style="text-align: center"><button type="submit" class="btn btn-success btn-md">Submit<span style="padding-left: 7px" class="glyphicon glyphicon-share-alt" aria-hidden="true">
                 </span></button></div>
 
                 <div class="col-md-4" style="text-align: right; padding-right: 6%">
@@ -206,6 +238,7 @@
             </div>
 
         </form>
+
 
     </div>
 

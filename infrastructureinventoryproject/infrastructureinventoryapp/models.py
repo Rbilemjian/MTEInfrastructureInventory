@@ -36,14 +36,22 @@ BOOL = [
 
 BOOL_WITH_NULL = [
     (None, 'N/A'),
-    (0, 'No'),
     (1, 'Yes'),
+    (0, 'No'),
 ]
 
 RECORD_TYPES = [
+    (None, 'N/A'),
     ('record:host', 'Host Record'),
     ('record:a', 'A Record'),
     ('record:cname', 'CNAME Record'),
+]
+
+FILTER_RECORD_TYPES = [
+    (None, 'N/A'),
+    ('Host Record', 'Host Record'),
+    ('A Record', 'A Record'),
+    ('CNAME Record', 'CNAME Record'),
 ]
 
 HOST_FIELDS = {
@@ -189,6 +197,13 @@ CNAME_FIELDS = {
     'zone'
 }
 
+RRSET_ORDERS = [
+    (None, 'N/A'),
+    ('cyclic', 'Cyclic'),
+    ('random', 'Random'),
+    ('fixed', 'Fixed'),
+]
+
 
 #TODO: Use the ordering defined here in the future to make the ordering of the display of the columns consistent
 APPLICATION_SERVER_FIELDS = [
@@ -200,7 +215,7 @@ APPLICATION_SERVER_FIELDS = [
     ('ddns_protected', 'DDNS Protected'),
     ('disable', 'Disable'),
     ('last_queried', 'Last Queried'),
-    ('ms_ad_user_data', 'MS Ad User Data'),
+    ('ms_ad_user_data', 'MS Ad User Count'),
     ('ttl', 'TTL'),
     ('use_ttl', 'Use TTL'),
     ('creation_time', 'Creation Time'),
@@ -564,7 +579,7 @@ class ApplicationServer(models.Model):
     last_pulled = models.DateTimeField(null=True, blank=True)
 
     #Infoblox Record Information (In two or more record types)
-    record_type = models.CharField(max_length=15, null=True, blank=True)
+    record_type = models.CharField(max_length=15, choices=RECORD_TYPES, null=True, blank=True)
     cloud_information = models.ForeignKey(CloudInformation, null=True, blank=True)
     comment = models.TextField(null=True, blank=True)
     ddns_protected = models.NullBooleanField(null=True, blank=True)
@@ -661,35 +676,53 @@ class ApplicationServer(models.Model):
 
 class FilterProfile(models.Model):
 
-    profile_name = models.CharField(max_length=100)
+    #Filter Profile Information
+    profile_name = models.CharField(max_length=100, null=True, blank=True)
     all_fields = models.CharField(max_length=100, null=True, blank=True)
 
-    #General Information
-    service = models.CharField(max_length=100, null=True, blank=True)
-    hostname = models.CharField(max_length=100, null=True, blank=True)
-    primary_application = models.CharField(max_length=100, null=True, blank=True)
-    is_virtual_machine = models.NullBooleanField(choices=BOOL_WITH_NULL, default=None, null=True)
-    environment = models.CharField(max_length=4, choices=ENVIRONMENTS_WITH_NULL, default=None, null=True, blank=True)
-    operating_system = models.CharField(max_length=100, null=True, blank=True)
-    model = models.CharField(max_length=100, null=True, blank=True)
-    serial_number = models.CharField(max_length=100, null=True, blank=True)
-    purchase_order = models.CharField(max_length=20, null=True, blank=True)
+    #Infoblox Record Information (In two or more record types)
+    record_type = models.CharField(max_length=15, choices=FILTER_RECORD_TYPES, null=True, blank=True)
+    name = models.CharField(max_length=100, null=True, blank=True)
+    view = models.CharField(max_length=100, null=True, blank=True)
+    zone = models.CharField(max_length=100, null=True, blank=True)
+    # cloud_information = models.ForeignKey(CloudInformation, null=True, blank=True)
+    ddns_protected = models.NullBooleanField(null=True, blank=True)
+    disable = models.NullBooleanField(null=True, blank=True)
+    # last_queried = models.DateTimeField(null=True, blank=True)
+    ms_ad_user_data = models.PositiveIntegerField(null=True, blank=True)
+    ttl = models.PositiveIntegerField(null=True, blank=True)
+    use_ttl = models.NullBooleanField(null=True, blank=True)
+    # creation_time = models.DateTimeField(null=True, blank=True)
+    creator = models.CharField(max_length=100, null=True, blank=True)
+    ddns_principal = models.CharField(max_length=100, null=True, blank=True)
+    reclaimable = models.NullBooleanField(null=True, blank=True)
+    shared_record_group = models.CharField(max_length=300, null=True, blank=True)
+    forbid_reclamation = models.NullBooleanField(null=True, blank=True)
 
-    #Location Information
-    location = models.CharField(max_length=40, null=True, blank=True)
-    data_center = models.CharField(max_length=30, null=True, blank=True)
-    rack = models.CharField(max_length=20, null=True, blank=True)
+    #Infoblox Host Record Information (only for host records)
+    ref = models.CharField(max_length=300, null=True, blank=True)
+    allow_telnet = models.NullBooleanField(default=None, null=True, blank=True)
+    configure_for_dns = models.NullBooleanField(null=True, blank=True)
+    device_location = models.CharField(max_length=100, null=True, blank=True)
+    device_description = models.CharField(max_length=500, null=True, blank=True)
+    device_type = models.CharField(max_length=100, null=True, blank=True)
+    device_vendor = models.CharField(max_length=100, null=True, blank=True)
+    disable_discovery = models.NullBooleanField(null=True, blank=True)
+    network_view = models.CharField(max_length=100, null=True, blank=True)
+    rrset_order = models.CharField(max_length=6, null=True, blank=True, choices=RRSET_ORDERS)
+    # snmp3_credential = models.ForeignKey(SNMP3Credential, null=True, blank=True)
+    # snmp_credential = models.ForeignKey(SNMPCredential, null=True, blank=True)
+    use_cli_credentials = models.NullBooleanField(null=True, blank=True)
+    use_snmp3_credential = models.NullBooleanField(null=True, blank=True)
+    use_snmp_credential = models.NullBooleanField(null=True, blank=True)
 
-    # Network Information
-    network = models.CharField(max_length=4, choices=NETWORKS_WITH_NULL, default=None, null=True, blank=True)
-    private_ip = models.GenericIPAddressField(null=True, blank=True)
-    dmz_public_ip = models.GenericIPAddressField(null=True, blank=True)
-    virtual_ip = models.GenericIPAddressField(null=True, blank=True)
-    nat_ip = models.GenericIPAddressField(null=True, blank=True)
-    ilo_or_cimc = models.GenericIPAddressField(null=True, blank=True)
-    nic_mac_address = models.CharField(max_length=23, null=True, blank=True)
-    switch = models.CharField(max_length=40, null=True, blank=True)
-    port = models.CharField(max_length=40, null=True, blank=True)
+    #Infoblox A Record Information (only for a records)
+    # aws_rte53_record_info = models.ForeignKey(AWSRTE53RecordInfo, null=True, blank=True)
+    # discovered_data = models.ForeignKey(DiscoveredData, null=True, blank=True)
+    ipv4addr = models.GenericIPAddressField(protocol='ipv4', null=True, blank=True)
+
+    #Infoblox CName Record Information (Only for cname records)
+    canonical = models.CharField(max_length=100, null=True, blank=True)
 
     class Meta:
         db_table = "filterprofile"

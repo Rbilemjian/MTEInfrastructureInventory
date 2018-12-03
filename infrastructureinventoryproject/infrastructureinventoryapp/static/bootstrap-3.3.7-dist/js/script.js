@@ -27,32 +27,7 @@ $(document).ready(function() {
 
         //export datatable columns
         dom: 'Bfrtip',
-        buttons: [
-            {
-                extend: 'copy',
-                exportOptions: {
-                    columns: [0, 1, 2, 3, 4, 5, 6, 7, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29]
-                }
-            },
-            {
-                extend: 'csv',
-                exportOptions: {
-                    columns: [0, 1, 2, 3, 4, 5, 6, 7, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29]
-                }
-            },
-            {
-                extend: 'excel',
-                exportOptions: {
-                    columns: [0, 1, 2, 3, 4, 5, 6, 7, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29]
-                }
-            },
-            {
-                extend: 'pdf',
-                exportOptions: {
-                    columns: [0, 1, 2, 3, 4, 5, 6, 7, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29]
-                }
-            }
-        ],
+        buttons: ['copy', 'csv', 'excel', 'pdf'],
 
 
 // individual column searching

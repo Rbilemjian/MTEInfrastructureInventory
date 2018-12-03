@@ -1,29 +1,27 @@
 from django import forms
 from . import models
-from .models import ApplicationServer, FilterProfile, RECORD_TYPES
+from .models import ApplicationServer, FilterProfile, FILTER_RECORD_TYPES, RECORD_TYPES, BOOL_WITH_NULL
 import floppyforms
 
 #Getting list of unique values for certain columns in the database for use in floppyforms
 #
-# services = ApplicationServer.objects.filter().values_list('service', flat=True).order_by('service').distinct()
-# hostnames = ApplicationServer.objects.filter().values_list('hostname', flat=True).order_by('hostname').distinct().exclude
-# primary_applications = ApplicationServer.objects.filter().values_list('primary_application', flat=True).order_by('primary_application').distinct()
-# locations = ApplicationServer.objects.filter().values_list('location', flat=True).order_by('location').distinct()
-# data_centers = ApplicationServer.objects.filter().values_list('data_center', flat=True).order_by('data_center').distinct()
-# operating_systems = ApplicationServer.objects.filter().values_list('operating_system', flat=True).order_by('operating_system').distinct()
-# racks = ApplicationServer.objects.filter().values_list('rack', flat=True).order_by('rack').distinct().exclude(rack__isnull=True)
-# server_models = ApplicationServer.objects.filter().values_list('model', flat=True).order_by('model').distinct().exclude(model__isnull=True)
-# serial_numbers = ApplicationServer.objects.filter().values_list('serial_number', flat=True).order_by('serial_number').distinct().exclude(serial_number__isnull=True)
-# private_ips = ApplicationServer.objects.filter().values_list('private_ip', flat=True).order_by('private_ip').distinct().exclude(private_ip__isnull=True)
-# dmz_public_ips = ApplicationServer.objects.filter().values_list('dmz_public_ip', flat=True).order_by('dmz_public_ip').distinct().exclude(dmz_public_ip__isnull=True)
-# virtual_ips = ApplicationServer.objects.filter().values_list('virtual_ip', flat=True).order_by('virtual_ip').distinct().exclude(virtual_ip__isnull=True)
-# nat_ips = ApplicationServer.objects.filter().values_list('nat_ip', flat=True).order_by('nat_ip').distinct().exclude(nat_ip__isnull=True)
-# ilo_or_cimcs = ApplicationServer.objects.filter().values_list('ilo_or_cimc', flat=True).order_by('ilo_or_cimc').distinct().exclude(ilo_or_cimc__isnull=True)
-# nic_mac_addresses = ApplicationServer.objects.filter().values_list('nic_mac_address', flat=True).order_by('nic_mac_address').distinct().exclude(nic_mac_address__isnull=True)
-# switches = ApplicationServer.objects.filter().values_list('switch', flat=True).order_by('switch').distinct().exclude(switch__isnull=True)
-# ports = ApplicationServer.objects.filter().values_list('port', flat=True).order_by('port').distinct().exclude(port__isnull=True)
-# purchase_orders = ApplicationServer.objects.filter().values_list('purchase_order', flat=True).order_by('purchase_order').distinct().exclude(purchase_order__isnull=True)
-# filter_profiles = FilterProfile.objects.filter().values_list('profile_name', flat=True)
+names = ApplicationServer.objects.filter().values_list('name', flat=True).order_by('name').distinct()
+views = ApplicationServer.objects.filter().values_list('view', flat=True).order_by('view').distinct()
+zones = ApplicationServer.objects.filter().values_list('zone', flat=True).order_by('zone').distinct()
+ms_ad_user_datas = ApplicationServer.objects.filter().values_list('ms_ad_user_data', flat=True).order_by('ms_ad_user_data').distinct()
+ttls = ApplicationServer.objects.filter().values_list('ttl', flat=True).order_by('ttl').distinct()
+creators = ApplicationServer.objects.filter().values_list('creator', flat=True).order_by('creator').distinct()
+ddns_principals = ApplicationServer.objects.filter().values_list('ddns_principal', flat=True).order_by('ddns_principal').distinct()
+shared_record_groups = ApplicationServer.objects.filter().values_list('shared_record_group', flat=True).order_by('shared_record_group').distinct()
+refs = ApplicationServer.objects.filter().values_list('ref', flat=True).order_by('ref').distinct()
+device_locations = ApplicationServer.objects.filter().values_list('device_location', flat=True).order_by('device_location').distinct()
+device_descriptions = ApplicationServer.objects.filter().values_list('device_description', flat=True).order_by('device_description').distinct()
+device_types = ApplicationServer.objects.filter().values_list('device_type', flat=True).order_by('device_type').distinct()
+device_vendors = ApplicationServer.objects.filter().values_list('device_vendor', flat=True).order_by('device_vendor').distinct()
+network_views = ApplicationServer.objects.filter().values_list('network_view', flat=True).order_by('network_view').distinct()
+ipv4addrs = ApplicationServer.objects.filter().values_list('ipv4addr', flat=True).order_by('ipv4addr').distinct()
+canonicals = ApplicationServer.objects.filter().values_list('canonical', flat=True).order_by('canonical').distinct()
+
 
 
 
@@ -76,6 +74,86 @@ class VisibleColumnForm(forms.ModelForm):
         exclude = ('user',)
 
 
+
+class FilterProfileForm(forms.ModelForm):
+    class Meta:
+        model = models.FilterProfile
+        exclude = []
+
+
+        widgets = {
+            #Profile Info Form Widgets
+            'profile_name': forms.TextInput(attrs={'size': 45, 'required': True}),
+            'all_fields': forms.TextInput(attrs={'size': 45}),
+
+            #Record Info Form Widgets
+            'name': floppyforms.widgets.Input(datalist=names, attrs={'size': 45}),
+            'view': floppyforms.widgets.Input(datalist=views, attrs={'size': 45}),
+            'zone': floppyforms.widgets.Input(datalist=zones, attrs={'size': 45}),
+            'record_type': forms.Select(choices=FILTER_RECORD_TYPES),
+
+            'ms_ad_user_data': floppyforms.widgets.Input(datalist=ms_ad_user_datas, attrs={'size': 45}),
+            'ttl': floppyforms.widgets.Input(datalist=ttls, attrs={'size': 45}),
+            'creator': floppyforms.widgets.Input(datalist=creators, attrs={'size': 45}),
+            'ddns_principal': floppyforms.widgets.Input(datalist=ddns_principals, attrs={'size': 45}),
+            'shared_record_group': floppyforms.widgets.Input(datalist=shared_record_groups, attrs={'size': 45}),
+            'ref': floppyforms.widgets.Input(datalist=refs, attrs={'size': 45}),
+
+            'device_location': floppyforms.widgets.Input(datalist=device_locations, attrs={'size': 45}),
+            'device_description': floppyforms.widgets.Input(datalist=device_descriptions, attrs={'size': 45}),
+            'device_type': floppyforms.widgets.Input(datalist=device_types, attrs={'size': 45}),
+            'device_vendor': floppyforms.widgets.Input(datalist=device_vendors, attrs={'size': 45}),
+            'network_view': floppyforms.widgets.Input(datalist=network_views, attrs={'size': 45}),
+            'rrset_order': forms.Select(),
+            'use_cli_credentials': forms.widgets.Select(choices=BOOL_WITH_NULL, attrs={'cols': 5}),
+            'use_snmp3_credential': forms.widgets.Select(choices=BOOL_WITH_NULL, attrs={'cols': 5}),
+            'use_snmp_credential': forms.widgets.Select(choices=BOOL_WITH_NULL, attrs={'cols': 5}),
+            'disable_discovery': floppyforms.widgets.Select(choices=BOOL_WITH_NULL, attrs={'cols': 5}),
+            'forbid_reclamation': forms.widgets.Select(choices=BOOL_WITH_NULL, attrs={'cols': 5}),
+            'ddns_protected': forms.widgets.Select(choices=BOOL_WITH_NULL, attrs={'cols': 5}),
+            'disable': forms.widgets.Select(choices=BOOL_WITH_NULL, attrs={'cols': 5}),
+            'use_ttl': forms.widgets.Select(choices=BOOL_WITH_NULL, attrs={'cols': 5}),
+            'reclaimable': forms.widgets.Select(choices=BOOL_WITH_NULL, attrs={'cols': 5}),
+            'allow_telnet': forms.widgets.Select(choices=BOOL_WITH_NULL, attrs={'cols': 5}),
+            'configure_for_dns': forms.widgets.Select(choices=BOOL_WITH_NULL, attrs={'cols': 5}),
+        }
+
+class AdvancedSearchForm(forms.ModelForm):
+    class Meta:
+        model = models.FilterProfile
+        exclude = []
+
+
+        widgets = {
+            'all_fields': forms.TextInput(attrs={'size': 45}),
+            'name': floppyforms.widgets.Input(datalist=names, attrs={'size': 45}),
+            'view': floppyforms.widgets.Input(datalist=views, attrs={'size': 45}),
+            'zone': floppyforms.widgets.Input(datalist=zones, attrs={'size': 45}),
+            'record_type': forms.Select(choices=FILTER_RECORD_TYPES),
+            'ms_ad_user_data': floppyforms.widgets.Input(datalist=ms_ad_user_datas, attrs={'size': 45}),
+            'ttl': floppyforms.widgets.Input(datalist=ttls, attrs={'size': 45}),
+            'creator': floppyforms.widgets.Input(datalist=creators, attrs={'size': 45}),
+            'ddns_principal': floppyforms.widgets.Input(datalist=ddns_principals, attrs={'size': 45}),
+            'shared_record_group': floppyforms.widgets.Input(datalist=shared_record_groups, attrs={'size': 45}),
+            'ref': floppyforms.widgets.Input(datalist=refs, attrs={'size': 45}),
+            'device_location': floppyforms.widgets.Input(datalist=device_locations, attrs={'size': 45}),
+            'device_description': floppyforms.widgets.Input(datalist=device_descriptions, attrs={'size': 45}),
+            'device_type': floppyforms.widgets.Input(datalist=device_types, attrs={'size': 45}),
+            'device_vendor': floppyforms.widgets.Input(datalist=device_vendors, attrs={'size': 45}),
+            'network_view': floppyforms.widgets.Input(datalist=network_views, attrs={'size': 45}),
+            'rrset_order': forms.Select(),
+            'use_cli_credentials': forms.widgets.Select(choices=BOOL_WITH_NULL, attrs={'cols': 5}),
+            'use_snmp3_credential': forms.widgets.Select(choices=BOOL_WITH_NULL, attrs={'cols': 5}),
+            'use_snmp_credential': forms.widgets.Select(choices=BOOL_WITH_NULL, attrs={'cols': 5}),
+            'disable_discovery': floppyforms.widgets.Select(choices=BOOL_WITH_NULL, attrs={'cols': 5}),
+            'forbid_reclamation': forms.widgets.Select(choices=BOOL_WITH_NULL, attrs={'cols': 5}),
+            'ddns_protected': forms.widgets.Select(choices=BOOL_WITH_NULL, attrs={'cols': 5}),
+            'disable': forms.widgets.Select(choices=BOOL_WITH_NULL, attrs={'cols': 5}),
+            'use_ttl': forms.widgets.Select(choices=BOOL_WITH_NULL, attrs={'cols': 5}),
+            'reclaimable': forms.widgets.Select(choices=BOOL_WITH_NULL, attrs={'cols': 5}),
+            'allow_telnet': forms.widgets.Select(choices=BOOL_WITH_NULL, attrs={'cols': 5}),
+            'configure_for_dns': forms.widgets.Select(choices=BOOL_WITH_NULL, attrs={'cols': 5}),
+        }
 
 #
 #
