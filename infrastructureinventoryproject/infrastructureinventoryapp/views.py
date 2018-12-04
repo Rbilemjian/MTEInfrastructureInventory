@@ -3,6 +3,7 @@ from django.shortcuts import render, redirect, get_object_or_404, HttpResponse
 
 from django.contrib.auth.decorators import login_required
 from django.utils import timezone
+from . import models
 from .models import ApplicationServer, FilterProfile, HOST_FIELDS, DHCPMember, CloudInformation, DISCOVERED_DATA_FIELDS
 from .models import SNMP3Credential, SNMPCredential, ExtensibleAttribute, DiscoveredData, IPv4HostAddress
 from .models import IPv6HostAddress, DomainNameServer, LogicFilterRule, Alias, CliCredential, DHCPOption, VisibleColumns
@@ -196,7 +197,8 @@ def prep_filter_for_save(filter):
                 setattr(filter, field, None)
     return filter
 
-def get_fields(visible_columns):
+def get_visible_fields(request):
+    visible_columns = VisibleColumns.objects.filter(user=request.user).get()
     fields = VisibleColumns._meta.get_all_field_names()
     field_iter = VisibleColumns._meta.get_all_field_names()
 
@@ -227,14 +229,14 @@ def view_application_servers(request):
             visible_columns.save()
         else:
             form = VisibleColumnForm()
-            visible_columns = VisibleColumns.objects.filter(user=request.user).get()
 
     else:
         form = VisibleColumnForm(instance=VisibleColumns.objects.filter(user=request.user).get())
 
-    fields = get_fields(visible_columns)
+    fields = get_visible_fields(request)
+    all_fields = models.APPLICATION_SERVER_FIELDS
 
-    args = {'applicationServers': application_servers, 'fields': fields, 'form': form}
+    args = {'applicationServers': application_servers, 'fields': fields, 'form': form, 'fieldList': all_fields}
     return render(request, 'application_server_list.html', args)
 #
 #
@@ -372,8 +374,8 @@ def view_application_servers(request):
 @login_required()
 def details_application_server(request, pk):
     applicationServer = get_object_or_404(ApplicationServer, pk=pk)
-    dd_fields = DISCOVERED_DATA_FIELDS
-    args = {"applicationServer": applicationServer, "dd_fields": dd_fields}
+
+    args = {"applicationServer": applicationServer}
     return render(request, 'application_server_details.html', args)
 #
 #
@@ -392,9 +394,8 @@ def search_application_server(request):
             filterProfile = form.save(commit=False)
             prep_filter_for_save(filterProfile)
             search_result = filter_servers(filterProfile)
-            visible_columns = VisibleColumns.objects.filter(user=request.user).get()
-            fields = get_fields(visible_columns)
-            args = {'applicationServers': search_result, 'fields': fields}
+            fields = get_visible_fields(request)
+            args = {'applicationServers': search_result, 'fields': fields, 'fieldList': models.APPLICATION_SERVER_FIELDS}
             return render(request, 'application_server_search_result.html', args)
     else:
         form = FilterProfileForm()
@@ -431,9 +432,9 @@ def filter_profile_form(request):
 def filtered_list(request, pk):
     filterProfile = get_object_or_404(FilterProfile, pk=pk)
     filter_result = filter_servers(filterProfile)
-    visible_columns = VisibleColumns.objects.filter(user=request.user).get()
-    fields = get_fields(visible_columns)
-    args = {'applicationServers': filter_result, 'fields': fields, "filterProfile": filterProfile}
+    fields = get_visible_fields(request)
+    af = models.APPLICATION_SERVER_FIELDS
+    args = {'applicationServers': filter_result, 'fields': fields, "filterProfile": filterProfile, "fieldList": af}
     return render(request, 'filtered_list.html', args)
 #
 #

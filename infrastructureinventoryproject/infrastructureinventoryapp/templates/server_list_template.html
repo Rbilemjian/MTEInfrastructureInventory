@@ -9,8 +9,8 @@
                 <a href="/infrastructureinventory/applicationserver/">
                     <tr>
                         {% for field in fields %}
-                            {% if field|getfield != None %}
-                                <th class="select-filter">{{ field|getfield }}</th>
+                            {% if field|getfield:fieldList != None %}
+                                <th class="select-filter">{{ field|getfield:fieldList }}</th>
                             {% endif %}
                         {% endfor %}
                     </tr>
@@ -24,11 +24,11 @@
 
 
 
-                                {% if field|getfield != None %}
+                                {% if field|getfield:fieldList != None %}
 
 
 
-                                    {% if field|getfield == "IPv4 Addresses" %}
+                                    {% if field|getfield:fieldList == "IPv4 Addresses" %}
 
                                         {% if applicationServer.getIPv4Addresses.0 != null %}
                                             <td>
@@ -59,7 +59,7 @@
 
 
 
-                                    {% elif field|getfield == "IPv6 Addresses" %}
+                                    {% elif field|getfield:fieldList == "IPv6 Addresses" %}
 
                                         {% if applicationServer.getIPv6Addresses.0 != null %}
                                                 <td>
@@ -88,7 +88,7 @@
                                             {% endif %}
 
 
-                                    {% elif field|getfield == "Aliases" %}
+                                    {% elif field|getfield:fieldList == "Aliases" %}
 
                                         {% if applicationServer.getAliases.0 != null %}
                                                 <td>
@@ -115,7 +115,7 @@
                                             {% endif %}
 
 
-                                    {% elif field|getfield == "Extensible Attributes" %}
+                                    {% elif field|getfield:fieldList == "Extensible Attributes" %}
 
                                         {% if applicationServer.getExtensibleAttributes.0 != null %}
                                                 <td>
@@ -144,7 +144,7 @@
                                             {% endif %}
 
 
-                                    {% elif field|getfield == "CLI Credentials" %}
+                                    {% elif field|getfield:fieldList == "CLI Credentials" %}
 
                                         {% if applicationServer.getCliCredentials.0 != null %}
                                                 <td>
