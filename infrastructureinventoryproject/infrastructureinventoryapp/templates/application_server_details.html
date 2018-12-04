@@ -238,7 +238,7 @@
                         <table class="table" style="table-layout: fixed; width:100%;">
                             <tbody>
                                 {% for field in ipv4FieldList %}
-                                    {% if field.1 == "Discovered Data" %}
+                                    {% if field.1 == "Discovered Data" or field.1 == "Options" or field.1 == "Logic Filter Rules" %}
                                         <!--Do nothing (handling discovered data after this table)-->
                                     {% else %}
                                     <tr>
@@ -343,7 +343,7 @@
                         <table class="table" style="table-layout: fixed; width:100%;">
                             <tbody>
                                 {% for field in ipv6FieldList %}
-                                    {% if field.1 == "Discovered Data" %}
+                                    {% if field.1 == "Discovered Data" or field.1 == "Options" or field.1 == "Domain Name Servers" %}
                                         <!--Do nothing (we're handling discovered data after this table)-->
                                     {% else %}
                                         <tr>

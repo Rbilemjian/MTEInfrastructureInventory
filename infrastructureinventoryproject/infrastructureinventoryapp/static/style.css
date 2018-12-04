@@ -70,9 +70,9 @@ body {
     }
 }
 
-/*Nav bar collapse when window is less than 1255px wide*/
+/*Nav bar collapse when window is less than 1051px wide*/
 
-@media (max-width: 817px) {
+@media (max-width: 1051px) {
     .navbar-header {
         float: none;
     }
