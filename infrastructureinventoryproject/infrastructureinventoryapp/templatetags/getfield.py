@@ -10,8 +10,8 @@ register = template.Library()
 def getfield(field, arg):
     """Gets an attribute of an object dynamically from a string name"""
     for model_field in arg:
-        if model_field[0] == field:
-            return model_field[1]
+        if model_field[1] == field:
+            return model_field[0]
     return None
 
 

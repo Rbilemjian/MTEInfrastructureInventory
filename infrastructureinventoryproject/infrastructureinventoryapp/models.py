@@ -224,7 +224,6 @@ APPLICATION_SERVER_FIELDS = [
     ('reclaimable', 'Reclaimable'),
     ('shared_record_group', 'Shared Record Group'),
     ('forbid_reclamation', 'Forbid Reclamation'),
-    ('ref', 'Reference'),
     ('allow_telnet', 'Allow Telnet'),
     ('configure_for_dns', 'Configure for DNS'),
     ('device_location', 'Device Location'),
@@ -244,6 +243,7 @@ APPLICATION_SERVER_FIELDS = [
     ('extattrs', 'Extensible Attributes'),
     ('aliases', 'Aliases'),
     ('cli_credentials', 'CLI Credentials'),
+    ('ref', 'Reference'),
 ]
 
 DISCOVERED_DATA_FIELDS = [

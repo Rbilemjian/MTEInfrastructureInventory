@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404, HttpResponse
 
-
+from django.http import HttpResponseNotFound
 from django.contrib.auth.decorators import login_required
 from django.utils import timezone
 from . import models
@@ -200,14 +200,15 @@ def prep_filter_for_save(filter):
 def get_visible_fields(request):
     visible_columns = VisibleColumns.objects.filter(user=request.user).get()
     fields = VisibleColumns._meta.get_all_field_names()
-    field_iter = VisibleColumns._meta.get_all_field_names()
+    fieldList = models.APPLICATION_SERVER_FIELDS
+    retList = []
 
-    for field in field_iter:
-        if field == 'user': continue
-        if getattr(visible_columns, field) is False:
-            fields.remove(field)
+    for field in fieldList:
+        if hasattr(visible_columns, field[0]):
+            if getattr(visible_columns, field[0]) is True:
+                retList.append(field)
 
-    return fields
+    return retList
 
 
 
@@ -234,9 +235,8 @@ def view_application_servers(request):
         form = VisibleColumnForm(instance=VisibleColumns.objects.filter(user=request.user).get())
 
     fields = get_visible_fields(request)
-    all_fields = models.APPLICATION_SERVER_FIELDS
 
-    args = {'applicationServers': application_servers, 'fields': fields, 'form': form, 'fieldList': all_fields}
+    args = {'applicationServers': application_servers, 'fields': fields, 'form': form}
     return render(request, 'application_server_list.html', args)
 #
 #
@@ -373,9 +373,36 @@ def view_application_servers(request):
 
 @login_required()
 def details_application_server(request, pk):
-    applicationServer = get_object_or_404(ApplicationServer, pk=pk)
+    applicationServer = ApplicationServer.objects.filter(pk=pk, visible=True)
+    if len(applicationServer) == 0:
+        return HttpResponseNotFound("Application server not found in database.")
+    applicationServer = applicationServer.get()
+    applicationServerFieldList = models.APPLICATION_SERVER_FIELDS
 
-    args = {"applicationServer": applicationServer}
+    ipv4HostAddresses = applicationServer.ipv4hostaddress_set.filter(visible=True)
+    ipv4HostAddressFields = models.IPV4_FIELDS
+
+    ipv6HostAddresses = applicationServer.ipv6hostaddress_set.filter(visible=True)
+    ipv6HostAddressFields = models.IPV6_FIELDS
+
+    extensibleAttributes = applicationServer.extensibleattribute_set.filter(visible=True)
+    aliases = applicationServer.alias_set.filter(visible=True)
+    cliCredentials = applicationServer.clicredential_set.filter(visible=True)
+
+    discoveredFieldList = models.DISCOVERED_DATA_FIELDS
+
+    args = {
+        "applicationServer": applicationServer,
+        "ipv4s": ipv4HostAddresses,
+        "ipv6s": ipv6HostAddresses,
+        "extattrs": extensibleAttributes,
+        "aliases": aliases,
+        "clicreds": cliCredentials,
+        "applicationServerFieldList": applicationServerFieldList,
+        "ipv4FieldList": ipv4HostAddressFields,
+        "ipv6FieldList": ipv6HostAddressFields,
+        "discoveredFieldList": discoveredFieldList,
+            }
     return render(request, 'application_server_details.html', args)
 #
 #
@@ -395,7 +422,7 @@ def search_application_server(request):
             prep_filter_for_save(filterProfile)
             search_result = filter_servers(filterProfile)
             fields = get_visible_fields(request)
-            args = {'applicationServers': search_result, 'fields': fields, 'fieldList': models.APPLICATION_SERVER_FIELDS}
+            args = {'applicationServers': search_result, 'fields': fields}
             return render(request, 'application_server_search_result.html', args)
     else:
         form = FilterProfileForm()
@@ -433,8 +460,7 @@ def filtered_list(request, pk):
     filterProfile = get_object_or_404(FilterProfile, pk=pk)
     filter_result = filter_servers(filterProfile)
     fields = get_visible_fields(request)
-    af = models.APPLICATION_SERVER_FIELDS
-    args = {'applicationServers': filter_result, 'fields': fields, "filterProfile": filterProfile, "fieldList": af}
+    args = {'applicationServers': filter_result, 'fields': fields, "filterProfile": filterProfile}
     return render(request, 'filtered_list.html', args)
 #
 #
