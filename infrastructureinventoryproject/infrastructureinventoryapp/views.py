@@ -374,22 +374,41 @@ def view_application_servers(request):
 @login_required()
 def details_application_server(request, pk):
     applicationServer = ApplicationServer.objects.filter(pk=pk, visible=True)
+
     if len(applicationServer) == 0:
         return HttpResponseNotFound("Application server not found in database.")
+
     applicationServer = applicationServer.get()
     applicationServerFieldList = models.APPLICATION_SERVER_FIELDS
 
     ipv4HostAddresses = applicationServer.ipv4hostaddress_set.filter(visible=True)
     ipv4HostAddressFields = models.IPV4_FIELDS
 
+    #Getting ipv4hostaddresses' one-to-many record field lists
+    logicFilterRuleFields = models.LOGIC_FILTER_RULE_FIELDS
+    DHCPOptionFields = models.DHCP_OPTION_FIELDS
+
+    #Getting ipv6hostaddresses' one-to-many record field lists
+    domainNameServerFields = models.DOMAIN_NAME_SERVER_FIELDS
+
+
+
+
     ipv6HostAddresses = applicationServer.ipv6hostaddress_set.filter(visible=True)
     ipv6HostAddressFields = models.IPV6_FIELDS
+
 
     extensibleAttributes = applicationServer.extensibleattribute_set.filter(visible=True)
     aliases = applicationServer.alias_set.filter(visible=True)
     cliCredentials = applicationServer.clicredential_set.filter(visible=True)
 
+    #Getting one-to-one Field Lists
     discoveredFieldList = models.DISCOVERED_DATA_FIELDS
+    cloudInformationFieldList = models.CLOUD_INFORMATION_FIELDS
+    delegatedMemberFieldList = models.DHCP_MEMBER_FIELDS
+    snmp3CredentialFieldList = models.SNMP3_CREDENTIAL_FIELDS
+    snmpCredentialFieldList = models.SNMP_CREDENTIAL_FIELDS
+    AWSRTE53RecordInfoFieldList = models.AWS_RTE53_RECORD_INFO_FIELDS
 
     args = {
         "applicationServer": applicationServer,
@@ -402,6 +421,14 @@ def details_application_server(request, pk):
         "ipv4FieldList": ipv4HostAddressFields,
         "ipv6FieldList": ipv6HostAddressFields,
         "discoveredFieldList": discoveredFieldList,
+        "cloudInformationFieldList": cloudInformationFieldList,
+        "delegatedMemberFieldList": delegatedMemberFieldList,
+        "snmp3CredentialFieldList": snmp3CredentialFieldList,
+        "snmpCredentialFieldList": snmpCredentialFieldList,
+        "AWSRTE53RecordInfoFieldList": AWSRTE53RecordInfoFieldList,
+        "logicFilterRuleFields": logicFilterRuleFields,
+        "DHCPOptionFields": DHCPOptionFields,
+        "domainNameServerFields": domainNameServerFields
             }
     return render(request, 'application_server_details.html', args)
 #
@@ -427,14 +454,14 @@ def search_application_server(request):
     else:
         form = FilterProfileForm()
     return render(request, 'application_server_search_form.html', {'form': form})
-#
-#
+
+
 @login_required()
 def application_server_delete_confirm(request, pk):
     applicationServer = get_object_or_404(ApplicationServer, pk=pk)
     return render(request, 'application_server_delete_confirm.html', {'applicationServer': applicationServer})
-#
-#
+
+
 @login_required()
 def filter_profile(request):
     filterProfiles = FilterProfile.objects.all()

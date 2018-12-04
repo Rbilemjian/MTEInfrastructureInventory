@@ -343,7 +343,7 @@ def saveCloudInfo(host, currHost):
             mgmt_platform=cloud_info.get('mgmt_platform'),
             owned_by_adaptor=cloud_info.get('owned_by_adaptor'),
             tenant=cloud_info.get('tenant'),
-            usage=cloud_info.get('usage'),
+            usage_field=cloud_info.get('usage'),
         )
         new_cloud_info.save()
 

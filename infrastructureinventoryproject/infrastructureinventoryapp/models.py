@@ -203,6 +203,66 @@ RRSET_ORDERS = [
     ('fixed', 'Fixed'),
 ]
 
+CLOUD_INFORMATION_FIELDS = [
+    ('authority_type', 'Authority Type'),
+    ('delegated_root', 'Delegated Root'),
+    ('delegated_scope', 'Delegated Scope'),
+    ('mgmt_platform', 'Management Platform'),
+    ('owned_by_adaptor', 'Owned By Adaptor'),
+    ('tenant', 'Tenant'),
+    ('usage_field', 'Usage'),
+    ('delegated_member', 'Delegated Member')
+]
+
+DHCP_MEMBER_FIELDS = [
+    ('ipv4_address', 'Delegated Member IPv4 Address'),
+    ('ipv6_address', 'Delegated Member IPv6 Address'),
+    ('name', 'Delegated Member Name'),
+]
+
+SNMP3_CREDENTIAL_FIELDS = [
+    ('authentication_protocol', 'Authentication Protocol'),
+    ('privacy_protocol', 'Privacy Protocol'),
+    ('user', 'User'),
+    ('comment', 'Comment')
+]
+
+SNMP_CREDENTIAL_FIELDS = [
+    ('community_string', 'Community String'),
+    ('comment', 'Comment'),
+]
+
+AWS_RTE53_RECORD_INFO_FIELDS = [
+    ('type', 'Type'),
+    ('region', 'Region'),
+    ('weight', 'Weight'),
+    ('alias_target_dns_name', 'Alias Target DNS Name'),
+    ('alias_target_evaluate_target_health', 'Alias Target Evaluate Target Health'),
+    ('alias_target_hosted_zone_id', 'Alias Target Hosted Zone ID'),
+    ('failover', 'Failover'),
+    ('geolocation_continent_code', 'Geolocation Continent Code'),
+    ('geolocation_subdivision_code', 'Geolocation Subdivision Code'),
+    ('health_check_id', 'Health Check ID'),
+    ('set_identifier', 'Set Identifier')
+]
+
+LOGIC_FILTER_RULE_FIELDS = [
+    ('filter', 'Filter'),
+    ('type', 'Type')
+]
+
+DHCP_OPTION_FIELDS = [
+    ('name', 'Name'),
+    ('num', 'Num'),
+    ('use_option', 'Use Option'),
+    ('value', 'Value'),
+    ('vendor_class', 'Vendor Class')
+]
+
+DOMAIN_NAME_SERVER_FIELDS = [
+    ('domain_name_server', 'Domain Name Server')
+]
+
 
 #TODO: Use the ordering defined here in the future to make the ordering of the display of the columns consistent
 APPLICATION_SERVER_FIELDS = [
@@ -361,7 +421,7 @@ class CloudInformation(models.Model):
     mgmt_platform = models.CharField(max_length=100, null=True, blank=True)
     owned_by_adaptor = models.NullBooleanField(null=True, blank=True)
     tenant = models.CharField(max_length=100, null=True, blank=True)
-    usage = models.CharField(max_length=9, null=True, blank=True)
+    usage_field = models.CharField(max_length=9, null=True, blank=True)
     visible = models.BooleanField(default=False)
 
     class Meta:
@@ -770,6 +830,12 @@ class IPv4HostAddress(models.Model):
             self.discovered_data.delete()
         self.delete()
 
+    def getLogicFilterRules(self):
+        return self.logicfilterrule_set.filter(visible=True)
+
+    def getDHCPOptions(self):
+        return self.dhcpoption_set.filter(visible=True)
+
     class Meta:
         db_table = "ipv4hostaddress"
 
@@ -808,6 +874,12 @@ class IPv6HostAddress(models.Model):
         if self.discovered_data is not None:
             self.discovered_data.delete()
         self.delete()
+
+    def getDHCPOptions(self):
+        return self.dhcpoption_set.filter(visible=True)
+
+    def getDomainNameServers(self):
+        return self.domainnameserver_set.filter(visible=True)
 
     class Meta:
         db_table = "ipv6hostaddress"

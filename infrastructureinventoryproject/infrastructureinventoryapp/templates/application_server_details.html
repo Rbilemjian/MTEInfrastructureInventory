@@ -33,13 +33,13 @@
                 {% if user.is_staff %}
 
                 <a class="btn btn-danger btn-md" data-toggle="modal" data-target="#modal">
-                    Delete Server
+                    Delete Record
                     <span style="padding-left: 7px;" class="glyphicon glyphicon-trash" aria-hidden="true"></span>
                 </a>
 
                 {% else %}
                     <a role="button" class="btn btn-default btn-md" disabled="disabled">
-                    Delete Server
+                    Delete Record
                     <span style="padding-left: 7px" class="glyphicon glyphicon-trash" aria-hiddne="true">
                     </span></a>
                     <p> *Must be owner or have staff status to delete*</p>
@@ -49,7 +49,7 @@
     </div>
 </div>
 
-<div class="container" style="background-color:white; border-radius: 5px; style:inline-block; text-align: center;">
+<div class="container" style="background-color:white; border-radius: 5px; style:inline-block; text-align: left;">
     <p>
         <div>
             <font style="font-weight: bold;">Last Pulled: </font>
@@ -62,65 +62,73 @@
 
 <div class="container" style="background-color:white;">
     <div class="row">
-        <div class="col-md-6">
-            <h3>Record Information</h3>
+        <div class="col-md-12 text-center" style="margin-top:30px; margin-bottom:15px; ">
+            <ul class="nav nav-pills nav-justified" >
+                <li class="active"><a data-toggle="pill" href="#recordInformation">Record Information</a></li>
+                <li><a data-toggle="pill" href="#ipv4Information">IPv4 Host Addresses</a></li>
+                <li><a data-toggle="pill" href="#ipv6Information">IPv6 Host Addresses</a></li>
+                <li><a data-toggle="pill" href="#aliases">Aliases</a></li>
+                <li><a data-toggle="pill" href="#extensibleAttributes">Extensible Attributes</a></li>
+                <li><a data-toggle="pill" href="#cliCredentials">CLI Credentials</a></li>
 
-            <table class="table" style="table-layout: fixed; width:100%;">
-                <tbody>
-                    {% for field in applicationServerFieldList %}
-                        {% if field.1 == "IPv4 Addresses" or field.1 == "IPv6 Addresses" or field.1 == "Extensible Attributes" or field.1 == "Aliases" or field.1 == "CLI Credentials" %}
-                            <!--Do nothing (don't display the ones that can have multiple) -->
-                        {% else %}
+            </ul>
+        </div>
+    </div>
+    <div class="tab-content">
+        <div id="recordInformation" class="row tab-pane fade in active">
+            <div class="col-md-6">
+                <h3>Record Information</h3>
+                <table class="table" style="table-layout: fixed; width:100%;">
+                    <tbody>
+                        {% for field in applicationServerFieldList %}
+                            {% if field.1 == "IPv4 Addresses" or field.1 == "IPv6 Addresses" or field.1 == "Extensible Attributes" or field.1 == "Aliases" or field.1 == "CLI Credentials" %}
+                                <!--Do nothing (don't display the ones that can have multiple) -->
+                            {% else %}
+                                <tr>
+                                    <td>
+                                        <strong>{{ field.1 }}</strong>
+                                    </td>
+
+                                    <td style="word-wrap:break-word; white-space: normal">
+                                        {{ applicationServer|getattribute:field.0 }}
+                                    </td>
+                                </tr>
+
+                            {% endif %}
+                        {% endfor %}
+                    </tbody>
+                </table>
+                <div class="my-padding"></div>
+                <h3>Cloud Information</h3>
+                <table class="table" style="table-layout: fixed; width:100%;">
+                    <tbody>
+                        {% for field in cloudInformationFieldList %}
+                            {% if field.1 == "Delegated Member" %}
+                                <!--Do Nothing (We're dealing with delegated member right after)-->
+                            {% else %}
+                                <tr>
+                                    <td>
+                                        <strong>{{ field.1 }}</strong>
+                                    </td>
+                                    <td style="word-wrap:break-word; white-space: normal">
+                                        {% if applicationServer.cloud_information != null %}
+                                            {{ applicationServer.cloud_information|getattribute:field.0 }}
+                                        {% else %}
+                                            None
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            {% endif %}
+                        {% endfor %}
+
+                        {% for field in delegatedMemberFieldList %}
                             <tr>
                                 <td>
                                     <strong>{{ field.1 }}</strong>
                                 </td>
-
                                 <td style="word-wrap:break-word; white-space: normal">
-                                    {{ applicationServer|getattribute:field.0 }}
-                                </td>
-                            </tr>
-
-                        {% endif %}
-                    {% endfor %}
-                </tbody>
-            </table>
-
-            <!--{% if ipv4s.count > 0 %}-->
-
-                <!--<h3>IPv4 Host Addresses</h3>-->
-                <!--{% for ipv4 in ipv4s %}-->
-                    <!--<table class="table" style="table-layout: fixed; width:100%;">-->
-                        <!--<tbody>-->
-                            <!--{% for field in ipv4FieldList %}-->
-                                <!--<tr>-->
-                                    <!--<td>-->
-                                        <!--<strong>{{ field.1 }}</strong>-->
-                                    <!--</td>-->
-                                    <!--<td style="word-wrap:break-word; white-space:normal;">-->
-                                        <!--{{ ipv4|getattribute:field.0 }}-->
-                                    <!--</td>-->
-                                <!--</tr>-->
-                            <!--{% endfor %}-->
-                        <!--</tbody>-->
-                    <!--</table>-->
-                <!--{% endfor %}-->
-
-            <!--{% endif %}-->
-
-        </div>
-        <div class="col-md-6">
-            <h3>Discovered Data</h3>
-                <table class="table" style="table-layout: fixed; width:100%;">
-                    <tbody>
-                        {% for dataField in discoveredFieldList %}
-                            <tr>
-                                <td>
-                                    <strong>{{ dataField.1 }}</strong>
-                                </td>
-                                <td style="word-wrap:break-word; white-space: normal">
-                                    {% if applicationServer.discovered_data != null %}
-                                        {{ applicationServer.discovered_data|getattribute:dataField.0 }}
+                                    {% if applicationServer.cloud_information != null and applicationServer.cloud_information.delegated_member != null %}
+                                        {{ applicationServer.cloud_information.delegated_member|getattribute:field.0 }}
                                     {% else %}
                                         None
                                     {% endif %}
@@ -129,6 +137,411 @@
                         {% endfor %}
                     </tbody>
                 </table>
+                <div class="my-padding"></div>
+                <h3>SNMP3 Credential</h3>
+                <table class="table" style="table-layout: fixed; width:100%;">
+                    <tbody>
+                        {% for field in snmp3CredentialFieldList %}
+                                <tr>
+                                    <td>
+                                        <strong>{{ field.1 }}</strong>
+                                    </td>
+
+                                    <td style="word-wrap:break-word; white-space: normal">
+                                        {% if applicationServer.snmp3_credential != null %}
+                                            {{ applicationServer.snmp3_credential|getattribute:field.0 }}
+                                        {% else %}
+                                            None
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                <div class="my-padding"></div>
+                <h3>SNMP Credential</h3>
+                <table class="table" style="table-layout: fixed; width:100%;">
+                    <tbody>
+                        {% for field in snmpCredentialFieldList %}
+                                <tr>
+                                    <td>
+                                        <strong>{{ field.1 }}</strong>
+                                    </td>
+
+                                    <td style="word-wrap:break-word; white-space: normal">
+                                        {% if applicationServer.snmp_credential != null %}
+                                            {{ applicationServer.snmp_credential|getattribute:field.0 }}
+                                        {% else %}
+                                            None
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                <div class="my-padding"></div>
+                <h3>AWS RTE53 Record Information</h3>
+                <table class="table" style="table-layout: fixed; width:100%;">
+                    <tbody>
+                        {% for field in AWSRTE53RecordInfoFieldList %}
+                                <tr>
+                                    <td>
+                                        <strong>{{ field.1 }}</strong>
+                                    </td>
+
+                                    <td style="word-wrap:break-word; white-space: normal">
+                                        {% if applicationServer.aws_rte53_record_info != null %}
+                                            {{ applicationServer.aws_rte53_record_info|getattribute:field.0 }}
+                                        {% else %}
+                                            None
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-md-6">
+                <h3>Discovered Data</h3>
+                    <table class="table" style="table-layout: fixed; width:100%;">
+                        <tbody>
+                            {% for dataField in discoveredFieldList %}
+                                <tr>
+                                    <td>
+                                        <strong>{{ dataField.1 }}</strong>
+                                    </td>
+                                    <td style="word-wrap:break-word; white-space: normal">
+                                        {% if applicationServer.discovered_data != null %}
+                                            {{ applicationServer.discovered_data|getattribute:dataField.0 }}
+                                        {% else %}
+                                            None
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+            </div>
+        </div>
+
+        <div id="ipv4Information" class="tab-pane fade">
+            {% if ipv4s.count > 0 %}
+                <div class="row">
+                    <div class="col-md-6">
+                        <h3 >IPv4 Host Addresses</h3>
+                    </div>
+                </div>
+                {% for ipv4 in ipv4s %}
+                <div class="row">
+                    <div class="col-md-6">
+                        <h4>{{ ipv4.ipv4addr }}</h4>
+                        <table class="table" style="table-layout: fixed; width:100%;">
+                            <tbody>
+                                {% for field in ipv4FieldList %}
+                                    {% if field.1 == "Discovered Data" %}
+                                        <!--Do nothing (handling discovered data after this table)-->
+                                    {% else %}
+                                    <tr>
+                                        <td>
+                                            <strong>{{ field.1 }}</strong>
+                                        </td>
+                                        <td style="word-wrap:break-word; white-space:normal;">
+                                            {{ ipv4|getattribute:field.0 }}
+                                        </td>
+                                    </tr>
+                                    {% endif %}
+
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                        {% if ipv4.getLogicFilterRules.count > 0 %}
+                            <h4>Logic Filter Rules</h4>
+                            <div class="my-padding"></div>
+                            {% for logicFilterRule in ipv4.getLogicFilterRules %}
+                                <table class="table" style="table-layout: fixed; width:100%;">
+                                    <tbody>
+                                        {% for filterRuleField in logicFilterRuleFields %}
+                                            <tr>
+                                                <td>
+                                                    <strong>{{ filterRuleField.1 }}</strong>
+                                                </td>
+                                                <td style="word-wrap:break-word; white-space: normal">
+                                                    {{ logicFilterRule|getattribute:filterRuleField.0 }}
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                                <div class="my-padding"></div>
+                            {% endfor %}
+                        {% endif %}
+                        {% if ipv4.getDHCPOptions.count > 0 %}
+                            <h4>DHCP Options</h4>
+                            <div class="my-padding"></div>
+                            {% for DHCPOption in ipv4.getDHCPOptions %}
+                                <table class="table" style="table-layout: fixed; width:100%;">
+                                    <tbody>
+                                        {% for DHCPOptionField in DHCPOptionFields %}
+                                            <tr>
+                                                <td>
+                                                    <strong>{{ DHCPOptionField.1 }}</strong>
+                                                </td>
+                                                <td style="word-wrap:break-word; white-space: normal">
+                                                    {{ DHCPOption|getattribute:DHCPOptionField.0 }}
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                                <div class="my-padding"></div>
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+                    <div class="col-md-6">
+                        <h4>Discovered Data</h4>
+                        <table class="table" style="table-layout: fixed; width:100%;">
+                            <tbody>
+                                {% for dataField in discoveredFieldList %}
+                                    <tr>
+                                        <td>
+                                            <strong>{{ dataField.1 }}</strong>
+                                        </td>
+                                        <td style="word-wrap:break-word; white-space: normal">
+                                            {% if ipv4.discovered_data != null %}
+                                                {{ ipv4.discovered_data|getattribute:dataField.0 }}
+                                            {% else %}
+                                                None
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                {% endfor %}
+                    {% else %}
+                        <div class="my-padding"></div>
+                        <div class="col-md-12 text-center" style="text-align:center">
+                            No IPv4 Host Addresses Associated with this Record
+                            <div class="my-padding"></div>
+                        </div>
+            {% endif %}
+        </div>
+
+        <div id="ipv6Information" class="tab-pane fade">
+            {% if ipv6s.count > 0 %}
+                <div class="row">
+                    <div class="col-md-6">
+                        <h3 >IPv6 Host Addresses</h3>
+                    </div>
+                </div>
+                {% for ipv6 in ipv6s %}
+                <div class="row">
+                    <div class="col-md-6">
+                        <h4>{{ ipv6.ipv6addr }}</h4>
+                        <table class="table" style="table-layout: fixed; width:100%;">
+                            <tbody>
+                                {% for field in ipv6FieldList %}
+                                    {% if field.1 == "Discovered Data" %}
+                                        <!--Do nothing (we're handling discovered data after this table)-->
+                                    {% else %}
+                                        <tr>
+                                            <td>
+                                                <strong>{{ field.1 }}</strong>
+                                            </td>
+                                            <td style="word-wrap:break-word; white-space:normal;">
+                                                {{ ipv6|getattribute:field.0 }}
+                                            </td>
+                                        </tr>
+                                    {% endif %}
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                        {% if ipv6.getDomainNameServers.count > 0 %}
+                            <h4>Domain Name Servers</h4>
+                            <div class="my-padding"></div>
+                            <table class="table" style="table-layout: fixed; width:100%;">
+                                <tbody>
+                            {% for domainNameServer in ipv6.getDomainNameServers %}
+                                        {% for domainNameServerField in domainNameServerFields %}
+                                            <tr>
+                                                <td>
+                                                    <strong>{{ domainNameServerField.1 }}</strong>
+                                                </td>
+                                                <td style="word-wrap:break-word; white-space: normal">
+                                                    {{ domainNameServer|getattribute:domainNameServerField.0 }}
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                            {% endfor %}
+                                </tbody>
+                            </table>
+                            <div class="my-padding"></div>
+                        {% endif %}
+                        {% if ipv6.getDHCPOptions.count > 0 %}
+                            <h4>DHCP Options</h4>
+                            <div class="my-padding"></div>
+                            {% for DHCPOption in ipv6.getDHCPOptions %}
+                                <table class="table" style="table-layout: fixed; width:100%;">
+                                    <tbody>
+                                        {% for DHCPOptionField in DHCPOptionFields %}
+                                            <tr>
+                                                <td>
+                                                    <strong>{{ DHCPOptionField.1 }}</strong>
+                                                </td>
+                                                <td style="word-wrap:break-word; white-space: normal">
+                                                    {{ DHCPOption|getattribute:DHCPOptionField.0 }}
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                                <div class="my-padding"></div>
+                            {% endfor %}
+                        {% endif %}
+
+                    </div>
+                    <div class="col-md-6">
+                        <h4>Discovered Data</h4>
+                        <table class="table" style="table-layout: fixed; width:100%;">
+                            <tbody>
+                                {% for dataField in discoveredFieldList %}
+                                    <tr>
+                                        <td>
+                                            <strong>{{ dataField.1 }}</strong>
+                                        </td>
+                                        <td style="word-wrap:break-word; white-space: normal">
+                                            {% if ipv6.discovered_data != null %}
+                                                {{ ipv6.discovered_data|getattribute:dataField.0 }}
+                                            {% else %}
+                                                None
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                {% endfor %}
+                    {% else %}
+                        <div class="my-padding"></div>
+                        <div class="col-md-12 text-center" style="text-align:center">
+                            No IPv6 Host Addresses Associated with this Record
+                            <div class="my-padding"></div>
+                        </div>
+            {% endif %}
+        </div>
+
+        <div id="aliases" class="tab-pane fade">
+            {% if aliases.count > 0 %}
+                <div class="row">
+                    <div class="col-md-3"></div>
+                    <div class="col-md-6">
+                        <h3>Aliases</h3>
+                        <table class="table" style="table-layout:fixed; width:100;">
+                            <tbody>
+                                {% for alias in aliases %}
+                                    <tr>
+                                        <td style="word-wrap:break-word; white-space: normal">
+                                            {{ alias.alias }}
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            {% else %}
+                <div class="my-padding"></div>
+                <div class="col-md-12 text-center" style="text-align:center">
+                    No Aliases Associated with this Record
+                    <div class="my-padding"></div>
+                </div>
+            {% endif %}
+        </div>
+
+        <div id="extensibleAttributes" class="tab-pane fade">
+            {% if extattrs.count > 0 %}
+                <div class="row">
+                    <div class="col-md-3"></div>
+                    <div class="col-md-6">
+                        <h3>Extensible Attributes</h3>
+                        <table class="table" style="table-layout:fixed; width:100;">
+                            <tbody>
+                                {% for extattr in extattrs %}
+                                    <tr>
+                                        <td>
+                                            <strong>{{ extattr.attribute_name }}</strong>
+                                        </td>
+                                        <td style="word-wrap:break-word; white-space: normal">
+                                            {{ extattr.attribute_value }}
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            {% else %}
+                <div class="my-padding"></div>
+                <div class="col-md-12 text-center" style="text-align:center">
+                    No Extensible Attributes Associated with this Record
+                    <div class="my-padding"></div>
+                </div>
+            {% endif %}
+        </div>
+
+        <div id="cliCredentials" class="tab-pane fade">
+            {% if clicreds.count > 0 %}
+                <div class="row">
+                    <div class="col-md-3"></div>
+                    <div class="col-md-6">
+                        <h3>CLI Credentials</h3>
+                        {% for clicred in clicreds %}
+                            <table class="table" style="table-layout:fixed; width:100;">
+                                <tbody>
+                                        <tr>
+                                            <td>
+                                                <strong>User</strong>
+                                            </td>
+                                            <td style="word-wrap:break-word; white-space: normal">
+                                                {{ clicred.user }}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <strong>Credential Type</strong>
+                                            </td>
+                                            <td style="word-wrap:break-word; white-space: normal">
+                                                {{ clicred.credential_type }}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <strong>Comment</strong>
+                                            </td>
+                                            <td style="word-wrap:break-word; white-space: normal">
+                                                {{ clicred.comment }}
+                                            </td>
+                                        </tr>
+                                </tbody>
+                            </table>
+                            <div class="my-padding"></div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+            {% else %}
+                <div class="my-padding"></div>
+                <div class="col-md-12 text-center" style="text-align:center">
+                    No CLI Credentials Associated with this Record
+                    <div class="my-padding"></div>
+                </div>
+            {% endif %}
         </div>
     </div>
 </div>
@@ -158,3 +571,30 @@
     </script>
 
 {% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
