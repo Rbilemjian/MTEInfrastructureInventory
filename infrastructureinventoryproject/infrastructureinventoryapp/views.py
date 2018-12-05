@@ -96,14 +96,14 @@ def filter_servers(filterProfile):
         search_result = ApplicationServer.objects.filter(visible=True)
 
     icontains = "__icontains"
-
+    
     for field in fields:
-        if field == "profile_name" or field == "all_fields": continue
-        if hasattr(filterProfile, field) and getattr(filterProfile, field):
+        if field == "profile_name" or field == "all_fields" or field == "id": continue
+        if hasattr(filterProfile, field) and getattr(filterProfile, field) is not None:
             filter = field + icontains
             value = getattr(filterProfile, field)
+            print(value)
             search_result = search_result.filter(**{filter: value})
-
     return search_result
 #
 #
