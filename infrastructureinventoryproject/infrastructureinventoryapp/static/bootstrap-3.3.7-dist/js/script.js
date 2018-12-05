@@ -26,7 +26,7 @@ $(document).ready(function() {
         "paging": true,
 
         //export datatable columns
-        dom: 'Bfrtip',
+        dom: 'Bfrtipl',
         buttons: ['copy', 'csv', 'excel', 'pdf'],
 
 

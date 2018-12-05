@@ -41,7 +41,6 @@ BOOL_WITH_NULL = [
 ]
 
 RECORD_TYPES = [
-    (None, 'N/A'),
     ('record:host', 'Host Record'),
     ('record:a', 'A Record'),
     ('record:cname', 'CNAME Record'),

@@ -235,6 +235,11 @@ a:hover + .nested-table {
 #nested-table + #table {
     background:transparent !important;
 }
+
+.dataTables_length {
+    margin-top:9px;
+    margin-left:15px;
+}
 /* colored backgrounds */
  
 .red {

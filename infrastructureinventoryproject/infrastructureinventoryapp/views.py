@@ -133,8 +133,6 @@ def get_discovered_data_application_servers(discovered_data_value):
     dds_of_interest = DiscoveredData.objects.none()
     fields = models.DISCOVERED_DATA_FIELDS
     icontains = "__icontains"
-    print(dds.count())
-    counter = 0
     for field in fields:
         field = field[0]
         filter = field + icontains
@@ -151,7 +149,7 @@ def filter_servers(filterProfile):
     if filterProfile.all_fields is not None:
         results = ApplicationServer.objects.none()
         for field in fields:
-            if field == "profile_name" or field == "all_fields" or field == "ipv6addr" or field == "alias" or field == "extensible_attribute_value" or field == "discovered_data" : continue
+            if field == "id" or field == "profile_name" or field == "all_fields" or field == "ipv6addr" or field == "alias" or field == "extensible_attribute_value" or field == "discovered_data": continue
             lookup = "%s__icontains" % field
             query = {lookup: filterProfile.all_fields}
             results = results | ApplicationServer.objects.filter(**query).filter(visible=True)
@@ -179,7 +177,7 @@ def filter_servers(filterProfile):
     icontains = "__icontains"
 
     for field in fields:
-        if field == "profile_name" or field == "all_fields" or field == "ipv6addr" or field == "ipv4addr" or field == "alias" or field == "extensible_attribute_value" or field == "discovered_data": continue
+        if field == "id" or field == "profile_name" or field == "all_fields" or field == "ipv6addr" or field == "ipv4addr" or field == "alias" or field == "extensible_attribute_value" or field == "discovered_data": continue
         if hasattr(filterProfile, field) and getattr(filterProfile, field) is not None:
             filter = field + icontains
             value = getattr(filterProfile, field)

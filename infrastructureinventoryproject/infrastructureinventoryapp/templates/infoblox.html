@@ -32,7 +32,6 @@
     </div>
 
 
-    <!--TODO: FIX ERROR MESSAGES-->
 
 
     <div class="my-padding"></div>
@@ -40,30 +39,50 @@
         <form method="post" autocomplete="off">
             {% csrf_token %}
 
+
             {{ form.non_field_errors }}
+            <div class="row">
+                <div class="col-md-2"></div>
+                <div class="col-md-2">
+                    <label for="{{ form.view.id_for_label }}">View: </label>
+                    {{ form.view }}
+                </div>
 
-            {{ form.view.errors }}
-            <label for="{{ form.view.id_for_label }}">View: </label>
-            {{ form.view }}
+                <div class="col-md-2">
+                    <label for="{{ form.zone.id_for_label }}">Zone: </label>
+                    {{ form.zone }}
+                </div>
 
-            &nbsp&nbsp&nbsp
-
-            {{ form.zone.errors }}
-            <label for="{{ form.zone.id_for_label }}">Zone: </label>
-            {{ form.zone }}
-
-            &nbsp&nbsp&nbsp
-
-            {{ form.record_type.errors }}
-            <label for="{{ form.record_type.id_for_label }}">Record Type: </label>
-            {{ form.record_type }}
-
-            &nbsp&nbsp&nbsp
-
-            <button type="submit" class="btn btn-success" style="margin-bottom:23px;">
-                Import from Zone
-            <span style="padding-left:7px" class="glyphicon glyphicon-import" aria-hidden="true"></span></button>
-
+                <div class="col-md-2" style="margin-top:5px; margin-left:5px; padding-left:0px; padding-right:0px;">
+                    <label for="{{ form.record_type.id_for_label }}">Record Type: </label>
+                    {{ form.record_type }}
+                </div>
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-success" style="margin-top:0px;">
+                        Import from Zone
+                    <span style="padding-left:7px" class="glyphicon glyphicon-import" aria-hidden="true"></span></button>
+                </div>
+            </div>
+            {% if error != null %}
+            <div class="row" style="margin-top:10px;">
+                <div class="col-md-3"></div>
+                <div class="col-md-6 text-center" style="color:red;">
+                    {{ error }}
+                </div>
+            </div>
+            {% endif %}
+            <div class="row" style="margin-top:10px;">
+                <div class="col-md-2"></div>
+                <div class="col-md-2">
+                    {{ form.view.errors }}
+                </div>
+                <div class="col-md-2">
+                    {{ form.zone.errors }}
+                </div>
+                <div class="col-md-2">
+                    {{ form.record_type.errors }}
+                </div>
+            </div>
         </form>
     </div>
 
@@ -86,7 +105,13 @@
                     <thead style="background-color: #580084; color: white">
                         <tr>
                             <th class="select-filter">Name</th>
-                            <th class="select-filter">IPv4 Address</th>
+                            {% if record_type == "A Record" %}
+                                <th class="select-filter">IPv4 Address</th>
+                            {% endif %}
+                            {% if record_type == "CNAME Record" %}
+                                <th class="select-filter">Canonical</th>
+                            {% endif %}
+                            <th class="select-filter">Ref</th>
 
                         </tr>
                         </a>
@@ -96,7 +121,13 @@
                         {% for record in records %}
                             <tr data-href="javascript:void(0)">
                                 <td>{{record.name}}</td>
-                                <td>{{record.ipv4addr}}</td>
+                                {% if record_type == "A Record" %}
+                                    <td>{{record.ipv4addr}}</td>
+                                {% endif %}
+                                {% if record_type == "CNAME Record" %}
+                                    <td>{{record.canonical}}</td>
+                                {% endif %}
+                                <td>{{record.ref}}</td>
                             </tr>
                         {% endfor %}
 

@@ -636,7 +636,6 @@ def infoblox(request):
 
             base_url = 'https://infoblox.net.tfayd.com/wapi/v2.7/' + record_type + '?view=' + view + '&zone=' + zone
             static_args = '&_max_results=25&_paging=1&_return_as_object=1'
-            # static_args = '&_max_results=100000000000'
             additional_fields = '&_return_fields='
 
             if record_type == 'record:host':
@@ -657,8 +656,21 @@ def infoblox(request):
 
             r = requests.get(get_url, auth=('206582055', 'miketysonpunchout'), verify=False)
             result = r.json()
+            #Error handling: if API returned an error
+            if result.get('Error') is not None:
+                error = result.get('Error')
+                error = "Infoblox Error: " + error.split(": ", 1)[1]
+                return render(request, "infoblox.html", {"form": form, "error": error})
+
+            #Error handling: if API returned nothing
+            if len(result.get('result')) == 0:
+                error = "Infoblox returned no records for this query"
+                return render(request, "infoblox.html", {"form": form, "error": error})
+
             records = result.get('result')
             next_page_id = result.get('next_page_id')
+
+
 
             #"Infinite" loop which ends when no pages to query remain
             while True:
@@ -710,7 +722,8 @@ def infoblox(request):
                 next_page_id = result.get('next_page_id')
 
             records = ApplicationServer.objects.filter(visible=False)
-            return render(request, "infoblox.html", {"form": form, "records": records})
+            record_type = records.first().record_type
+            return render(request, "infoblox.html", {"form": form, "records": records, "record_type": record_type})
     else:
         form = InfobloxImportForm()
     return render(request, "infoblox.html", {"form": form})
