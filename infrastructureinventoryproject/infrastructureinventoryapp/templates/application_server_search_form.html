@@ -34,15 +34,15 @@
                     <label for="{{ form.all_fields.id_for_label }}">All Fields</label><br>
                     {{ form.all_fields }}
                 </div>
-                <div class="col-md-4">
-                    {{ form.record_type.errors }}
-                    <label for="{{ form.record_type.id_for_label }}">Record Type</label><br>
-                    {{ form.record_type }}
-                </div>
              <div class="col-md-4">
                     {{ form.name.errors }}
                     <label for="{{ form.name.id_for_label }}">Name</label><br>
                     {{ form.name }}
+                </div>
+                <div class="col-md-4">
+                    {{ form.record_type.errors }}
+                    <label for="{{ form.record_type.id_for_label }}">Record Type</label><br>
+                    {{ form.record_type }}
                 </div>
             </div>
 
@@ -136,14 +136,48 @@
             <div class="my-padding"></div>
 
             <div class="row">
-
-
-
                 <div class="col-md-4">
                     {{ form.network_view.errors }}
                     <label for="{{ form.network_view.id_for_label }}">Network View</label><br>
                     {{ form.network_view }}
                 </div>
+                <div class="col-md-4">
+                    {{ form.ipv4addr.errors }}
+                    <label for="{{ form.ipv4addr.id_for_label }}">IPv4 Address</label><br>
+                    {{ form.ipv4addr }}
+                </div>
+                <div class="col-md-4">
+                    {{ form.ipv6addr.errors }}
+                    <label for="{{ form.ipv6addr.id_for_label }}">IPv6 Address</label><br>
+                    {{ form.ipv6addr }}
+                </div>
+
+            </div>
+
+            <div class="my-padding"></div>
+
+            <div class="row">
+                <div class="col-md-4">
+                    {{ form.alias.errors }}
+                    <label for="{{ form.alias.id_for_label }}">Alias</label><br>
+                    {{ form.alias }}
+                </div>
+                <div class="col-md-4">
+                    {{ form.extensible_attribute_value.errors }}
+                    <label for="{{ form.extensible_attribute_value.id_for_label }}">Extensible Attribute Value</label><br>
+                    {{ form.extensible_attribute_value }}
+                </div>
+                <div class="col-md-4">
+                    {{ form.discovered_data.errors }}
+                    <label for="{{ form.discovered_data.id_for_label }}">Discovered Data</label><br>
+                    {{ form.discovered_data }}
+                </div>
+
+            </div>
+
+            <div class="my-padding"></div>
+
+            <div class="row">
                 <div class="col-md-2">
                     {{ form.rrset_order.errors }}
                     <label for="{{ form.rrset_order.id_for_label }}">RRSet Order</label><br>
@@ -154,13 +188,6 @@
                     <label for="{{ form.use_cli_credentials.id_for_label }}">Use CLI Credentials</label><br>
                     {{ form.use_cli_credentials }}
                 </div>
-            </div>
-
-            <div class="my-padding"></div>
-
-            <div class="row">
-
-                <div class="col-md-1"></div>
                 <div class="col-md-2">
                     {{ form.use_snmp3_credential.errors }}
                     <label for="{{ form.use_snmp3_credentials.id_for_label }}">Use SNMP3 Credential</label><br>
@@ -181,19 +208,17 @@
                     <label for="{{ form.forbid_reclamation.id_for_label }}">Forbid Reclamation</label><br>
                     {{ form.use_snmp_credential }}
                 </div>
-                <div class="col-md-2">
-                    {{ form.ddns_protected.errors }}
-                    <label for="{{ form.ddns_protected.id_for_label }}">DDNS Protected</label><br>
-                    {{ form.ddns_protected }}
-                </div>
+
             </div>
 
             <div class="my-padding"></div>
 
             <div class="row">
-
-                <div class="col-md-1"></div>
-
+                <div class="col-md-2">
+                    {{ form.ddns_protected.errors }}
+                    <label for="{{ form.ddns_protected.id_for_label }}">DDNS Protected</label><br>
+                    {{ form.ddns_protected }}
+                </div>
                 <div class="col-md-2">
                     {{ form.disable.errors }}
                     <label for="{{ form.disable.id_for_label }}">Disable</label><br>

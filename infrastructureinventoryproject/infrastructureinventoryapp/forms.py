@@ -1,27 +1,59 @@
 from django import forms
 from . import models
 from .models import ApplicationServer, FilterProfile, FILTER_RECORD_TYPES, RECORD_TYPES, BOOL_WITH_NULL
+from .models import IPv6HostAddress, IPv4HostAddress, Alias, ExtensibleAttribute, DiscoveredData
 import floppyforms
+
+#helper functions
+
+def get_all_discovered_data_values():
+    fields = models.DISCOVERED_DATA_FIELDS
+    values = list()
+    dds = DiscoveredData.objects.all()
+    for dd in dds:
+        for field in fields:
+            currVal = getattr(dd, field[0])
+            if currVal not in values:
+                values.append(currVal)
+    return values
+
+def get_all_extensible_field_values():
+    values = list()
+    eas = ExtensibleAttribute.objects.all()
+    for ea in eas:
+            currVal = getattr(ea, "attribute_value")
+            if currVal not in values:
+                values.append(currVal)
+    return values
+
 
 #Getting list of unique values for certain columns in the database for use in floppyforms
 #
-names = ApplicationServer.objects.filter().values_list('name', flat=True).order_by('name').distinct()
-views = ApplicationServer.objects.filter().values_list('view', flat=True).order_by('view').distinct()
-zones = ApplicationServer.objects.filter().values_list('zone', flat=True).order_by('zone').distinct()
-ms_ad_user_datas = ApplicationServer.objects.filter().values_list('ms_ad_user_data', flat=True).order_by('ms_ad_user_data').distinct()
-ttls = ApplicationServer.objects.filter().values_list('ttl', flat=True).order_by('ttl').distinct()
-creators = ApplicationServer.objects.filter().values_list('creator', flat=True).order_by('creator').distinct()
-ddns_principals = ApplicationServer.objects.filter().values_list('ddns_principal', flat=True).order_by('ddns_principal').distinct()
-shared_record_groups = ApplicationServer.objects.filter().values_list('shared_record_group', flat=True).order_by('shared_record_group').distinct()
-refs = ApplicationServer.objects.filter().values_list('ref', flat=True).order_by('ref').distinct()
-device_locations = ApplicationServer.objects.filter().values_list('device_location', flat=True).order_by('device_location').distinct()
-device_descriptions = ApplicationServer.objects.filter().values_list('device_description', flat=True).order_by('device_description').distinct()
-device_types = ApplicationServer.objects.filter().values_list('device_type', flat=True).order_by('device_type').distinct()
-device_vendors = ApplicationServer.objects.filter().values_list('device_vendor', flat=True).order_by('device_vendor').distinct()
-network_views = ApplicationServer.objects.filter().values_list('network_view', flat=True).order_by('network_view').distinct()
-ipv4addrs = ApplicationServer.objects.filter().values_list('ipv4addr', flat=True).order_by('ipv4addr').distinct()
-canonicals = ApplicationServer.objects.filter().values_list('canonical', flat=True).order_by('canonical').distinct()
-
+names = ApplicationServer.objects.filter(visible=True).values_list('name', flat=True).order_by('name').distinct()
+views = ApplicationServer.objects.filter(visible=True).values_list('view', flat=True).order_by('view').distinct()
+zones = ApplicationServer.objects.filter(visible=True).values_list('zone', flat=True).order_by('zone').distinct()
+ms_ad_user_datas = ApplicationServer.objects.filter(visible=True).values_list('ms_ad_user_data', flat=True).order_by('ms_ad_user_data').distinct()
+ttls = ApplicationServer.objects.filter(visible=True).values_list('ttl', flat=True).order_by('ttl').distinct()
+creators = ApplicationServer.objects.filter(visible=True).values_list('creator', flat=True).order_by('creator').distinct()
+ddns_principals = ApplicationServer.objects.filter(visible=True).values_list('ddns_principal', flat=True).order_by('ddns_principal').distinct()
+shared_record_groups = ApplicationServer.objects.filter(visible=True).values_list('shared_record_group', flat=True).order_by('shared_record_group').distinct()
+refs = ApplicationServer.objects.filter(visible=True).values_list('ref', flat=True).order_by('ref').distinct()
+device_locations = ApplicationServer.objects.filter(visible=True).values_list('device_location', flat=True).order_by('device_location').distinct()
+device_descriptions = ApplicationServer.objects.filter(visible=True).values_list('device_description', flat=True).order_by('device_description').distinct()
+device_types = ApplicationServer.objects.filter(visible=True).values_list('device_type', flat=True).order_by('device_type').distinct()
+device_vendors = ApplicationServer.objects.filter(visible=True).values_list('device_vendor', flat=True).order_by('device_vendor').distinct()
+network_views = ApplicationServer.objects.filter(visible=True).values_list('network_view', flat=True).order_by('network_view').distinct()
+ipv4addrs = ApplicationServer.objects.filter(visible=True).values_list('ipv4addr', flat=True).order_by('ipv4addr').distinct()
+ipv4hostaddrs = IPv4HostAddress.objects.filter(visible=True).values_list('ipv4addr', flat=True).order_by('ipv4addr').distinct()
+ipv4addrs = set(ipv4addrs)
+ipv4hostaddrs = set(ipv4hostaddrs)
+ipv4addrs = ipv4addrs | ipv4hostaddrs
+ipv4addrs = list(ipv4addrs)
+canonicals = ApplicationServer.objects.filter(visible=True).values_list('canonical', flat=True).order_by('canonical').distinct()
+ipv6addrs = IPv6HostAddress.objects.filter(visible=True).values_list('ipv6addr', flat=True).order_by('ipv6addr').distinct()
+aliases = Alias.objects.filter(visible=True).values_list('alias', flat=True).order_by('alias').distinct()
+extensible_attribute_values = get_all_extensible_field_values()
+discovered_data_values = get_all_discovered_data_values()
 
 
 
@@ -104,6 +136,8 @@ class FilterProfileForm(forms.ModelForm):
             'device_type': floppyforms.widgets.Input(datalist=device_types, attrs={'size': 45}),
             'device_vendor': floppyforms.widgets.Input(datalist=device_vendors, attrs={'size': 45}),
             'network_view': floppyforms.widgets.Input(datalist=network_views, attrs={'size': 45}),
+
+            #Select Widgets
             'rrset_order': forms.Select(),
             'use_cli_credentials': forms.widgets.Select(choices=BOOL_WITH_NULL, attrs={'cols': 5}),
             'use_snmp3_credential': forms.widgets.Select(choices=BOOL_WITH_NULL, attrs={'cols': 5}),
@@ -116,7 +150,15 @@ class FilterProfileForm(forms.ModelForm):
             'reclaimable': forms.widgets.Select(choices=BOOL_WITH_NULL, attrs={'cols': 5}),
             'allow_telnet': forms.widgets.Select(choices=BOOL_WITH_NULL, attrs={'cols': 5}),
             'configure_for_dns': forms.widgets.Select(choices=BOOL_WITH_NULL, attrs={'cols': 5}),
+
+            #Many-to-one Widgets
+            'ipv4addr': floppyforms.widgets.Input(datalist=ipv4addrs, attrs={'size': 45}),
+            'ipv6addr': floppyforms.widgets.Input(datalist=ipv6addrs, attrs={'size': 45}),
+            'alias': floppyforms.widgets.Input(datalist=aliases, attrs={'size': 45}),
+            'extensible_attribute_value': floppyforms.widgets.Input(datalist=extensible_attribute_values, attrs={'size': 45}),
+            'discovered_data': floppyforms.widgets.Input(datalist=discovered_data_values, attrs={'size': 45}),
         }
+
 
 class AdvancedSearchForm(forms.ModelForm):
     class Meta:
@@ -141,6 +183,8 @@ class AdvancedSearchForm(forms.ModelForm):
             'device_type': floppyforms.widgets.Input(datalist=device_types, attrs={'size': 45}),
             'device_vendor': floppyforms.widgets.Input(datalist=device_vendors, attrs={'size': 45}),
             'network_view': floppyforms.widgets.Input(datalist=network_views, attrs={'size': 45}),
+
+            #Select Widgets
             'rrset_order': forms.Select(),
             'use_cli_credentials': forms.widgets.Select(choices=BOOL_WITH_NULL, attrs={'cols': 5}),
             'use_snmp3_credential': forms.widgets.Select(choices=BOOL_WITH_NULL, attrs={'cols': 5}),
@@ -153,6 +197,13 @@ class AdvancedSearchForm(forms.ModelForm):
             'reclaimable': forms.widgets.Select(choices=BOOL_WITH_NULL, attrs={'cols': 5}),
             'allow_telnet': forms.widgets.Select(choices=BOOL_WITH_NULL, attrs={'cols': 5}),
             'configure_for_dns': forms.widgets.Select(choices=BOOL_WITH_NULL, attrs={'cols': 5}),
+
+            #Many-to-one Widgets
+            'ipv4addr': floppyforms.widgets.Input(datalist=ipv4addrs, attrs={'size': 45}),
+            'ipv6addr': floppyforms.widgets.Input(datalist=ipv6addrs, attrs={'size': 45}),
+            'alias': floppyforms.widgets.Input(datalist=aliases, attrs={'size': 45}),
+            'extensible_attribute_value': floppyforms.widgets.Input(datalist=extensible_attribute_values,attrs={'size': 45}),
+            'discovered_data': floppyforms.widgets.Input(datalist=discovered_data_values, attrs={'size': 45}),
         }
 
 #

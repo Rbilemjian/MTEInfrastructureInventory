@@ -81,28 +81,108 @@ import urllib3
 #     return server
 #
 #
-def filter_servers(filterProfile):
 
+#If a user searches for an ipv4address, this function looks at ipv4hostaddresses and finds the applicationserver
+#that is associated with the ivp4hostaddress that has that IP address, if such an appliationServer exists
+#as well as any record applicationservers that have that ip address
+def get_ipv4_application_servers(ipv4addr):
+    ipv4s = IPv4HostAddress.objects.filter(visible=True)
+    appServers = ApplicationServer.objects.filter(visible=True)
+    retServers = ApplicationServer.objects.none()
+    if ipv4s.filter(ipv4addr__startswith=ipv4addr).count() > 0:
+        ipv4s = ipv4s.filter(ipv4addr__startswith=ipv4addr)
+        for ipv4 in ipv4s:
+            as_id = ipv4.application_server.id
+            retServers = retServers | appServers.filter(id=as_id)
+    retServers = retServers | appServers.filter(ipv4addr__startswith=ipv4addr)
+    return retServers
+
+
+def get_ipv6_application_servers(ipv6addr):
+    retServers = ApplicationServer.objects.none()
+    if IPv6HostAddress.objects.filter(visible=True).filter(ipv6addr__istartswith=ipv6addr).count() > 0:
+        ipv6s = IPv6HostAddress.objects.filter(visible=True).filter(ipv6addr__startswith=ipv6addr)
+        for ipv6 in ipv6s:
+            as_id = ipv6.application_server.id
+            retServers = retServers | ApplicationServer.objects.filter(visible=True).filter(id=as_id)
+    return retServers
+
+
+def get_alias_application_servers(alias):
+    retServers = ApplicationServer.objects.none()
+    if Alias.objects.filter(visible=True).filter(alias__icontains=alias).count() > 0:
+        aliases = Alias.objects.filter(visible=True).filter(alias__icontains=alias)
+        for alias in aliases:
+            as_id = alias.application_server.id
+            retServers = retServers | ApplicationServer.objects.filter(visible=True).filter(id=as_id)
+    return retServers
+
+
+def get_extensible_attribute_application_servers(extensible_attribute_value):
+    retServers = ApplicationServer.objects.none()
+    if ExtensibleAttribute.objects.filter(visible=True).filter(attribute_value__icontains=extensible_attribute_value).count() > 0:
+        ext_attrs = ExtensibleAttribute.objects.filter(visible=True).filter(attribute_value__icontains=extensible_attribute_value)
+        for ext_attr in ext_attrs:
+            retServers = retServers | ApplicationServer.objects.filter(visible=True).filter(id=ext_attr.application_server.id)
+    return retServers
+
+
+def get_discovered_data_application_servers(discovered_data_value):
+    retServers = ApplicationServer.objects.none()
+    dds = DiscoveredData.objects.filter(visible=True)
+    dds_of_interest = DiscoveredData.objects.none()
+    fields = models.DISCOVERED_DATA_FIELDS
+    icontains = "__icontains"
+    print(dds.count())
+    counter = 0
+    for field in fields:
+        field = field[0]
+        filter = field + icontains
+        dds_of_interest = dds_of_interest | dds.filter(**{filter: discovered_data_value})
+
+    for dd in dds_of_interest:
+        retServers = retServers | ApplicationServer.objects.filter(visible=True).filter(discovered_data=dd)
+    return retServers
+
+
+
+def filter_servers(filterProfile):
     fields = FilterProfile._meta.get_all_field_names()
     if filterProfile.all_fields is not None:
         results = ApplicationServer.objects.none()
         for field in fields:
-            if field == "profile_name" or field == "all_fields": continue
+            if field == "profile_name" or field == "all_fields" or field == "ipv6addr" or field == "alias" or field == "extensible_attribute_value" or field == "discovered_data" : continue
             lookup = "%s__icontains" % field
             query = {lookup: filterProfile.all_fields}
             results = results | ApplicationServer.objects.filter(**query).filter(visible=True)
+        results = results | get_ipv4_application_servers(filterProfile.all_fields)
+        results = results | get_ipv6_application_servers(filterProfile.all_fields)
+        results = results | get_alias_application_servers(filterProfile.all_fields)
+        results = results | get_extensible_attribute_application_servers(filterProfile.all_fields)
+        results = results | get_discovered_data_application_servers(filterProfile.all_fields)
         search_result = results
+
     else:
         search_result = ApplicationServer.objects.filter(visible=True)
 
+    if filterProfile.ipv4addr is not None:
+        search_result = search_result & get_ipv4_application_servers(filterProfile.ipv4addr)
+    if filterProfile.ipv6addr is not None:
+        search_result = search_result & get_ipv6_application_servers(filterProfile.ipv6addr)
+    if filterProfile.alias is not None:
+        search_result = search_result & get_alias_application_servers(filterProfile.alias)
+    if filterProfile.extensible_attribute_value is not None:
+        search_result = search_result & get_extensible_attribute_application_servers(filterProfile.extensible_attribute_value)
+    if filterProfile.discovered_data is not None:
+        search_result = search_result & get_discovered_data_application_servers(filterProfile.discovered_data)
+
     icontains = "__icontains"
-    
+
     for field in fields:
-        if field == "profile_name" or field == "all_fields" or field == "id": continue
+        if field == "profile_name" or field == "all_fields" or field == "ipv6addr" or field == "ipv4addr" or field == "alias" or field == "extensible_attribute_value" or field == "discovered_data": continue
         if hasattr(filterProfile, field) and getattr(filterProfile, field) is not None:
             filter = field + icontains
             value = getattr(filterProfile, field)
-            print(value)
             search_result = search_result.filter(**{filter: value})
     return search_result
 #

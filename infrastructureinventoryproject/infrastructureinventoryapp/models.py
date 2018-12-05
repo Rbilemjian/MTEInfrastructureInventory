@@ -310,9 +310,9 @@ DISCOVERED_DATA_FIELDS = [
     ('ap_name', 'AP Name'),
     ('ap_ssid', 'AP SSID'),
     ('bridge_domain', 'Bridge Domain'),
-    ('cisco_ise_endpoint', 'Cisco ISE Endpoint'),
+    ('cisco_ise_endpoint_profile', 'Cisco ISE Endpoint Profile'),
     ('cisco_ise_security_group', 'Cisco ISE Security Group'),
-    ('cisco_ise_session_store', 'Cisco ISE Session Store'),
+    ('cisco_ise_session_state', 'Cisco ISE Session State'),
     ('cisco_ise_ssid', 'Cisco ISE SSID'),
     ('cmp_type', 'CMP Type'),
     ('device_contact', 'Device Contact'),
@@ -744,14 +744,11 @@ class FilterProfile(models.Model):
     name = models.CharField(max_length=100, null=True, blank=True)
     view = models.CharField(max_length=100, null=True, blank=True)
     zone = models.CharField(max_length=100, null=True, blank=True)
-    # cloud_information = models.ForeignKey(CloudInformation, null=True, blank=True)
     ddns_protected = models.NullBooleanField(null=True, blank=True)
     disable = models.NullBooleanField(null=True, blank=True)
-    # last_queried = models.DateTimeField(null=True, blank=True)
     ms_ad_user_data = models.PositiveIntegerField(null=True, blank=True)
     ttl = models.PositiveIntegerField(null=True, blank=True)
     use_ttl = models.NullBooleanField(null=True, blank=True)
-    # creation_time = models.DateTimeField(null=True, blank=True)
     creator = models.CharField(max_length=100, null=True, blank=True)
     ddns_principal = models.CharField(max_length=100, null=True, blank=True)
     reclaimable = models.NullBooleanField(null=True, blank=True)
@@ -769,16 +766,16 @@ class FilterProfile(models.Model):
     disable_discovery = models.NullBooleanField(null=True, blank=True)
     network_view = models.CharField(max_length=100, null=True, blank=True)
     rrset_order = models.CharField(max_length=6, null=True, blank=True, choices=RRSET_ORDERS)
-    # snmp3_credential = models.ForeignKey(SNMP3Credential, null=True, blank=True)
-    # snmp_credential = models.ForeignKey(SNMPCredential, null=True, blank=True)
     use_cli_credentials = models.NullBooleanField(null=True, blank=True)
     use_snmp3_credential = models.NullBooleanField(null=True, blank=True)
     use_snmp_credential = models.NullBooleanField(null=True, blank=True)
 
     #Infoblox A Record Information (only for a records)
-    # aws_rte53_record_info = models.ForeignKey(AWSRTE53RecordInfo, null=True, blank=True)
-    # discovered_data = models.ForeignKey(DiscoveredData, null=True, blank=True)
-    ipv4addr = models.GenericIPAddressField(protocol='ipv4', null=True, blank=True)
+    ipv4addr = models.CharField(max_length=30, null=True, blank=True)
+    ipv6addr = models.CharField(max_length=30, null=True, blank=True)
+    alias = models.CharField(max_length=100, null=True, blank=True)
+    extensible_attribute_value = models.CharField(max_length=100, null=True, blank=True)
+    discovered_data = models.CharField(max_length=100, null=True, blank=True)
 
     #Infoblox CName Record Information (Only for cname records)
     canonical = models.CharField(max_length=100, null=True, blank=True)
