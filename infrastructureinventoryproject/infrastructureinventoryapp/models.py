@@ -487,6 +487,9 @@ DISCOVERED_DATA_FIELDS = [
 class AuthoritativeZone(models.Model):
     view = models.CharField(max_length=20)
     zone = models.CharField(max_length=150)
+    last_host_pull = models.DateTimeField(null=True)
+    last_a_pull = models.DateTimeField(null=True)
+    last_cname_pull = models.DateTimeField(null=True)
 
     class Meta:
         db_table = "authoritativezone"

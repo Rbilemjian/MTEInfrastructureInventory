@@ -614,19 +614,48 @@ def saveExtAttributes(host, currHost):
 
 @login_required()
 def infoblox(request):
-    urllib3.disable_warnings()
 
-    r = requests.get('https://infoblox.net.tfayd.com/wapi/v2.7/zone_auth', auth=('206582055', 'miketysonpunchout'), verify=False)
-    auth_zones_json = json.loads(r.content)
-    AuthoritativeZone.objects.all().delete()
-    for auth_zone in auth_zones_json:
-        new_zone = AuthoritativeZone(view = auth_zone.get('view'), zone=auth_zone.get('fqdn'))
-        new_zone.save()
+    authZonesForDisplay = AuthoritativeZone.objects.none()
+
+    if request.method == "GET":
+
+        authZonesForDisplay = authZonesForDisplay | AuthoritativeZone.objects.filter(last_host_pull__isnull=False)
+        authZonesForDisplay = authZonesForDisplay | AuthoritativeZone.objects.filter(last_a_pull__isnull=False)
+        authZonesForDisplay = authZonesForDisplay | AuthoritativeZone.objects.filter(last_cname_pull__isnull=False)
+
+        urllib3.disable_warnings()
+
+        r = requests.get('https://infoblox.net.tfayd.com/wapi/v2.7/zone_auth', auth=('206582055', 'miketysonpunchout'), verify=False)
+        auth_zones_json = json.loads(r.content)
+        for auth_zone in auth_zones_json:
+            if AuthoritativeZone.objects.filter(view=auth_zone.get('view'), zone=auth_zone.get('fqdn')).count() > 0:
+                continue
+            new_zone = AuthoritativeZone(view = auth_zone.get('view'), zone=auth_zone.get('fqdn'))
+            new_zone.save()
 
     if request.method == "POST":
         if request.POST.get('confirmed') == "true":
 
 
+            #Updating last pulled value of auth zone that was pulled from
+            appServer = ApplicationServer.objects.filter(visible=False).first()
+            view = appServer.view
+            zone = appServer.zone
+            record_type = appServer.record_type
+            authZone = AuthoritativeZone.objects.filter(view=view, zone=zone).get()
+
+            if record_type == "Host Record":
+                authZone.last_host_pull = timezone.now()
+            elif record_type == "A Record":
+                authZone.last_a_pull = timezone.now()
+            elif record_type == "CNAME Record":
+                authZone.last_cname_pull = timezone.now()
+
+
+
+            authZone.save()
+
+            #Doing a database update and setting all of the new servers to be visible
             databaseDiff()
             setAllVisible()
             return redirect('/infrastructureinventory/applicationserver')
@@ -734,7 +763,7 @@ def infoblox(request):
             return render(request, "infoblox.html", {"form": form, "records": records, "record_type": record_type})
     else:
         form = InfobloxImportForm()
-    return render(request, "infoblox.html", {"form": form})
+    return render(request, "infoblox.html", {"form": form, "zones": authZonesForDisplay})
 
 
 

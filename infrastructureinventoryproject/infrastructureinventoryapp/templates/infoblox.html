@@ -86,6 +86,39 @@
         </form>
     </div>
 
+    {% if zones.count > 0 %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="col-md-2"></div>
+                <div class="col-md-8">
+                    <table class="table" style="background-color:white; margin-top:50px;">
+                        <thead style="text-align:center;">
+                            <th>View</th>
+                            <th>Zone</th>
+                            <th>Last Host Record Pull</th>
+                            <th>Last A Record Pull</th>
+                            <th>Last CNAME Record Pull</th>
+                        </thead>
+
+                        <tbody>
+                            {% for zone in zones %}
+                            <tr>
+                                <td>{{ zone.view }}</td>
+                                <td>{{ zone.zone }}</td>
+                                <td>{{ zone.last_host_pull }}</td>
+                                <td>{{ zone.last_a_pull }}</td>
+                                <td>{{ zone.last_cname_pull }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
 {% if records.count > 0 %}
 
     <div style="text-align:center;">
