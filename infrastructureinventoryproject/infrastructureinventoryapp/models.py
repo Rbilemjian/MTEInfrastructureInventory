@@ -3,6 +3,15 @@ from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 
 
+CISCO_ISE_SESSION_STATES = [
+    (None, 'N/A'),
+    ('AUTHENTICATED', 'AUTHENTICATED'),
+    ('AUTHENTICATING', 'AUTHENTICATING'),
+    ('DISCONNECTED', 'DISCONNECTED'),
+    ('POSTURED', 'POSTURED'),
+    ('STARTED', 'STARTED'),
+]
+
 ENVIRONMENTS = [
     ('Prod', 'Production'),
     ('Dev', 'Development'),
@@ -15,6 +24,21 @@ ENVIRONMENTS_WITH_NULL = [
     ('QA', 'Quality Assurance'),
     (None, 'N/A')
 ]
+
+VPORT_MODES = [
+    (None, 'N/A'),
+    ('Full-duplex', 'Full-duplex'),
+    ('Half-duplex', 'Half-duplex'),
+    ('Unknown', 'Unknown'),
+]
+
+VSWITCH_TYPES = [
+    (None, 'N/A'),
+    ('Distributed', 'Distributed'),
+    ('Standard', 'Standard'),
+    ('Unknown', 'Unknown'),
+]
+
 
 
 NETWORKS = [
@@ -44,6 +68,64 @@ RECORD_TYPES = [
     ('record:host', 'Host Record'),
     ('record:a', 'A Record'),
     ('record:cname', 'CNAME Record'),
+]
+
+AUTHORITY_TYPES = [
+    (None, 'N/A'),
+    ('CP', 'CP'),
+    ('GM', 'GM'),
+    ('NONE', 'None'),
+]
+
+DELEGATED_SCOPES = [
+    (None, 'N/A'),
+    ('NONE', 'NONE'),
+    ('RECLAIMING', 'RECLAIMING'),
+    ('ROOT', 'ROOT'),
+    ('SUBTREE', 'SUBTREE'),
+]
+
+USAGES = [
+    (None, 'N/A'),
+    ('ADAPTER', 'ADAPTER'),
+    ('DELEGATED', 'DELEGATED'),
+    ('NONE', 'NONE'),
+    ('USED_BY', 'USED_BY'),
+]
+
+AUTHENTICATION_PROTOCOLS = [
+    (None, 'N/A'),
+    ('MD5', 'MD5'),
+    ('NONE', 'NONE'),
+    ('SHA', 'SHA'),
+]
+
+PRIVACY_PROTOCOLS = [
+    (None, 'N/A'),
+    ('3DES', '3DES'),
+    ('AES', 'AES'),
+    ('DES', 'DES'),
+    ('NONE', 'NONE'),
+]
+
+FAILOVERS = [
+    (None, 'N/A'),
+    ('PRIMARY', 'PRIMARY'),
+    ('SECONDARY', 'SECONDARY')
+]
+
+AWS_TYPES = [
+    (None, 'N/A'),
+    ('A', 'A'),
+    ('AAAA', 'AAAA'),
+    ('CNAME', 'CNAME'),
+    ('MX', 'MX'),
+    ('NS', 'NS'),
+    ('PTR', 'PTR'),
+    ('SOA', 'SOA'),
+    ('SPF', 'SPF'),
+    ('SRV', 'SRV'),
+    ('TXT', 'TXT')
 ]
 
 FILTER_RECORD_TYPES = [
@@ -240,6 +322,7 @@ AWS_RTE53_RECORD_INFO_FIELDS = [
     ('alias_target_hosted_zone_id', 'Alias Target Hosted Zone ID'),
     ('failover', 'Failover'),
     ('geolocation_continent_code', 'Geolocation Continent Code'),
+    ('geolocation_country_code', 'Geolocation Country Code'),
     ('geolocation_subdivision_code', 'Geolocation Subdivision Code'),
     ('health_check_id', 'Health Check ID'),
     ('set_identifier', 'Set Identifier')
@@ -315,6 +398,7 @@ DISCOVERED_DATA_FIELDS = [
     ('cisco_ise_ssid', 'Cisco ISE SSID'),
     ('cmp_type', 'CMP Type'),
     ('device_contact', 'Device Contact'),
+    ('device_location', 'Device Location'),
     ('device_model', 'Device Model'),
     ('device_port_name', 'Device Port Name'),
     ('device_port_type', 'Device Port Type'),
@@ -365,15 +449,15 @@ DISCOVERED_DATA_FIELDS = [
     ('vlan_port_group', 'VLAN Port Group'),
     ('vmhost_ip_address', 'VM Host IP Address'),
     ('vmhost_mac_address', 'VM Host Mac Address'),
-    ('vmhost_ip_address', 'VM Host IP Address'),
-    ('vmhost_mac_address', 'VM Host IP Address'),
     ('vmhost_name', 'VM Host Name'),
     ('vmhost_nic_names', 'VM Host NIC Names'),
     ('vmhost_subnet_cidr', 'VM Host Subnet CIDR'),
     ('vmi_id', 'VMI ID'),
     ('vmi_ip_type', 'VMI IP Type'),
     ('vmi_is_public_address', 'VMI Is Public Address'),
-    ('tenant_id', 'Tenant ID'),
+    ('vmi_name', 'VMI Name'),
+    ('vmi_private_address', 'VMI Private Address'),
+    ('vmi_tenant_id', 'VMI Tenant ID'),
     ('vport_conf_mode', 'VPort Conf Mode'),
     ('vport_conf_speed', 'VPort Conf Speed'),
     ('vport_link_status', 'VPort Link Status'),
@@ -456,6 +540,7 @@ class AWSRTE53RecordInfo(models.Model):
     alias_target_hosted_zone_id = models.CharField(max_length=100, null=True, blank=True)
     failover = models.CharField(max_length=9, null=True, blank=True)
     geolocation_continent_code = models.CharField(max_length=100, null=True, blank=True)
+    geolocation_country_code = models.CharField(max_length=100, null=True, blank=True)
     geolocation_subdivision_code = models.CharField(max_length=100, null=True, blank=True)
     health_check_id = models.CharField(max_length=100, null=True, blank=True)
     region = models.CharField(max_length=100, null=True, blank=True)
@@ -481,15 +566,17 @@ class DiscoveredData(models.Model):
     cmp_type = models.CharField(max_length=100, null=True, blank=True)
     device_contact = models.CharField(max_length=100, null=True, blank=True)
     device_model = models.CharField(max_length=100, null=True, blank=True)
+    device_location = models.CharField(max_length=100, null=True, blank=True)
     device_port_name = models.CharField(max_length=100, null=True, blank=True)
     device_port_type = models.CharField(max_length=100, null=True, blank=True)
     device_type = models.CharField(max_length=100, null=True, blank=True)
     device_vendor = models.CharField(max_length=100, null=True, blank=True)
+
     discovered_name = models.CharField(max_length=100, null=True, blank=True)
     discoverer = models.CharField(max_length=100, null=True, blank=True)
     duid = models.CharField(max_length=100, null=True, blank=True)
     endpoint_groups = models.CharField(max_length=100, null=True, blank=True)
-    first_discovered = models.DateTimeField(null=True, blank=True, editable=False)
+    first_discovered = models.DateTimeField(null=True, blank=True)
     iprg_no = models.PositiveIntegerField(null=True, blank=True)
     iprg_state = models.CharField(max_length=100, null=True, blank=True)
     iprg_type = models.CharField(max_length=100, null=True, blank=True)
@@ -520,6 +607,7 @@ class DiscoveredData(models.Model):
     port_vlan_number = models.PositiveIntegerField(null=True, blank=True)
     task_name = models.CharField(max_length=100, null=True, blank=True)
     tenant = models.CharField(max_length=100, null=True, blank=True)
+
     v_adapter = models.CharField(max_length=100, null=True, blank=True)
     v_cluster = models.CharField(max_length=100, null=True, blank=True)
     v_datacenter = models.CharField(max_length=100, null=True, blank=True)
@@ -535,8 +623,10 @@ class DiscoveredData(models.Model):
     vmhost_subnet_cidr = models.CharField(max_length=100, null=True, blank=True)
     vmi_id = models.CharField(max_length=100, null=True, blank=True)
     vmi_ip_type = models.CharField(max_length=100, null=True, blank=True)
-    vmi_is_public_address = models.NullBooleanField(null=True, blank=True, default=False)
-    tenant_id = models.CharField(max_length=100, null=True, blank=True)
+    vmi_is_public_address = models.NullBooleanField(null=True, blank=True)
+    vmi_name = models.NullBooleanField(null=True, blank=True)
+    vmi_private_address = models.NullBooleanField(null=True, blank=True)
+    vmi_tenant_id = models.CharField(max_length=100, null=True, blank=True)
     vport_conf_mode = models.CharField(max_length=100, null=True, blank=True)
     vport_conf_speed = models.PositiveIntegerField(null=True, blank=True)
     vport_link_status = models.CharField(max_length=100, null=True, blank=True)
@@ -560,6 +650,7 @@ class DiscoveredData(models.Model):
     vswitch_tep_vlan = models.CharField(max_length=100, null=True, blank=True)
     vswitch_type = models.CharField(max_length=100, null=True, blank=True)
     visible = models.BooleanField(default=False)
+
 
     class Meta:
         db_table = "discovereddata"
@@ -779,6 +870,134 @@ class FilterProfile(models.Model):
     #Infoblox CName Record Information (Only for cname records)
     canonical = models.CharField(max_length=100, null=True, blank=True)
 
+    #Cloud Information
+    ci_authority_type = models.CharField(max_length=4, null=True, blank=True, choices=AUTHORITY_TYPES)
+    ci_delegated_root = models.CharField(max_length=100, null=True, blank=True)
+    ci_delegated_scope = models.CharField(max_length=10, null=True, blank=True)
+    ci_mgmt_platform = models.CharField(max_length=100, null=True, blank=True)
+    ci_owned_by_adaptor = models.NullBooleanField(null=True, blank=True)
+    ci_tenant = models.CharField(max_length=100, null=True, blank=True)
+    ci_usage_field = models.CharField(max_length=9, null=True, blank=True)
+    ci_delegated_member_ipv4_address = models.GenericIPAddressField(protocol='IPv4', null=True, blank=True)
+    ci_delegated_member_ipv6_address = models.GenericIPAddressField(protocol='IPv6', null=True, blank=True)
+    ci_delegated_member_name = models.CharField(max_length=100, null=True, blank=True)
+
+    #SNMP3 Credential Information
+    snmp3_authentication_protocol = models.CharField(max_length=4, null=True, blank=True)
+    snmp3_privacy_protocol = models.CharField(max_length=4, null=True, blank=True)
+    snmp3_user = models.CharField(max_length=100, null=True, blank=True)
+
+    #SNMP Credential Information
+    snmp_community_string = models.CharField(max_length=100, null=True, blank=True)
+
+    #AWS RTE53 Record Information
+    aws_alias_target_dns_name = models.CharField(max_length=100, null=True, blank=True)
+    aws_alias_target_evaluate_target_health = models.NullBooleanField(null=True, blank=True)
+    aws_alias_target_hosted_zone_id = models.CharField(max_length=100, null=True, blank=True)
+    aws_failover = models.CharField(max_length=9, null=True, blank=True)
+    aws_geolocation_continent_code = models.CharField(max_length=100, null=True, blank=True)
+    aws_geolocation_country_code = models.CharField(max_length=100, null=True, blank=True)
+    aws_geolocation_subdivision_code = models.CharField(max_length=100, null=True, blank=True)
+    aws_health_check_id = models.CharField(max_length=100, null=True, blank=True)
+    aws_region = models.CharField(max_length=100, null=True, blank=True)
+    aws_set_identifier = models.CharField(max_length=100, null=True, blank=True)
+    aws_type = models.CharField(max_length=5, null=True, blank=True)
+    aws_weight = models.PositiveIntegerField(null=True, blank=True)
+
+
+    #Discovered Data Record Information
+    dd_ap_ip_address = models.GenericIPAddressField(max_length=100, null=True, blank=True)
+    dd_ap_name = models.CharField(max_length=100, null=True, blank=True)
+    dd_ap_ssid = models.CharField(max_length=100, null=True, blank=True)
+    dd_bridge_domain = models.CharField(max_length=100, null=True, blank=True)
+    dd_cisco_ise_endpoint_profile = models.CharField(max_length=100, null=True, blank=True)
+    dd_cisco_ise_security_group = models.CharField(max_length=100, null=True, blank=True)
+    dd_cisco_ise_session_state = models.CharField(max_length=100, null=True, blank=True)
+    dd_cisco_ise_ssid = models.CharField(max_length=100, null=True, blank=True)
+    dd_cmp_type = models.CharField(max_length=100, null=True, blank=True)
+    dd_device_contact = models.CharField(max_length=100, null=True, blank=True)
+    dd_device_model = models.CharField(max_length=100, null=True, blank=True)
+    dd_device_location = models.CharField(max_length=100, null=True, blank=True)
+    dd_device_port_name = models.CharField(max_length=100, null=True, blank=True)
+    dd_device_port_type = models.CharField(max_length=100, null=True, blank=True)
+    dd_device_type = models.CharField(max_length=100, null=True, blank=True)
+    dd_device_vendor = models.CharField(max_length=100, null=True, blank=True)
+    dd_discovered_name = models.CharField(max_length=100, null=True, blank=True)
+    dd_discoverer = models.CharField(max_length=100, null=True, blank=True)
+    dd_duid = models.CharField(max_length=100, null=True, blank=True)
+    dd_endpoint_groups = models.CharField(max_length=100, null=True, blank=True)
+    dd_iprg_no = models.PositiveIntegerField(null=True, blank=True)
+    dd_iprg_state = models.CharField(max_length=100, null=True, blank=True)
+    dd_iprg_type = models.CharField(max_length=100, null=True, blank=True)
+    dd_mac_address = models.CharField(max_length=100, null=True, blank=True)
+    dd_mgmt_ip_address = models.GenericIPAddressField(null=True, blank=True)
+    dd_netbios_name = models.CharField(max_length=100, null=True, blank=True)
+    dd_network_component_contact = models.CharField(max_length=100, null=True, blank=True)
+    dd_network_component_description = models.TextField(null=True, blank=True)
+    dd_network_component_ip = models.GenericIPAddressField(null=True, blank=True)
+    dd_network_component_location = models.CharField(max_length=100, null=True, blank=True)
+    dd_network_component_model = models.CharField(max_length=100, null=True, blank=True)
+    dd_network_component_name = models.CharField(max_length=100, null=True, blank=True)
+    dd_network_component_port_description = models.TextField(null=True, blank=True)
+    dd_network_component_port_name = models.CharField(max_length=100, null=True, blank=True)
+    dd_network_component_port_number = models.PositiveIntegerField(null=True, blank=True)
+    dd_network_component_type = models.CharField(max_length=100, null=True, blank=True)
+    dd_network_component_vendor = models.CharField(max_length=100, null=True, blank=True)
+    dd_open_ports = models.CharField(max_length=100, null=True, blank=True)
+    dd_os = models.CharField(max_length=100, null=True, blank=True)
+    dd_port_duplex = models.CharField(max_length=100, null=True, blank=True)
+    dd_port_link_status = models.CharField(max_length=100, null=True, blank=True)
+    dd_port_speed = models.CharField(max_length=100, null=True, blank=True)
+    dd_port_status = models.CharField(max_length=100, null=True, blank=True)
+    dd_port_type = models.CharField(max_length=100, null=True, blank=True)
+    dd_port_vlan_description = models.CharField(max_length=100, null=True, blank=True)
+    dd_port_vlan_name = models.CharField(max_length=100, null=True, blank=True)
+    dd_port_vlan_number = models.PositiveIntegerField(null=True, blank=True)
+    dd_task_name = models.CharField(max_length=100, null=True, blank=True)
+    dd_tenant = models.CharField(max_length=100, null=True, blank=True)
+    dd_v_adapter = models.CharField(max_length=100, null=True, blank=True)
+    dd_v_cluster = models.CharField(max_length=100, null=True, blank=True)
+    dd_v_datacenter = models.CharField(max_length=100, null=True, blank=True)
+    dd_v_entity_name = models.CharField(max_length=100, null=True, blank=True)
+    dd_v_entity_type = models.CharField(max_length=100, null=True, blank=True)
+    dd_v_host = models.CharField(max_length=100, null=True, blank=True)
+    dd_v_switch = models.CharField(max_length=100, null=True, blank=True)
+    dd_vlan_port_group = models.CharField(max_length=100, null=True, blank=True)
+    dd_vmhost_ip_address = models.GenericIPAddressField(null=True, blank=True)
+    dd_vmhost_mac_address = models.CharField(max_length=100, null=True, blank=True)
+    dd_vmhost_name = models.CharField(max_length=100, null=True, blank=True)
+    dd_vmhost_nic_names = models.CharField(max_length=100, null=True, blank=True)
+    dd_vmhost_subnet_cidr = models.CharField(max_length=100, null=True, blank=True)
+    dd_vmi_id = models.CharField(max_length=100, null=True, blank=True)
+    dd_vmi_ip_type = models.CharField(max_length=100, null=True, blank=True)
+    dd_vmi_is_public_address = models.NullBooleanField(null=True, blank=True)
+    dd_vmi_name = models.NullBooleanField(null=True, blank=True)
+    dd_vmi_private_address = models.NullBooleanField(null=True, blank=True)
+    dd_vmi_tenant_id = models.CharField(max_length=100, null=True, blank=True)
+    dd_vport_conf_mode = models.CharField(max_length=100, null=True, blank=True)
+    dd_vport_conf_speed = models.PositiveIntegerField(null=True, blank=True)
+    dd_vport_link_status = models.CharField(max_length=100, null=True, blank=True)
+    dd_vport_mac_address = models.CharField(max_length=100, null=True, blank=True)
+    dd_vport_mode = models.CharField(max_length=100, null=True, blank=True)
+    dd_vport_name = models.CharField(max_length=100, null=True, blank=True)
+    dd_vport_speed = models.PositiveIntegerField(null=True, blank=True)
+    dd_vswitch_available_ports_count = models.PositiveIntegerField(null=True, blank=True)
+    dd_vswitch_id = models.CharField(max_length=100, null=True, blank=True)
+    dd_vswitch_ipv6_enabled = models.NullBooleanField(null=True, blank=True)
+    dd_vswitch_name = models.CharField(max_length=100, null=True, blank=True)
+    dd_vswitch_segment_id = models.CharField(max_length=100, null=True, blank=True)
+    dd_vswitch_segment_name = models.CharField(max_length=100, null=True, blank=True)
+    dd_vswitch_segment_port_group = models.CharField(max_length=100, null=True, blank=True)
+    dd_vswitch_segment_type = models.CharField(max_length=100, null=True, blank=True)
+    dd_vswitch_tep_dhcp_server = models.CharField(max_length=100, null=True, blank=True)
+    dd_vswitch_tep_ip = models.GenericIPAddressField(null=True, blank=True)
+    dd_vswitch_tep_multicast = models.CharField(max_length=100, null=True, blank=True)
+    dd_vswitch_tep_port_group = models.CharField(max_length=100, null=True, blank=True)
+    dd_vswitch_tep_type = models.CharField(max_length=100, null=True, blank=True)
+    dd_vswitch_tep_vlan = models.CharField(max_length=100, null=True, blank=True)
+    dd_vswitch_type = models.CharField(max_length=100, null=True, blank=True)
+
+
     class Meta:
         db_table = "filterprofile"
 
@@ -962,15 +1181,3 @@ def create_visible_column(sender, **kwargs):
 
 
 post_save.connect(create_visible_column, sender=User)
-
-
-
-
-
-
-
-
-
-
-
-

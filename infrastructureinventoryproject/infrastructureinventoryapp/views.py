@@ -7,7 +7,7 @@ from . import models
 from .models import ApplicationServer, FilterProfile, HOST_FIELDS, DHCPMember, CloudInformation, DISCOVERED_DATA_FIELDS
 from .models import SNMP3Credential, SNMPCredential, ExtensibleAttribute, DiscoveredData, IPv4HostAddress
 from .models import IPv6HostAddress, DomainNameServer, LogicFilterRule, Alias, CliCredential, DHCPOption, VisibleColumns
-from .models import HOST_FIELDS
+from .models import HOST_FIELDS, AWSRTE53RecordInfo
 from .forms import InfobloxImportForm, VisibleColumnForm, FilterProfileForm, AdvancedSearchForm
 import xlrd
 import requests
@@ -129,18 +129,146 @@ def get_extensible_attribute_application_servers(extensible_attribute_value):
 
 def get_discovered_data_application_servers(discovered_data_value):
     retServers = ApplicationServer.objects.none()
+    ipv4s = IPv4HostAddress.objects.none()
+    ipv6s = IPv6HostAddress.objects.none()
+
     dds = DiscoveredData.objects.filter(visible=True)
     dds_of_interest = DiscoveredData.objects.none()
     fields = models.DISCOVERED_DATA_FIELDS
     icontains = "__icontains"
+
     for field in fields:
         field = field[0]
         filter = field + icontains
         dds_of_interest = dds_of_interest | dds.filter(**{filter: discovered_data_value})
 
-    for dd in dds_of_interest:
-        retServers = retServers | ApplicationServer.objects.filter(visible=True).filter(discovered_data=dd)
+    if dds_of_interest.count() > 0:
+        for dd in dds_of_interest:
+            retServers = retServers | ApplicationServer.objects.filter(visible=True).filter(discovered_data=dd)
+            ipv4s = ipv4s | IPv4HostAddress.objects.filter(visible=True).filter(discovered_data=dd)
+            ipv6s = ipv6s | IPv6HostAddress.objects.filter(visible=True).filter(discovered_data=dd)
+
+    if ipv4s.count() > 0:
+        for ipv4 in ipv4s:
+            retServers = retServers | ApplicationServer.objects.filter(visible=True).filter(id=ipv4.application_server.id)
+
+    if ipv6s.count() > 0:
+        for ipv6 in ipv6s:
+            retServers = retServers | ApplicationServer.objects.filter(visible=True).filter(id=ipv6.application_server.id)
+
     return retServers
+
+
+def remove_prefix(string, prefix):
+    if string.startswith(prefix):
+        return string[len(prefix):]
+    return string
+
+
+def filter_by_cloud_information(field, value):
+    appServers = ApplicationServer.objects.none()
+    field = remove_prefix(field, "ci_")
+    field = remove_prefix(field, "delegated_member_")
+
+
+    filter = field + "__icontains"
+
+    cFields = CloudInformation._meta.get_all_field_names()
+    dFields = DHCPMember._meta.get_all_field_names()
+
+    if field in cFields:
+        cis = CloudInformation.objects.filter(**{filter: value}).filter(visible=True)
+        if cis.count() > 0:
+            cis = CloudInformation.objects.filter(**{filter:value}).filter(visible=True)
+            for ci in cis:
+                appServers = appServers | ApplicationServer.objects.filter(cloud_information=ci).filter(visible=True)
+
+    elif field in dFields:
+        cloudInfos = CloudInformation.objects.filter(visible=True)
+        dms = DHCPMember.objects.filter(**{filter: value})
+        if dms.count() > 0:
+            dms = DHCPMember.objects.filter(**{filter:value})
+            for dm in dms:
+                cloudInfos = cloudInfos | CloudInformation.objects.filter(delegated_member=dm).filter(visible=True)
+            for cloudInfo in cloudInfos:
+                appServers = appServers | ApplicationServer.objects.filter(cloud_information=cloudInfo).filter(visible=True)
+
+    return appServers
+
+
+def filter_by_snmp3_credential_information(field, value):
+    appServers = ApplicationServer.objects.none()
+
+    field = remove_prefix(field, "snmp3_")
+    fields = SNMP3Credential._meta.get_all_field_names()
+
+    filter = field + "__icontains"
+
+    if field in fields:
+        snmp3s = SNMP3Credential.objects.filter(**{filter: value}).filter(visible=True)
+        if snmp3s.count() > 0:
+            for snmp3 in snmp3s:
+                appServers = appServers | ApplicationServer.objects.filter(visible=True).filter(snmp3_credential=snmp3)
+    return appServers
+
+
+
+def filter_by_snmp_credential_information(field, value):
+    appServers = ApplicationServer.objects.none()
+
+    field = remove_prefix(field, "snmp_")
+    fields = SNMPCredential._meta.get_all_field_names()
+
+    filter = field + "__icontains"
+
+    if field in fields:
+        snmps = SNMPCredential.objects.filter(**{filter: value}).filter(visible=True)
+        if snmps.count() > 0:
+            for snmp in snmps:
+                appServers = appServers | ApplicationServer.objects.filter(visible=True).filter(snmp_credential=snmp)
+    return appServers
+
+
+
+def filter_by_aws_rte53_record_information(field, value):
+    appServers = ApplicationServer.objects.none()
+
+    field = remove_prefix(field, "aws_")
+    fields = AWSRTE53RecordInfo._meta.get_all_field_names()
+
+    filter = field + "__icontains"
+    print(field)
+    if field in fields:
+        awss = AWSRTE53RecordInfo.objects.filter(**{filter: value}).filter(visible=True)
+        if awss.count() > 0:
+            for aws in awss:
+                appServers = appServers | ApplicationServer.objects.filter(visible=True).filter(aws_rte53_record_info=aws)
+    return appServers
+
+
+def filter_by_discovered_data(field, value):
+
+    field = remove_prefix(field, "dd_")
+
+    ipv4s = IPv4HostAddress.objects.none()
+    ipv6s = IPv6HostAddress.objects.none()
+
+    retServers = ApplicationServer.objects.none()
+    filter = field + "__icontains"
+    dds = DiscoveredData.objects.filter(visible=True).filter(**{filter: value})
+    for dd in dds:
+        retServers = retServers | ApplicationServer.objects.filter(visible=True).filter(discovered_data=dd)
+        ipv4s = ipv4s | IPv4HostAddress.objects.filter(visible=True).filter(discovered_data=dd)
+        ipv6s = ipv6s | IPv6HostAddress.objects.filter(visible=True).filter(discovered_data=dd)
+
+    if ipv4s.count() > 0:
+        for ipv4 in ipv4s:
+            retServers = retServers| ApplicationServer.objects.filter(visible=True).filter(id=ipv4.application_server.id)
+    if ipv6s.count() > 0:
+        for ipv6 in ipv6s:
+            retServers = retServers | ApplicationServer.objects.filter(visible=True).filter(id=ipv6.application_server.id)
+    return retServers
+
 
 
 
@@ -163,25 +291,33 @@ def filter_servers(filterProfile):
     else:
         search_result = ApplicationServer.objects.filter(visible=True)
 
-    if filterProfile.ipv4addr is not None:
-        search_result = search_result & get_ipv4_application_servers(filterProfile.ipv4addr)
-    if filterProfile.ipv6addr is not None:
-        search_result = search_result & get_ipv6_application_servers(filterProfile.ipv6addr)
+
     if filterProfile.alias is not None:
         search_result = search_result & get_alias_application_servers(filterProfile.alias)
     if filterProfile.extensible_attribute_value is not None:
         search_result = search_result & get_extensible_attribute_application_servers(filterProfile.extensible_attribute_value)
-    if filterProfile.discovered_data is not None:
-        search_result = search_result & get_discovered_data_application_servers(filterProfile.discovered_data)
-
-    icontains = "__icontains"
 
     for field in fields:
         if field == "id" or field == "profile_name" or field == "all_fields" or field == "ipv6addr" or field == "ipv4addr" or field == "alias" or field == "extensible_attribute_value" or field == "discovered_data": continue
         if hasattr(filterProfile, field) and getattr(filterProfile, field) is not None:
-            filter = field + icontains
             value = getattr(filterProfile, field)
-            search_result = search_result.filter(**{filter: value})
+
+            #Checking if field is in a model other than applicationserver
+            if field.startswith("ci_"):
+                search_result = search_result & filter_by_cloud_information(field, value)
+            elif field.startswith("snmp3_"):
+                search_result = search_result & filter_by_snmp3_credential_information(field, value)
+            elif field.startswith("snmp_"):
+                search_result = search_result & filter_by_snmp_credential_information(field, value)
+            elif field.startswith("aws_"):
+                search_result = search_result & filter_by_aws_rte53_record_information(field, value)
+            elif field.startswith("dd_"):
+                search_result = search_result & filter_by_discovered_data(field, value)
+            else:
+                filter = field + "__icontains"
+                search_result = search_result.filter(**{filter: value})
+            print(field)
+            print(len(search_result))
     return search_result
 #
 #
@@ -520,6 +656,7 @@ def delete_application_server(request, pk):
 #
 @login_required()
 def search_application_server(request):
+
     if request.method == "POST":
         form = AdvancedSearchForm(request.POST)
         if form.is_valid():
@@ -530,7 +667,7 @@ def search_application_server(request):
             args = {'applicationServers': search_result, 'fields': fields}
             return render(request, 'application_server_search_result.html', args)
     else:
-        form = FilterProfileForm()
+        form = AdvancedSearchForm()
     return render(request, 'application_server_search_form.html', {'form': form})
 
 

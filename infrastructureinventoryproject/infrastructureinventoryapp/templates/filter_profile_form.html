@@ -263,6 +263,825 @@
                 </div>
             </div>
 
+            <div class="row">
+                <div class="col-md-12">
+                    <h2>Cloud Information</h2>
+                </div>
+            </div>
+
+            <div class="my-padding"></div>
+
+            <div class="row">
+
+                <div class="col-md-4">
+                    {{ form.ci_delegated_root.errors }}
+                    <label for="{{ form.ci_delegated_root.id_for_label }}">Delegated Root</label><br>
+                    {{ form.ci_delegated_root }}
+                </div>
+                <div class="col-md-4">
+                    {{ form.ci_mgmt_platform.errors }}
+                    <label for="{{ form.ci_mgmt_platform.id_for_label }}">Management Platform</label><br>
+                    {{ form.ci_mgmt_platform }}
+                </div>
+
+                <div class="col-md-4">
+                    {{ form.ci_tenant.errors }}
+                    <label for="{{ form.ci_tenant.id_for_label }}">Tenant</label><br>
+                    {{ form.ci_tenant }}
+                </div>
+            </div>
+
+            <div class="my-padding"></div>
+
+            <div class="row">
+
+             <div class="col-md-4">
+                    {{ form.ci_delegated_member_ipv4_address.errors }}
+                    <label for="{{ form.ci_delegated_member_ipv4_address.id_for_label }}">Delegated Member IPv4 Address</label><br>
+                    {{ form.ci_delegated_member_ipv4_address }}
+                </div>
+                <div class="col-md-4">
+                    {{ form.ci_delegated_member_ipv6_address.errors }}
+                    <label for="{{ form.ci_delegated_member_ipv6_address.id_for_label }}">Delegated Member IPv6 Address</label><br>
+                    {{ form.ci_delegated_member_ipv6_address }}
+                </div>
+
+                <div class="col-md-4">
+                    {{ form.ci_delegated_member_name.errors }}
+                    <label for="{{ form.ci_delegated_member_name.id_for_label }}">Delegated Member Name</label><br>
+                    {{ form.ci_delegated_member_name }}
+                </div>
+            </div>
+
+            <div class="my-padding"></div>
+
+            <div class="row">
+
+
+                <div class="col-md-3">
+                    {{ form.ci_delegated_scope.errors }}
+                    <label for="{{ form.ci_delegated_scope.id_for_label }}">Delegated Scope</label><br>
+                    {{ form.ci_delegated_scope }}
+                </div>
+                <div class="col-md-3">
+                    {{ form.ci_usage_field.errors }}
+                    <label for="{{ form.ci_usage_field.id_for_label }}">Usage</label><br>
+                    {{ form.ci_usage_field }}
+                </div>
+                <div class="col-md-3">
+                    {{ form.ci_owned_by_adaptor.errors }}
+                    <label for="{{ form.ci_owned_by_adaptor.id_for_label }}">Owned By Adaptor</label><br>
+                    {{ form.ci_owned_by_adaptor }}
+                </div>
+
+                <div class="col-md-3">
+                    {{ form.ci_authority_type.errors }}
+                    <label for="{{ form.ci_authority_type.id_for_label }}">Authority Type</label><br>
+                    {{ form.ci_authority_type }}
+                </div>
+
+            </div>
+
+            <div class="my-padding"></div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <h2>SNMP3 Credential Information</h2>
+                </div>
+            </div>
+
+            <div class="my-padding"></div>
+
+            <div class="row">
+
+                <div class="col-md-4">
+                    {{ form.snmp3_user.errors }}
+                    <label for="{{ form.snmp3_user.id_for_label }}">User</label><br>
+                    {{ form.snmp3_user }}
+                </div>
+             <div class="col-md-3">
+                    {{ form.snmp3_authentication_protocol.errors }}
+                    <label for="{{ form.snmp3_authentication_protocol.id_for_label }}">Authentication Protocol</label><br>
+                    {{ form.snmp3_authentication_protocol }}
+                </div>
+                <div class="col-md-3">
+                    {{ form.snmp3_privacy_protocol.errors }}
+                    <label for="{{ form.snmp3_privacy_protocol.id_for_label }}">Privacy Protocol</label><br>
+                    {{ form.snmp3_privacy_protocol }}
+                </div>
+            </div>
+
+            <div class="my-padding"></div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <h2>SNMP Credential Information</h2>
+                </div>
+            </div>
+
+            <div class="my-padding"></div>
+
+            <div class="row">
+
+                <div class="col-md-4">
+                    {{ form.snmp_community_string.errors }}
+                    <label for="{{ form.snmp_community_string.id_for_label }}">Community String</label><br>
+                    {{ form.snmp_community_string }}
+                </div>
+            </div>
+
+            <div class="my-padding"></div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <h2>AWS RTE53 Record Information</h2>
+                </div>
+            </div>
+
+            <div class="my-padding"></div>
+
+            <div class="row">
+
+                <div class="col-md-4">
+                    {{ form.aws_health_check_id.errors }}
+                    <label for="{{ form.aws_health_check_id.id_for_label }}">Health Check ID</label><br>
+                    {{ form.aws_health_check_id }}
+                </div>
+                <div class="col-md-4">
+                    {{ form.aws_alias_target_dns_name.errors }}
+                    <label for="{{ form.aws_alias_target_dns_name.id_for_label }}">Alias Target DNS Name</label><br>
+                    {{ form.aws_alias_target_dns_name }}
+                </div>
+                <div class="col-md-4">
+                    {{ form.aws_alias_target_hosted_zone_id.errors }}
+                    <label for="{{ form.aws_alias_target_hosted_zone_id.id_for_label }}">Alias Target Hosted Zone ID</label><br>
+                    {{ form.aws_alias_target_hosted_zone_id }}
+                </div>
+            </div>
+
+            <div class="my-padding"></div>
+
+            <div class="row">
+
+             <div class="col-md-4">
+                    {{ form.aws_region.errors }}
+                    <label for="{{ form.aws_region.id_for_label }}">Region</label><br>
+                    {{ form.aws_region }}
+                </div>
+                <div class="col-md-4">
+                    {{ form.aws_set_identifier.errors }}
+                    <label for="{{ form.aws_set_identifier.id_for_label }}">Set Identifier</label><br>
+                    {{ form.aws_set_identifier }}
+                </div>
+                <div class="col-md-4">
+                    {{ form.aws_weight.errors }}
+                    <label for="{{ form.aws_weight.id_for_label }}">Weight</label><br>
+                    {{ form.aws_weight }}
+                </div>
+            </div>
+
+             <div class="my-padding"></div>
+
+            <div class="row">
+
+             <div class="col-md-4">
+                    {{ form.aws_geolocation_continent_code.errors }}
+                    <label for="{{ form.aws_geolocation_continent_code.id_for_label }}">Geolocation Continent Code</label><br>
+                    {{ form.aws_geolocation_continent_code }}
+                </div>
+                <div class="col-md-4">
+                    {{ form.aws_geolocation_subdivision_code.errors }}
+                    <label for="{{ form.aws_geolocation_subdivision_code.id_for_label }}">Geolocation Subdivision Code</label><br>
+                    {{ form.aws_geolocation_subdivision_code }}
+                </div>
+                <div class="col-md-4">
+                    {{ form.aws_geolocation_country_code.errors }}
+                    <label for="{{ form.aws_geolocation_country_code.id_for_label }}">Geolocation Country Code</label><br>
+                    {{ form.aws_geolocation_country_code }}
+                </div>
+            </div>
+
+             <div class="my-padding"></div>
+
+            <div class="row">
+                 <div class="col-md-4">
+                    {{ form.aws_type.errors }}
+                    <label for="{{ form.aws_type.id_for_label }}">Type</label><br>
+                    {{ form.aws_type }}
+                </div>
+                 <div class="col-md-4">
+                    {{ form.aws_alias_target_evaluate_target_health.errors }}
+                    <label for="{{ form.aws_alias_target_evaluate_target_health.id_for_label }}">Alias Target Evaluate Target Health</label><br>
+                    {{ form.aws_alias_target_evaluate_target_health }}
+                </div>
+                <div class="col-md-4">
+                    {{ form.aws_failover.errors }}
+                    <label for="{{ form.aws_failover.id_for_label }}">Failover</label><br>
+                    {{ form.aws_failover }}
+                </div>
+            </div>
+
+            <div class="my-padding"></div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <h2>Discovered Data Information</h2>
+                </div>
+            </div>
+
+            <div class="my-padding"></div>
+
+            <div class="row">
+                 <div class="col-md-4">
+                    {{ form.dd_ap_ip_address.errors }}
+                    <label for="{{ form.dd_ap_ip_address.id_for_label }}">AP IP Address</label><br>
+                    {{ form.dd_ap_ip_address }}
+                </div>
+                 <div class="col-md-4">
+                    {{ form.dd_ap_name.errors }}
+                    <label for="{{ form.dd_ap_name.id_for_label }}">AP Name</label><br>
+                    {{ form.dd_ap_name }}
+                </div>
+                <div class="col-md-4">
+                    {{ form.dd_ap_ssid.errors }}
+                    <label for="{{ form.dd_ap_ssid.id_for_label }}">AP SSID</label><br>
+                    {{ form.dd_ap_ssid }}
+                </div>
+            </div>
+
+            <div class="my-padding"></div>
+
+            <div class="row">
+                 <div class="col-md-4">
+                    {{ form.dd_bridge_domain.errors }}
+                    <label for="{{ form.dd_bridge_domain.id_for_label }}">Bridge Domain</label><br>
+                    {{ form.dd_bridge_domain }}
+                </div>
+                 <div class="col-md-4">
+                    {{ form.dd_cisco_ise_endpoint_profile.errors }}
+                    <label for="{{ form.dd_cisco_ise_endpoint_profile.id_for_label }}">Cisco ISE Endpoint Profile</label><br>
+                    {{ form.dd_cisco_ise_endpoint_profile }}
+                </div>
+                <div class="col-md-4">
+                    {{ form.dd_cisco_ise_security_group.errors }}
+                    <label for="{{ form.dd_cisco_ise_security_group.id_for_label }}">Cisco ISE Security Group</label><br>
+                    {{ form.dd_cisco_ise_security_group }}
+                </div>
+            </div>
+
+
+            <div class="my-padding"></div>
+
+            <div class="row">
+                 <div class="col-md-4">
+                    {{ form.dd_cisco_ise_ssid.errors }}
+                    <label for="{{ form.dd_cisco_ise_ssid.id_for_label }}">Cisco ISE SSID</label><br>
+                    {{ form.dd_cisco_ise_ssid }}
+                </div>
+                 <div class="col-md-4">
+                    {{ form.dd_cmp_type.errors }}
+                    <label for="{{ form.dd_cmp_type.id_for_label }}">CMP Type</label><br>
+                    {{ form.dd_cmp_type }}
+                </div>
+                <div class="col-md-4">
+                    {{ form.dd_device_contact.errors }}
+                    <label for="{{ form.dd_device_contact.id_for_label }}">Device Contact</label><br>
+                    {{ form.dd_device_contact }}
+                </div>
+            </div>
+
+            <div class="my-padding"></div>
+
+            <div class="row">
+                 <div class="col-md-4">
+                    {{ form.dd_device_model.errors }}
+                    <label for="{{ form.dd_device_model.id_for_label }}">Device Model</label><br>
+                    {{ form.dd_device_model }}
+                </div>
+                 <div class="col-md-4">
+                    {{ form.dd_device_location.errors }}
+                    <label for="{{ form.dd_device_location.id_for_label }}">Device Location</label><br>
+                    {{ form.dd_device_location }}
+                </div>
+                <div class="col-md-4">
+                    {{ form.dd_device_port_name.errors }}
+                    <label for="{{ form.dd_device_port_name.id_for_label }}">Device Port Name</label><br>
+                    {{ form.dd_device_port_name }}
+                </div>
+            </div>
+
+             <div class="my-padding"></div>
+
+            <div class="row">
+                 <div class="col-md-4">
+                    {{ form.dd_device_port_type.errors }}
+                    <label for="{{ form.dd_device_port_type.id_for_label }}">Device Port Type</label><br>
+                    {{ form.dd_device_port_type }}
+                </div>
+                 <div class="col-md-4">
+                    {{ form.dd_device_type.errors }}
+                    <label for="{{ form.dd_device_type.id_for_label }}">Device Type</label><br>
+                    {{ form.dd_device_type }}
+                </div>
+                <div class="col-md-4">
+                    {{ form.dd_device_vendor.errors }}
+                    <label for="{{ form.dd_device_vendor.id_for_label }}">Device Vendor</label><br>
+                    {{ form.dd_device_vendor }}
+                </div>
+            </div>
+
+            <div class="my-padding"></div>
+
+            <div class="row">
+                 <div class="col-md-4">
+                    {{ form.dd_discovered_name.errors }}
+                    <label for="{{ form.dd_discovered_name.id_for_label }}">Discovered Name</label><br>
+                    {{ form.dd_discovered_name }}
+                </div>
+                 <div class="col-md-4">
+                    {{ form.dd_discoverer.errors }}
+                    <label for="{{ form.dd_discoverer.id_for_label }}">Discoverer</label><br>
+                    {{ form.dd_discoverer }}
+                </div>
+                <div class="col-md-4">
+                    {{ form.dd_duid.errors }}
+                    <label for="{{ form.dd_duid.id_for_label }}">DUID</label><br>
+                    {{ form.dd_duid }}
+                </div>
+            </div>
+
+            <div class="my-padding"></div>
+
+            <div class="row">
+                 <div class="col-md-4">
+                    {{ form.dd_endpoint_groups.errors }}
+                    <label for="{{ form.dd_endpoint_groups.id_for_label }}">Endpoint Groups</label><br>
+                    {{ form.dd_endpoint_groups }}
+                </div>
+                 <div class="col-md-4">
+                    {{ form.dd_iprg_no.errors }}
+                    <label for="{{ form.dd_iprg_no.id_for_label }}">IPRG Number</label><br>
+                    {{ form.dd_iprg_no }}
+                </div>
+                <div class="col-md-4">
+                    {{ form.dd_mac_address.errors }}
+                    <label for="{{ form.dd_mac_address.id_for_label }}">Mac Address</label><br>
+                    {{ form.dd_mac_address }}
+                </div>
+            </div>
+
+            <div class="my-padding"></div>
+
+            <div class="row">
+                 <div class="col-md-4">
+                    {{ form.dd_mgmt_ip_address.errors }}
+                    <label for="{{ form.dd_mgmt_ip_address.id_for_label }}">Management IP Address</label><br>
+                    {{ form.dd_mgmt_ip_address }}
+                </div>
+                 <div class="col-md-4">
+                    {{ form.dd_netbios_name.errors }}
+                    <label for="{{ form.dd_netbios_name.id_for_label }}">Netbios Name</label><br>
+                    {{ form.dd_netbios_name }}
+                </div>
+                <div class="col-md-4">
+                    {{ form.dd_network_component_contact.errors }}
+                    <label for="{{ form.dd_network_component_contact.id_for_label }}">Network Component Contact</label><br>
+                    {{ form.dd_network_component_contact }}
+                </div>
+            </div>
+
+             <div class="my-padding"></div>
+
+            <div class="row">
+                 <div class="col-md-4">
+                    {{ form.dd_network_component_description.errors }}
+                    <label for="{{ form.dd_network_component_description.id_for_label }}">Network Component Description</label><br>
+                    {{ form.dd_network_component_description }}
+                </div>
+                 <div class="col-md-4">
+                    {{ form.dd_network_component_ip.errors }}
+                    <label for="{{ form.dd_network_component_ip.id_for_label }}">Network Component IP</label><br>
+                    {{ form.dd_network_component_ip }}
+                </div>
+                <div class="col-md-4">
+                    {{ form.dd_network_component_location.errors }}
+                    <label for="{{ form.dd_network_component_location.id_for_label }}">Network Component Location</label><br>
+                    {{ form.dd_network_component_location }}
+                </div>
+            </div>
+
+            <div class="my-padding"></div>
+
+            <div class="row">
+                 <div class="col-md-4">
+                    {{ form.dd_network_component_model.errors }}
+                    <label for="{{ form.dd_network_component_model.id_for_label }}">Network Component Model</label><br>
+                    {{ form.dd_network_component_model }}
+                </div>
+                 <div class="col-md-4">
+                    {{ form.dd_network_component_name.errors }}
+                    <label for="{{ form.dd_network_component_name.id_for_label }}">Network Component Name</label><br>
+                    {{ form.dd_network_component_name }}
+                </div>
+                <div class="col-md-4">
+                    {{ form.dd_network_component_port_description.errors }}
+                    <label for="{{ form.dd_network_component_port_description.id_for_label }}">Network Component Port Description</label><br>
+                    {{ form.dd_network_component_port_description }}
+                </div>
+            </div>
+
+            <div class="my-padding"></div>
+
+            <div class="row">
+                 <div class="col-md-4">
+                    {{ form.dd_network_component_port_name.errors }}
+                    <label for="{{ form.dd_network_component_port_name.id_for_label }}">Network Component Port Name</label><br>
+                    {{ form.dd_network_component_port_name }}
+                </div>
+                 <div class="col-md-4">
+                    {{ form.dd_network_component_port_number.errors }}
+                    <label for="{{ form.dd_network_component_port_number.id_for_label }}">Network Component Port Number</label><br>
+                    {{ form.dd_network_component_port_number }}
+                </div>
+                <div class="col-md-4">
+                    {{ form.dd_network_component_type.errors }}
+                    <label for="{{ form.dd_network_component_type.id_for_label }}">Network Component Type</label><br>
+                    {{ form.dd_network_component_type }}
+                </div>
+            </div>
+
+            <div class="my-padding"></div>
+
+            <div class="row">
+                 <div class="col-md-4">
+                    {{ form.dd_network_component_vendor.errors }}
+                    <label for="{{ form.dd_network_component_vendor.id_for_label }}">Network Component Vendor</label><br>
+                    {{ form.dd_network_component_vendor }}
+                </div>
+                 <div class="col-md-4">
+                    {{ form.dd_open_ports.errors }}
+                    <label for="{{ form.dd_open_ports.id_for_label }}">Open Ports</label><br>
+                    {{ form.dd_open_ports }}
+                </div>
+                <div class="col-md-4">
+                    {{ form.dd_os.errors }}
+                    <label for="{{ form.dd_os.id_for_label }}">Operating System</label><br>
+                    {{ form.dd_os }}
+                </div>
+            </div>
+
+            <div class="my-padding"></div>
+
+            <div class="row">
+                 <div class="col-md-4">
+                    {{ form.dd_port_duplex.errors }}
+                    <label for="{{ form.dd_port_duplex.id_for_label }}">Port Duplex</label><br>
+                    {{ form.dd_port_duplex }}
+                </div>
+                 <div class="col-md-4">
+                    {{ form.dd_port_link_status.errors }}
+                    <label for="{{ form.dd_port_link_status.id_for_label }}">Port Link Status</label><br>
+                    {{ form.dd_port_link_status }}
+                </div>
+                <div class="col-md-4">
+                    {{ form.dd_port_speed.errors }}
+                    <label for="{{ form.dd_port_speed.id_for_label }}">Port Speed</label><br>
+                    {{ form.dd_port_speed }}
+                </div>
+            </div>
+
+            <div class="my-padding"></div>
+
+            <div class="row">
+                 <div class="col-md-4">
+                    {{ form.dd_port_status.errors }}
+                    <label for="{{ form.dd_port_status.id_for_label }}">Port Status</label><br>
+                    {{ form.dd_port_status }}
+                </div>
+                 <div class="col-md-4">
+                    {{ form.dd_port_type.errors }}
+                    <label for="{{ form.dd_port_type.id_for_label }}">Port Type</label><br>
+                    {{ form.dd_port_type }}
+                </div>
+                <div class="col-md-4">
+                    {{ form.dd_port_vlan_description.errors }}
+                    <label for="{{ form.dd_port_vlan_description.id_for_label }}">Port VLAN Description</label><br>
+                    {{ form.dd_port_vlan_description }}
+                </div>
+            </div>
+
+             <div class="my-padding"></div>
+
+            <div class="row">
+                 <div class="col-md-4">
+                    {{ form.dd_port_vlan_name.errors }}
+                    <label for="{{ form.dd_port_vlan_name.id_for_label }}">Port VLAN Name</label><br>
+                    {{ form.dd_port_vlan_name }}
+                </div>
+                 <div class="col-md-4">
+                    {{ form.dd_port_vlan_number.errors }}
+                    <label for="{{ form.dd_port_vlan_number.id_for_label }}">Port VLAN Number</label><br>
+                    {{ form.dd_port_vlan_number }}
+                </div>
+                <div class="col-md-4">
+                    {{ form.dd_task_name.errors }}
+                    <label for="{{ form.dd_task_name.id_for_label }}">Task Name</label><br>
+                    {{ form.dd_task_name }}
+                </div>
+            </div>
+
+            <div class="my-padding"></div>
+
+            <div class="row">
+                 <div class="col-md-4">
+                    {{ form.dd_tenant.errors }}
+                    <label for="{{ form.dd_tenant.id_for_label }}">Tenant</label><br>
+                    {{ form.dd_tenant }}
+                </div>
+                 <div class="col-md-4">
+                    {{ form.dd_v_adapter.errors }}
+                    <label for="{{ form.dd_v_adapter.id_for_label }}">Virtual Adapter</label><br>
+                    {{ form.dd_v_adapter }}
+                </div>
+                <div class="col-md-4">
+                    {{ form.dd_v_cluster.errors }}
+                    <label for="{{ form.dd_v_cluster.id_for_label }}">Virtual Cluster</label><br>
+                    {{ form.dd_v_cluster }}
+                </div>
+            </div>
+
+            <div class="my-padding"></div>
+
+            <div class="row">
+                 <div class="col-md-4">
+                    {{ form.dd_v_datacenter.errors }}
+                    <label for="{{ form.dd_v_datacenter.id_for_label }}">Virtual Datacenter</label><br>
+                    {{ form.dd_v_datacenter }}
+                </div>
+                 <div class="col-md-4">
+                    {{ form.dd_v_entity_name.errors }}
+                    <label for="{{ form.dd_v_entity_name.id_for_label }}">Virtual Entity Name</label><br>
+                    {{ form.dd_v_entity_name }}
+                </div>
+                <div class="col-md-4">
+                    {{ form.dd_v_entity_type.errors }}
+                    <label for="{{ form.dd_v_entity_type.id_for_label }}">Virtual Entity Type</label><br>
+                    {{ form.dd_v_entity_type }}
+                </div>
+            </div>
+
+            <div class="my-padding"></div>
+
+            <div class="row">
+                 <div class="col-md-4">
+                    {{ form.dd_v_host.errors }}
+                    <label for="{{ form.dd_v_host.id_for_label }}">Virtual Host</label><br>
+                    {{ form.dd_v_host }}
+                </div>
+                 <div class="col-md-4">
+                    {{ form.dd_v_switch.errors }}
+                    <label for="{{ form.dd_v_switch.id_for_label }}">Virtual Switch</label><br>
+                    {{ form.dd_v_switch }}
+                </div>
+                <div class="col-md-4">
+                    {{ form.dd_vlan_port_group.errors }}
+                    <label for="{{ form.dd_vlan_port_group.id_for_label }}">VLAN Port Group</label><br>
+                    {{ form.dd_vlan_port_group }}
+                </div>
+            </div>
+
+            <div class="my-padding"></div>
+
+            <div class="row">
+                 <div class="col-md-4">
+                    {{ form.dd_vmhost_ip_address.errors }}
+                    <label for="{{ form.dd_vmhost_ip_address.id_for_label }}">VM Host IP Address</label><br>
+                    {{ form.dd_vmhost_ip_address }}
+                </div>
+                 <div class="col-md-4">
+                    {{ form.dd_vmhost_mac_address.errors }}
+                    <label for="{{ form.dd_vmhost_mac_address.id_for_label }}">VM Host Mac Address</label><br>
+                    {{ form.dd_vmhost_mac_address }}
+                </div>
+                <div class="col-md-4">
+                    {{ form.dd_vmhost_name.errors }}
+                    <label for="{{ form.dd_vmhost_name.id_for_label }}">VM Host Name</label><br>
+                    {{ form.dd_vmhost_name }}
+                </div>
+            </div>
+
+            <div class="my-padding"></div>
+
+            <div class="row">
+                 <div class="col-md-4">
+                    {{ form.dd_vmhost_nic_names.errors }}
+                    <label for="{{ form.dd_vmhost_nic_names.id_for_label }}">VM Host Nic Names</label><br>
+                    {{ form.dd_vmhost_nic_names }}
+                </div>
+                 <div class="col-md-4">
+                    {{ form.dd_vmhost_subnet_cidr.errors }}
+                    <label for="{{ form.dd_vmhost_subnet_cidr.id_for_label }}">VM Host Subnet CIDR</label><br>
+                    {{ form.dd_vmhost_subnet_cidr }}
+                </div>
+                <div class="col-md-4">
+                    {{ form.dd_vmi_id.errors }}
+                    <label for="{{ form.dd_vmi_id.id_for_label }}">Virtual Machine ID</label><br>
+                    {{ form.dd_vmi_id }}
+                </div>
+            </div>
+
+            <div class="my-padding"></div>
+
+            <div class="row">
+                 <div class="col-md-4">
+                    {{ form.dd_vmi_ip_type.errors }}
+                    <label for="{{ form.dd_vmi_ip_type.id_for_label }}">Virtual Machine IP Type</label><br>
+                    {{ form.dd_vmi_ip_type }}
+                </div>
+                 <div class="col-md-4">
+                    {{ form.dd_vmi_name.errors }}
+                    <label for="{{ form.dd_vmi_name.id_for_label }}">Virtual Machine Name</label><br>
+                    {{ form.dd_vmi_name }}
+                </div>
+                <div class="col-md-4">
+                    {{ form.dd_vmi_private_address.errors }}
+                    <label for="{{ form.dd_vmi_private_address.id_for_label }}">Virtual Machine Private Address</label><br>
+                    {{ form.dd_vmi_private_address }}
+                </div>
+            </div>
+
+            <div class="my-padding"></div>
+
+            <div class="row">
+                 <div class="col-md-4">
+                    {{ form.dd_vmi_tenant_id.errors }}
+                    <label for="{{ form.dd_vmi_tenant_id.id_for_label }}">Virtual Machine Tenant ID</label><br>
+                    {{ form.dd_vmi_tenant_id }}
+                </div>
+                 <div class="col-md-4">
+                    {{ form.dd_vport_conf_speed.errors }}
+                    <label for="{{ form.dd_vport_conf_speed.id_for_label }}">VPort Configured Speed</label><br>
+                    {{ form.dd_vport_conf_speed }}
+                </div>
+                <div class="col-md-4">
+                    {{ form.dd_vport_link_status.errors }}
+                    <label for="{{ form.dd_vport_link_status.id_for_label }}">VPort Link Status</label><br>
+                    {{ form.dd_vport_link_status }}
+                </div>
+            </div>
+
+            <div class="my-padding"></div>
+
+            <div class="row">
+                 <div class="col-md-4">
+                    {{ form.dd_vport_mac_address.errors }}
+                    <label for="{{ form.dd_vport_mac_address.id_for_label }}">VPort Mac Address</label><br>
+                    {{ form.dd_vport_mac_address }}
+                </div>
+                 <div class="col-md-4">
+                    {{ form.dd_vport_name.errors }}
+                    <label for="{{ form.dd_vport_name.id_for_label }}">VPort Name</label><br>
+                    {{ form.dd_vport_name }}
+                </div>
+                <div class="col-md-4">
+                    {{ form.dd_vport_speed.errors }}
+                    <label for="{{ form.dd_vport_speed.id_for_label }}">VPort Speed</label><br>
+                    {{ form.dd_vport_speed }}
+                </div>
+            </div>
+
+            <div class="my-padding"></div>
+
+            <div class="row">
+                 <div class="col-md-4">
+                    {{ form.dd_vswitch_available_ports_count.errors }}
+                    <label for="{{ form.dd_vswitch_available_ports_count.id_for_label }}">VSwitch Available Port Count</label><br>
+                    {{ form.dd_vswitch_available_ports_count }}
+                </div>
+                 <div class="col-md-4">
+                    {{ form.dd_vswitch_id.errors }}
+                    <label for="{{ form.dd_vswitch_id.id_for_label }}">VSwitch ID</label><br>
+                    {{ form.dd_vswitch_id }}
+                </div>
+                <div class="col-md-4">
+                    {{ form.dd_vswitch_name.errors }}
+                    <label for="{{ form.dd_vswitch_name.id_for_label }}">VSwitch Name</label><br>
+                    {{ form.dd_vswitch_name }}
+                </div>
+            </div>
+
+            <div class="my-padding"></div>
+
+            <div class="row">
+                 <div class="col-md-4">
+                    {{ form.dd_vswitch_segment_id.errors }}
+                    <label for="{{ form.dd_vswitch_segment_id.id_for_label }}">VSwitch Segment ID</label><br>
+                    {{ form.dd_vswitch_segment_id }}
+                </div>
+                 <div class="col-md-4">
+                    {{ form.dd_vswitch_segment_name.errors }}
+                    <label for="{{ form.dd_vswitch_segment_name.id_for_label }}">VSwitch Segment Name</label><br>
+                    {{ form.dd_vswitch_segment_name }}
+                </div>
+                <div class="col-md-4">
+                    {{ form.dd_vswitch_segment_port_group.errors }}
+                    <label for="{{ form.dd_vswitch_segment_port_group.id_for_label }}">VSwitch Segment Port Group</label><br>
+                    {{ form.dd_vswitch_segment_port_group }}
+                </div>
+            </div>
+
+            <div class="my-padding"></div>
+
+            <div class="row">
+                 <div class="col-md-4">
+                    {{ form.dd_vswitch_segment_type.errors }}
+                    <label for="{{ form.dd_vswitch_segment_type.id_for_label }}">VSwitch Segment Type</label><br>
+                    {{ form.dd_vswitch_segment_type }}
+                </div>
+                 <div class="col-md-4">
+                    {{ form.dd_vswitch_tep_dhcp_server.errors }}
+                    <label for="{{ form.dd_vswitch_tep_dhcp_server.id_for_label }}">VSwitch TEP DHCP Server</label><br>
+                    {{ form.dd_vswitch_tep_dhcp_server }}
+                </div>
+                <div class="col-md-4">
+                    {{ form.dd_vswitch_tep_ip.errors }}
+                    <label for="{{ form.dd_vswitch_tep_ip.id_for_label }}">VSwitch TEP IP</label><br>
+                    {{ form.dd_vswitch_tep_ip }}
+                </div>
+            </div>
+
+            <div class="my-padding"></div>
+
+
+            <div class="row">
+                 <div class="col-md-4">
+                    {{ form.dd_vswitch_tep_multicast.errors }}
+                    <label for="{{ form.dd_vswitch_tep_multicast.id_for_label }}">VSwitch TEP Multicast</label><br>
+                    {{ form.dd_vswitch_tep_multicast }}
+                </div>
+                 <div class="col-md-4">
+                    {{ form.dd_vswitch_tep_port_group.errors }}
+                    <label for="{{ form.dd_vswitch_tep_port_group.id_for_label }}">VSwitch TEP Port Group</label><br>
+                    {{ form.dd_vswitch_tep_port_group }}
+                </div>
+                <div class="col-md-4">
+                    {{ form.dd_vswitch_tep_type.errors }}
+                    <label for="{{ form.dd_vswitch_tep_type.id_for_label }}">VSwitch TEP Type</label><br>
+                    {{ form.dd_vswitch_tep_type }}
+                </div>
+            </div>
+
+            <div class="my-padding"></div>
+
+            <div class="row">
+                 <div class="col-md-4">
+                    {{ form.dd_vswitch_tep_vlan.errors }}
+                    <label for="{{ form.dd_vswitch_tep_vlan.id_for_label }}">VSwitch TEP VLAN</label><br>
+                    {{ form.dd_vswitch_tep_vlan }}
+                </div>
+            </div>
+
+            <div class="my-padding"></div>
+
+            <div class="row">
+                 <div class="col-md-4">
+                    {{ form.dd_cisco_ise_session_state.errors }}
+                    <label for="{{ form.dd_cisco_ise_session_state.id_for_label }}">Cisco ISE Session State</label><br>
+                    {{ form.dd_cisco_ise_session_state }}
+                </div>
+                 <div class="col-md-4">
+                    {{ form.dd_vswitch_type.errors }}
+                    <label for="{{ form.dd_vswitch_type.id_for_label }}">VSwitch Type</label><br>
+                    {{ form.dd_vswitch_type }}
+                </div>
+                <div class="col-md-4">
+                    {{ form.dd_vswitch_ipv6_enabled.errors }}
+                    <label for="{{ form.dd_vswitch_ipv6_enabled.id_for_label }}">VSwitch IPv6 Enabled</label><br>
+                    {{ form.dd_vswitch_ipv6_enabled }}
+                </div>
+
+            </div>
+
+            <div class="my-padding"></div>
+
+            <div class="row">
+                <div class="col-md-4">
+                    {{ form.dd_vport_mode.errors }}
+                    <label for="{{ form.dd_vport_mode.id_for_label }}">VPort Mode</label><br>
+                    {{ form.dd_vport_mode }}
+                </div>
+                <div class="col-md-4">
+                    {{ form.dd_vport_conf_mode.errors }}
+                    <label for="{{ dd_vport_conf_mode.dd_vswitch_tep_type.id_for_label }}">VPort Configuration Mode</label><br>
+                    {{ form.dd_vport_conf_mode }}
+                </div>
+                <div class="col-md-4">
+                    {{ form.dd_vmi_is_public_address.errors }}
+                    <label for="{{ form.dd_vmi_is_public_address.id_for_label }}">VMI Is Public Address</label><br>
+                    {{ form.dd_vmi_is_public_address }}
+                </div>
+            </div>
+
             <div class="my-padding"></div>
 
             <div class="row" style="padding-bottom: 20px">
