@@ -483,6 +483,14 @@ DISCOVERED_DATA_FIELDS = [
 ]
 
 
+#Holds Views and Zones from Infoblox
+class AuthoritativeZone(models.Model):
+    view = models.CharField(max_length=20)
+    zone = models.CharField(max_length=150)
+
+    class Meta:
+        db_table = "authoritativezone"
+
 
 # One of these to each CloudInformation
 class DHCPMember(models.Model):

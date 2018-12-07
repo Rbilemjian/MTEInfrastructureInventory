@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import login_required
 from .models import ApplicationServer, DHCPMember, CloudInformation, HOST_FIELDS, IPV4_FIELDS, IPV6_FIELDS, A_FIELDS
 from .models import SNMP3Credential, SNMPCredential, ExtensibleAttribute, DiscoveredData, IPv4HostAddress
 from .models import IPv6HostAddress, DomainNameServer, LogicFilterRule, Alias, CliCredential, DHCPOption
-from .models import AWSRTE53RecordInfo, CNAME_FIELDS
+from .models import AWSRTE53RecordInfo, CNAME_FIELDS, AuthoritativeZone
 from .forms import InfobloxImportForm
 import requests
 import json
@@ -614,6 +614,15 @@ def saveExtAttributes(host, currHost):
 
 @login_required()
 def infoblox(request):
+    urllib3.disable_warnings()
+
+    r = requests.get('https://infoblox.net.tfayd.com/wapi/v2.7/zone_auth', auth=('206582055', 'miketysonpunchout'), verify=False)
+    auth_zones_json = json.loads(r.content)
+    AuthoritativeZone.objects.all().delete()
+    for auth_zone in auth_zones_json:
+        new_zone = AuthoritativeZone(view = auth_zone.get('view'), zone=auth_zone.get('fqdn'))
+        new_zone.save()
+
     if request.method == "POST":
         if request.POST.get('confirmed') == "true":
 
@@ -652,7 +661,6 @@ def infoblox(request):
 
             get_url = base_url + static_args + additional_fields
 
-            urllib3.disable_warnings()
 
             r = requests.get(get_url, auth=('206582055', 'miketysonpunchout'), verify=False)
             result = r.json()

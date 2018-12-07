@@ -2,7 +2,7 @@ from django import forms
 from . import models
 from .models import ApplicationServer, FilterProfile, FILTER_RECORD_TYPES, RECORD_TYPES, BOOL_WITH_NULL
 from.models import CloudInformation, SNMP3Credential, SNMPCredential, AWSRTE53RecordInfo
-from .models import IPv6HostAddress, IPv4HostAddress, Alias, ExtensibleAttribute, DiscoveredData, DHCPMember
+from .models import IPv6HostAddress, IPv4HostAddress, Alias, ExtensibleAttribute, DiscoveredData, DHCPMember, AuthoritativeZone
 import floppyforms
 
 #helper functions
@@ -93,12 +93,17 @@ extensible_attribute_values = get_all_extensible_field_values()
 discovered_data_values = get_all_discovered_data_values()
 
 
+#Auth Zones for Infoblox Import Form
+views = AuthoritativeZone.objects.all().values_list('view', flat=True).order_by('view').distinct()
+zones = AuthoritativeZone.objects.all().values_list('zone', flat=True).order_by('zone').distinct()
+
+
 
 #defines form for importing records from a user-designated zone in infoblox
 
 class InfobloxImportForm(forms.Form):
-    view = forms.CharField(min_length=1, max_length=50, required=True)
-    zone = forms.CharField(min_length=1, max_length=50, required=True)
+    view = forms.CharField(min_length=1, max_length=50, required=True, widget=floppyforms.widgets.Input(datalist=views))
+    zone = forms.CharField(min_length=1, max_length=50, required=True, widget=floppyforms.widgets.Input(datalist=zones))
     record_type = forms.ChoiceField(choices=RECORD_TYPES, required=True, widget=forms.Select())
 
 #defines form for advanced search of application servers
