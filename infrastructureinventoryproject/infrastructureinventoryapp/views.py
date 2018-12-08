@@ -923,10 +923,23 @@ def filter_profile_form(request):
 #
 @login_required()
 def filtered_list(request, pk):
+    if request.method == 'POST':
+        form = VisibleColumnForm(request.POST)
+        if form.is_valid():
+            if VisibleColumns.objects.filter(user=request.user).count() > 0:
+                VisibleColumns.objects.filter(user=request.user).delete()
+            visible_columns = form.save(commit=False)
+            visible_columns.user = request.user
+            visible_columns.save()
+        else:
+            form = VisibleColumnForm()
+
+    form = VisibleColumnForm(instance=VisibleColumns.objects.filter(user=request.user).get())
+
     filterProfile = get_object_or_404(FilterProfile, pk=pk)
     filter_result = filter_servers(filterProfile)
     fields = get_visible_fields(request)
-    args = {'applicationServers': filter_result, 'fields': fields, "profileName": filterProfile.profile_name}
+    args = {'applicationServers': filter_result, 'fields': fields, "profileName": filterProfile.profile_name, "form": form}
     return render(request, 'filtered_list.html', args)
 #
 #

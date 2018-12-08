@@ -737,7 +737,7 @@ class VisibleColumns(models.Model):
     ipv4addr = models.BooleanField(default=True)
 
     #Logistical Information
-    last_pulled = models.BooleanField(default=False)
+    last_pulled = models.BooleanField(default=True)
 
     #Infoblox Host Record Information (Only for Host Records)
     ref = models.BooleanField(default=False)

@@ -28,6 +28,11 @@
                 {% endif %}
             </div>
     </div>
+
+<div class="my-padding"></div>
+{% if form != null %}
+    {% include 'visible_columns_template.html' %}
+{% endif %}
 <div class="my-padding"></div>
 
 {% include 'server_list_template.html' %}
