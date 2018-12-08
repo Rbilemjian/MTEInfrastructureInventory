@@ -170,8 +170,11 @@ def filter_by_cloud_information(field, value):
     field = remove_prefix(field, "ci_")
     field = remove_prefix(field, "delegated_member_")
 
-
-    filter = field + "__icontains"
+    strVal = str(value)
+    if strVal == "True" or strVal == "False":
+        filter = field
+    else:
+        filter = field + "__icontains"
 
     cFields = CloudInformation._meta.get_all_field_names()
     dFields = DHCPMember._meta.get_all_field_names()
@@ -201,8 +204,11 @@ def filter_by_snmp3_credential_information(field, value):
 
     field = remove_prefix(field, "snmp3_")
     fields = SNMP3Credential._meta.get_all_field_names()
-
-    filter = field + "__icontains"
+    strVal = str(value)
+    if strVal == "True" or strVal == "False":
+        filter = field
+    else:
+        filter = field + "__icontains"
 
     if field in fields:
         snmp3s = SNMP3Credential.objects.filter(**{filter: value}).filter(visible=True)
@@ -218,8 +224,11 @@ def filter_by_snmp_credential_information(field, value):
 
     field = remove_prefix(field, "snmp_")
     fields = SNMPCredential._meta.get_all_field_names()
-
-    filter = field + "__icontains"
+    strVal = str(value)
+    if strVal == "True" or strVal == "False":
+        filter = field
+    else:
+        filter = field + "__icontains"
 
     if field in fields:
         snmps = SNMPCredential.objects.filter(**{filter: value}).filter(visible=True)
@@ -235,8 +244,11 @@ def filter_by_aws_rte53_record_information(field, value):
 
     field = remove_prefix(field, "aws_")
     fields = AWSRTE53RecordInfo._meta.get_all_field_names()
-
-    filter = field + "__icontains"
+    strVal = str(value)
+    if strVal == "True" or strVal == "False":
+        filter = field
+    else:
+        filter = field + "__icontains"
     if field in fields:
         awss = AWSRTE53RecordInfo.objects.filter(**{filter: value}).filter(visible=True)
         if awss.count() > 0:
@@ -253,7 +265,11 @@ def filter_by_discovered_data(field, value):
     ipv6s = IPv6HostAddress.objects.none()
 
     retServers = ApplicationServer.objects.none()
-    filter = field + "__icontains"
+    strVal = str(value)
+    if strVal == "True" or strVal == "False":
+        filter = field
+    else:
+        filter = field + "__icontains"
     dds = DiscoveredData.objects.filter(visible=True).filter(**{filter: value})
     for dd in dds:
         retServers = retServers | ApplicationServer.objects.filter(visible=True).filter(discovered_data=dd)
@@ -274,8 +290,11 @@ def filter_by_ipv4_host_address(field, value):
     field = remove_prefix(field, "ipv4_")
 
     retServers = ApplicationServer.objects.none()
-
-    filter = field + "__icontains"
+    strVal = str(value)
+    if strVal == "True" or strVal == "False":
+        filter = field
+    else:
+        filter = field + "__icontains"
     ipv4s = IPv4HostAddress.objects.filter(visible=True).filter(**{filter: value})
 
     for ipv4 in ipv4s:
@@ -288,8 +307,11 @@ def filter_by_logic_filter_rule(field, value):
     field = remove_prefix(field, "lfr_")
     retServers = ApplicationServer.objects.none()
     ipv4s = IPv4HostAddress.objects.none()
-
-    filter = field + "__icontains"
+    strVal = str(value)
+    if strVal == "True" or strVal == "False":
+        filter = field
+    else:
+        filter = field + "__icontains"
     lfrs = LogicFilterRule.objects.filter(visible=True).filter(**{filter: value})
 
     for lfr in lfrs:
@@ -306,7 +328,11 @@ def filter_by_dhcp_option(field, value):
     ipv4s = IPv4HostAddress.objects.none()
     ipv6s = IPv6HostAddress.objects.none()
 
-    filter = field + "__icontains"
+    strVal = str(value)
+    if strVal == "True" or strVal == "False":
+        filter = field
+    else:
+        filter = field + "__icontains"
     dhcps = DHCPOption.objects.filter(visible=True).filter(**{filter: value})
 
     for dhcp in dhcps:
