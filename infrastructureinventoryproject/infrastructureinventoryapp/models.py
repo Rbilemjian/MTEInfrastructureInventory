@@ -39,6 +39,26 @@ VSWITCH_TYPES = [
     ('Unknown', 'Unknown'),
 ]
 
+DISCOVER_NOW_STATUSES = [
+    (None, 'N/A'),
+    ('COMPLETE', 'COMPLETE'),
+    ('FAILED', 'FAILED'),
+    ('NONE', 'NONE'),
+    ('PENDING', 'PENDING'),
+    ('RUNNING', 'RUNNING'),
+]
+
+DHCP_USE_OPTIONS = [
+    (None, 'N/A'),
+    ('routers', 'routers'),
+    ('router-templates', 'router-templates'),
+    ('domain-name-servers', 'domain-name-servers'),
+    ('domain-name', 'domain-name'),
+    ('broadcast-address', 'broadcast-address'),
+    ('broadcast-address-offset', 'broadcast-address-offset'),
+    ('dhcp-lease-time', 'dhcp-lease-time'),
+    ('dhcp6.name-servers', 'dhcp6.name-servers'),
+]
 
 
 NETWORKS = [
@@ -50,6 +70,13 @@ NETWORKS_WITH_NULL = [
     (None, 'N/A'),
     ('Corp', 'Corp'),
     ('DMZ', 'DMZ'),
+]
+
+LOGIC_FILTER_RULE_TYPES = [
+    (None, 'N/A'),
+    ('MAC', 'MAC'),
+    ('NAC', 'NAC'),
+    ('Option', 'Option'),
 ]
 
 
@@ -1136,6 +1163,45 @@ class FilterProfile(models.Model):
     dd_vswitch_tep_vlan = models.CharField(max_length=100, null=True, blank=True)
     dd_vswitch_type = models.CharField(max_length=100, null=True, blank=True)
 
+    #IPv4 Host Information
+    ipv4_ref = models.CharField(max_length=300, null=True, blank=True)
+    ipv4_bootfile = models.CharField(max_length=100, null=True, blank=True)
+    ipv4_bootserver = models.CharField(max_length=100, null=True, blank=True)
+    ipv4_configure_for_dhcp = models.NullBooleanField(null=True, blank=True)
+    ipv4_deny_bootp = models.NullBooleanField(null=True, blank=True)
+    ipv4_discover_now_status = models.CharField(max_length=100, null=True, blank=True)
+    ipv4_enable_pxe_lease_time = models.NullBooleanField(null=True, blank=True)
+    ipv4_host = models.CharField(max_length=100, null=True, blank=True)
+    ipv4_ignore_client_requested_options = models.NullBooleanField(null=True, blank=True)
+    ipv4_ipv4addr = models.CharField(max_length=25, null=True, blank=True)
+    ipv4_is_invalid_mac = models.NullBooleanField(null=True, blank=True)
+    ipv4_mac = models.CharField(max_length=100, null=True, blank=True)
+    ipv4_match_client = models.CharField(max_length=100, null=True, blank=True)
+    ipv4_ms_ad_user_data = models.CharField(max_length=100, null=True, blank=True)
+    ipv4_network = models.CharField(max_length=100, null=True, blank=True)
+    ipv4_network_view = models.CharField(max_length=100, null=True, blank=True)
+    ipv4_nextserver = models.CharField(max_length=100, null=True, blank=True)
+    ipv4_pxe_lease_time = models.CharField(max_length=100, null=True, blank=True)
+    ipv4_reserved_interface = models.CharField(max_length=100, null=True, blank=True)
+    ipv4_use_bootfile = models.NullBooleanField(null=True, blank=True)
+    ipv4_use_deny_bootp = models.NullBooleanField(null=True, blank=True)
+    ipv4_use_for_ea_inheritance = models.NullBooleanField(null=True, blank=True)
+    ipv4_use_ignore_client_requested_options = models.NullBooleanField(null=True, blank=True)
+    ipv4_use_logic_filter_rules = models.NullBooleanField(null=True, blank=True)
+    ipv4_use_nextserver = models.NullBooleanField(null=True, blank=True)
+    ipv4_use_options = models.NullBooleanField(null=True, blank=True)
+    ipv4_use_pxe_lease_time = models.NullBooleanField(null=True, blank=True)
+
+    #Logic Filter Rule Information
+    lfr_filter = models.CharField(max_length=100, null=True, blank=True)
+    lfr_type = models.CharField(max_length=6, null=True, blank=True)
+
+    #DHCP Option Information
+    dhcp_name = models.CharField(max_length=100, null=True, blank=True)
+    dhcp_num = models.PositiveIntegerField(null=True, blank=True)
+    dhcp_use_option = models.NullBooleanField(null=True, blank=True, default=False)
+    dhcp_value = models.CharField(max_length=100, null=True, blank=True)
+    dhcp_vendor_class = models.CharField(max_length=100, null=True, blank=True)
 
     class Meta:
         db_table = "filterprofile"

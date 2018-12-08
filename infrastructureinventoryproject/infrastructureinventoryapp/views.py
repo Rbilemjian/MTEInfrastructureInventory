@@ -269,6 +269,56 @@ def filter_by_discovered_data(field, value):
     return retServers
 
 
+def filter_by_ipv4_host_address(field, value):
+
+    field = remove_prefix(field, "ipv4_")
+
+    retServers = ApplicationServer.objects.none()
+
+    filter = field + "__icontains"
+    ipv4s = IPv4HostAddress.objects.filter(visible=True).filter(**{filter: value})
+
+    for ipv4 in ipv4s:
+        retServers = retServers | ApplicationServer.objects.filter(visible=True).filter(id=ipv4.application_server.id)
+    return retServers
+
+
+def filter_by_logic_filter_rule(field, value):
+
+    field = remove_prefix(field, "lfr_")
+    retServers = ApplicationServer.objects.none()
+    ipv4s = IPv4HostAddress.objects.none()
+
+    filter = field + "__icontains"
+    lfrs = LogicFilterRule.objects.filter(visible=True).filter(**{filter: value})
+
+    for lfr in lfrs:
+        ipv4s = ipv4s | IPv4HostAddress.objects.filter(visible=True).filter(id=lfr.ipv4_host_address.id)
+    for ipv4 in ipv4s:
+        retServers = retServers | ApplicationServer.objects.filter(visible=True).filter(id=ipv4.application_server.id)
+    return retServers
+
+
+def filter_by_dhcp_option(field, value):
+
+    field = remove_prefix(field, "dhcp_")
+    retServers = ApplicationServer.objects.none()
+    ipv4s = IPv4HostAddress.objects.none()
+    ipv6s = IPv6HostAddress.objects.none()
+
+    filter = field + "__icontains"
+    dhcps = DHCPOption.objects.filter(visible=True).filter(**{filter: value})
+
+    for dhcp in dhcps:
+        ipv4s = ipv4s | IPv4HostAddress.objects.filter(visible=True).filter(id=dhcp.ipv4_host_address.id)
+        ipv6s = ipv6s | IPv6HostAddress.objects.filter(visible=True).filter(id=dhcp.ipv6_host_address.id)
+
+    for ipv4 in ipv4s:
+        retServers = retServers | ApplicationServer.objects.filter(visible=True).filter(id=ipv4.application_server.id)
+    for ipv6 in ipv6s:
+        retServers = retServers | ApplicationServer.objects.filter(visible=True).filter(id=ipv6.application_server.id)
+
+    return retServers
 
 
 def filter_servers(filterProfile):
@@ -312,6 +362,12 @@ def filter_servers(filterProfile):
                 search_result = search_result & filter_by_aws_rte53_record_information(field, value)
             elif field.startswith("dd_"):
                 search_result = search_result & filter_by_discovered_data(field, value)
+            elif field.startswith("ipv4_"):
+                search_result = search_result & filter_by_ipv4_host_address(field, value)
+            elif field.startswith("lfr_"):
+                search_result = search_result & filter_by_logic_filter_rule(field, value)
+            elif field.startswith("dhcp_"):
+                search_result = search_result & filter_by_dhcp_option(field, value)
             else:
                 filter = field + "__icontains"
                 search_result = search_result.filter(**{filter: value})

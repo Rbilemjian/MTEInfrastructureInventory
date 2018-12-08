@@ -1,7 +1,7 @@
 from django import forms
 from . import models
 from .models import ApplicationServer, FilterProfile, FILTER_RECORD_TYPES, RECORD_TYPES, BOOL_WITH_NULL
-from.models import CloudInformation, SNMP3Credential, SNMPCredential, AWSRTE53RecordInfo
+from.models import CloudInformation, SNMP3Credential, SNMPCredential, AWSRTE53RecordInfo, LogicFilterRule, DHCPOption
 from .models import IPv6HostAddress, IPv4HostAddress, Alias, ExtensibleAttribute, DiscoveredData, DHCPMember, AuthoritativeZone
 import floppyforms
 
@@ -78,6 +78,21 @@ ddv = {}
 for field in dd_fields:
     ddv[field] = DiscoveredData.objects.filter(visible=True).values_list(field, flat=True).order_by(field).distinct()
 
+#IPv4 Host datalists
+
+ipv4_fields = IPv4HostAddress._meta.get_all_field_names()
+ipv4_d = {}
+for field in ipv4_fields:
+    ipv4_d[field] = IPv4HostAddress.objects.filter(visible=True).values_list(field, flat=True).order_by(field).distinct()
+
+#Logic Filter Rule Datalists
+filters = LogicFilterRule.objects.filter(visible=True).values_list('filter', flat=True).order_by('filter').distinct()
+
+#DHCP Option Datalists
+dhcp_names = DHCPOption.objects.filter(visible=True).values_list('name', flat=True).order_by('name').distinct()
+dhcp_nums = DHCPOption.objects.filter(visible=True).values_list('num', flat=True).order_by('num').distinct()
+dhcp_values = DHCPOption.objects.filter(visible=True).values_list('value', flat=True).order_by('value').distinct()
+dhcp_vendor_classes = DHCPOption.objects.filter(visible=True).values_list('vendor_class', flat=True).order_by('vendor_class').distinct()
 
 #Many-to-one datalists
 ipv4addrs = ApplicationServer.objects.filter(visible=True).values_list('ipv4addr', flat=True).order_by('ipv4addr').distinct()
@@ -348,6 +363,11 @@ class FilterProfileForm(forms.ModelForm):
             'dd_vport_conf_mode': forms.widgets.Select(choices=models.VPORT_MODES),
             'dd_vmi_is_public_address': forms.widgets.Select(choices=BOOL_WITH_NULL),
 
+            #IPv4 Host Information
+
+
+            #
+
             # #Many-to-one Widgets
             # 'ipv4addr': floppyforms.widgets.Input(datalist=ipv4addrs, attrs={'size': 45}),
             # 'ipv6addr': floppyforms.widgets.Input(datalist=ipv6addrs, attrs={'size': 45}),
@@ -521,6 +541,46 @@ class AdvancedSearchForm(forms.ModelForm):
             'dd_vport_mode': forms.widgets.Select(choices=models.VPORT_MODES),
             'dd_vport_conf_mode': forms.widgets.Select(choices=models.VPORT_MODES),
             'dd_vmi_is_public_address': forms.widgets.Select(choices=BOOL_WITH_NULL),
+
+            #IPv4 Host Address Form Widgets
+            'ipv4_ref': floppyforms.widgets.Input(datalist=ipv4_d['ref'], attrs={'size': 45}),
+            'ipv4_bootfile': floppyforms.widgets.Input(datalist=ipv4_d['bootfile'], attrs={'size': 45}),
+            'ipv4_bootserver': floppyforms.widgets.Input(datalist=ipv4_d['bootserver'], attrs={'size': 45}),
+            'ipv4_configure_for_dhcp': forms.widgets.Select(choices=BOOL_WITH_NULL),
+            'ipv4_deny_bootp': forms.widgets.Select(choices=BOOL_WITH_NULL),
+            'ipv4_discover_now_status': forms.widgets.Select(choices=models.DISCOVER_NOW_STATUSES),
+            'ipv4_enable_pxe_lease_time': forms.widgets.Select(choices=BOOL_WITH_NULL),
+            'ipv4_host': floppyforms.widgets.Input(datalist=ipv4_d['host'], attrs={'size': 45}),
+            'ipv4_ignore_client_requested_options': forms.widgets.Select(choices=BOOL_WITH_NULL),
+            'ipv4_ipv4addr': floppyforms.widgets.Input(datalist=ipv4_d['ipv4addr'], attrs={'size': 45}),
+            'ipv4_is_invalid_mac': forms.widgets.Select(choices=BOOL_WITH_NULL),
+            'ipv4_mac': floppyforms.widgets.Input(datalist=ipv4_d['mac'], attrs={'size': 45}),
+            'ipv4_match_client': floppyforms.widgets.Input(datalist=ipv4_d['match_client'], attrs={'size': 45}),
+            'ipv4_ms_ad_user_data': floppyforms.widgets.Input(datalist=ipv4_d['ms_ad_user_data'], attrs={'size': 45}),
+            'ipv4_network': floppyforms.widgets.Input(datalist=ipv4_d['network'], attrs={'size': 45}),
+            'ipv4_network_view': floppyforms.widgets.Input(datalist=ipv4_d['network_view'], attrs={'size': 45}),
+            'ipv4_nextserver': floppyforms.widgets.Input(datalist=ipv4_d['nextserver'], attrs={'size': 45}),
+            'ipv4_pxe_lease_time': floppyforms.widgets.Input(datalist=ipv4_d['pxe_lease_time'], attrs={'size': 45}),
+            'ipv4_reserved_interface': floppyforms.widgets.Input(datalist=ipv4_d['reserved_interface'], attrs={'size': 45}),
+            'ipv4_use_bootfile': forms.widgets.Select(choices=BOOL_WITH_NULL),
+            'ipv4_use_deny_bootp': forms.widgets.Select(choices=BOOL_WITH_NULL),
+            'ipv4_use_for_ea_inheritance': forms.widgets.Select(choices=BOOL_WITH_NULL),
+            'ipv4_use_ignore_client_requested_options': forms.widgets.Select(choices=BOOL_WITH_NULL),
+            'ipv4_use_logic_filter_rules': forms.widgets.Select(choices=BOOL_WITH_NULL),
+            'ipv4_use_nextserver': forms.widgets.Select(choices=BOOL_WITH_NULL),
+            'ipv4_use_options': forms.widgets.Select(choices=BOOL_WITH_NULL),
+            'ipv4_use_pxe_lease_time': forms.widgets.Select(choices=BOOL_WITH_NULL),
+
+            #Logic Filter Rule Widgets
+            'lfr_filter': floppyforms.widgets.Input(datalist=filters, attrs={'size': 45}),
+            'lfr_type': forms.widgets.Select(choices=models.LOGIC_FILTER_RULE_TYPES),
+
+            #DHCP Member Filter Rule Widgets
+            'dhcp_name': floppyforms.widgets.Input(datalist=dhcp_names, attrs={'size': 45}),
+            'dhcp_num': floppyforms.widgets.Input(datalist=dhcp_nums, attrs={'size': 45}),
+            'dhcp_use_option': forms.widgets.Select(choices=BOOL_WITH_NULL),
+            'dhcp_value': floppyforms.widgets.Input(datalist=dhcp_values, attrs={'size': 45}),
+            'dhcp_vendor_class': floppyforms.widgets.Input(datalist=dhcp_vendor_classes, attrs={'size': 45}),
 
             # # #Many-to-one Widgets
             # 'ipv4addr': floppyforms.widgets.Input(datalist=ipv4addrs, attrs={'size': 45}),
