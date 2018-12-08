@@ -12,3 +12,5 @@ infrastructureinventoryproject/infrastructureinventoryapp/migrations/
 infrastructureinventoryproject/__init__\.py
 
 infrastructureinventoryproject/db\.json
+
+\.idea/inspectionProfiles/Project_Default\.xml

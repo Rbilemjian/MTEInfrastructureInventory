@@ -237,7 +237,6 @@ def filter_by_aws_rte53_record_information(field, value):
     fields = AWSRTE53RecordInfo._meta.get_all_field_names()
 
     filter = field + "__icontains"
-    print(field)
     if field in fields:
         awss = AWSRTE53RecordInfo.objects.filter(**{filter: value}).filter(visible=True)
         if awss.count() > 0:
@@ -316,8 +315,6 @@ def filter_servers(filterProfile):
             else:
                 filter = field + "__icontains"
                 search_result = search_result.filter(**{filter: value})
-            print(field)
-            print(len(search_result))
     return search_result
 #
 #
@@ -559,6 +556,76 @@ def get_visible_fields(request):
     return retList
 
 
+def get_visible_cloud_fields(request):
+    visible_columns = VisibleColumns.objects.filter(user=request.user).get()
+    fields = VisibleColumns._meta.get_all_field_names()
+    fieldList = models.CLOUD_INFORMATION_FIELDS
+    retList = []
+    for field in fieldList:
+        if hasattr(visible_columns, "ci_"+field[0]):
+            if getattr(visible_columns, "ci_"+field[0]) is True:
+                retList.append(field)
+    return retList
+
+
+def get_visible_dhcp_member_fields(request):
+    visible_columns = VisibleColumns.objects.filter(user=request.user).get()
+    fields = VisibleColumns._meta.get_all_field_names()
+    fieldList = models.DHCP_MEMBER_FIELDS
+    retList = []
+    for field in fieldList:
+        if hasattr(visible_columns, "dm_" + field[0]):
+            if getattr(visible_columns, "dm_" + field[0]) is True:
+                retList.append(field)
+    return retList
+
+
+def get_visible_snmp3_credential_fields(request):
+    visible_columns = VisibleColumns.objects.filter(user=request.user).get()
+    fields = VisibleColumns._meta.get_all_field_names()
+    fieldList = models.SNMP3_CREDENTIAL_FIELDS
+    retList = []
+    for field in fieldList:
+        if hasattr(visible_columns, "snmp3_" + field[0]):
+            if getattr(visible_columns, "snmp3_" + field[0]) is True:
+                retList.append(field)
+    return retList
+
+
+def get_visible_snmp_credential_fields(request):
+    visible_columns = VisibleColumns.objects.filter(user=request.user).get()
+    fields = VisibleColumns._meta.get_all_field_names()
+    fieldList = models.SNMP_CREDENTIAL_FIELDS
+    retList = []
+    for field in fieldList:
+        if hasattr(visible_columns, "snmp_" + field[0]):
+            if getattr(visible_columns, "snmp_" + field[0]) is True:
+                retList.append(field)
+    return retList
+
+
+def get_visible_aws_fields(request):
+    visible_columns = VisibleColumns.objects.filter(user=request.user).get()
+    fields = VisibleColumns._meta.get_all_field_names()
+    fieldList = models.AWS_RTE53_RECORD_INFO_FIELDS
+    retList = []
+    for field in fieldList:
+        if hasattr(visible_columns, "aws_" + field[0]):
+            if getattr(visible_columns, "aws_" + field[0]) is True:
+                retList.append(field)
+    return retList
+
+
+def get_visible_discovered_data_fields(request):
+    visible_columns = VisibleColumns.objects.filter(user=request.user).get()
+    fields = VisibleColumns._meta.get_all_field_names()
+    fieldList = models.DISCOVERED_DATA_FIELDS
+    retList = []
+    for field in fieldList:
+        if hasattr(visible_columns, "dd_" + field[0]):
+            if getattr(visible_columns, "dd_" + field[0]) is True:
+                retList.append(field)
+    return retList
 
 #View Functions
 
@@ -567,7 +634,7 @@ def get_visible_fields(request):
 @login_required
 def view_application_servers(request):
     visible_columns = VisibleColumns.objects.filter(user=request.user).get()
-    application_servers = ApplicationServer.objects.filter(visible=True)
+    application_servers = ApplicationServer.objects.filter(visible=True).order_by('id')
     if request.method == 'POST':
         form = VisibleColumnForm(request.POST)
         if form.is_valid():
@@ -583,8 +650,23 @@ def view_application_servers(request):
         form = VisibleColumnForm(instance=VisibleColumns.objects.filter(user=request.user).get())
 
     fields = get_visible_fields(request)
+    cloud_fields = get_visible_cloud_fields(request)
+    delegated_member_fields = get_visible_dhcp_member_fields(request)
+    snmp3_fields = get_visible_snmp3_credential_fields(request)
+    snmp_fields = get_visible_snmp_credential_fields(request)
+    aws_fields = get_visible_aws_fields(request)
+    dd_fields = get_visible_discovered_data_fields(request)
 
-    args = {'applicationServers': application_servers, 'fields': fields, 'form': form}
+    args = {'applicationServers': application_servers,
+            'fields': fields,
+            'cloudFields': cloud_fields,
+            'dmFields': delegated_member_fields,
+            'snmp3Fields': snmp3_fields,
+            'snmpFields': snmp_fields,
+            'awsFields': aws_fields,
+            'ddFields': dd_fields,
+            'form': form,
+            }
     return render(request, 'application_server_list.html', args)
 
 

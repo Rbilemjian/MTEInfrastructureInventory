@@ -11,6 +11,30 @@
                         {% for field in fields %}
                             <th class="select-filter">{{ field.1 }}</th>
                         {% endfor %}
+
+                        {% for cloudField in cloudFields %}
+                            <th class="select-filter">{{ cloudField.1 }}</th>
+                        {% endfor %}
+
+                        {% for dmField in dmFields %}
+                            <th class="select-filter">{{ dmField.1 }}</th>
+                        {% endfor %}
+
+                        {% for snmp3Field in snmp3Fields %}
+                            <th class="select-filter">{{ snmp3Field.1 }}</th>
+                        {% endfor %}
+
+                        {% for snmpField in snmpFields %}
+                            <th class="select-filter">{{ snmpField.1 }}</th>
+                        {% endfor %}
+
+                        {% for awsField in awsFields %}
+                            <th class="select-filter">{{ awsField.1 }}</th>
+                        {% endfor %}
+
+                        {% for ddField in ddFields %}
+                            <td class="select-filter">{{ ddField.1 }}</td>
+                        {% endfor %}
                     </tr>
                     </a>
                 </thead>
@@ -161,9 +185,37 @@
                                         <td>{{ applicationServer|getattribute:field.0 }}</td>
                                     {% endif %}
                             {% endfor %}
+
+                            {% for cloudField in cloudFields %}
+                                <td>{{ applicationServer.cloud_information|getattribute:cloudField.0 }}</td>
+                            {% endfor %}
+
+                            {% for dmField in dmFields %}
+                                {% if applicationServer.cloud_information.delegated_member != null %}
+                                    <td>{{ applicationServer.cloud_information.delegated_member|getattribute:dmField.0 }}</td>
+                                {% else %}
+                                    <td>None</td>
+                                {% endif %}
+                            {% endfor %}
+
+                            {% for snmp3Field in snmp3Fields %}
+                                <td>{{ applicationServer.snmp3_credential|getattribute:snmp3Field.0 }}</td>
+                            {% endfor %}
+
+                            {% for snmpField in snmpFields %}
+                                <td>{{ applicationServer.snmp_credential|getattribute:snmpField.0 }}</td>
+                            {% endfor %}
+
+                            {% for awsField in awsFields %}
+                                <td>{{ applicationServer.aws_rte53_record_info|getattribute:awsField.0 }}</td>
+                            {% endfor %}
+
+                            {% for ddField in ddFields %}
+                                <td>{{ applicationServer.discovered_data|getattribute:ddField.0 }}</td>
+                            {% endfor %}
+
                         </tr>
                     {% endfor %}
-
                 </tbody>
             </table>
         </div>
