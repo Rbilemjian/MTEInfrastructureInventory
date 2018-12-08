@@ -20,8 +20,12 @@
 {% block body %}
 
         <div class="container" style="border-bottom: 3px inset #c4cedb; border-bottom-left-radius: 5px; border-bottom-right-radius: 5px; border-top-left-radius: 5px; border-top-right-radius: 5px">
-            <div class="col-md-4">
-                <h2>{{filterProfile.profile_name}}</h2>
+            <div class="col-md-8">
+                {% if profileName != null %}
+                    <h2>{{ profileName }}</h2>
+                {% else %}
+                    <h2>Advanced Search Result</h2>
+                {% endif %}
             </div>
     </div>
 <div class="my-padding"></div>

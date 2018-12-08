@@ -29,17 +29,10 @@
                                                 <a class="link">View IPv4 Addresses</a>
                                                 <div class="nested-table" style="padding-bottom:0px">
                                                     <table class="table" style="padding-bottom:0px">
-                                                        <thead>
-                                                            <tr style="background-color:whitesmoke">
-                                                                <th scope="col" style="text-align:center">Host</th>
-                                                                <th scope="col" style="text-align:center">IPv4</th>
-                                                            </tr>
-                                                        </thead>
                                                         <tbody>
                                                             {% for ip in applicationServer.getIPv4Addresses %}
                                                                 <tr style="background-color:whitesmoke">
-                                                                    <td style="text-align:center">{{ip.0}}</td>
-                                                                    <td style="text-align:center">{{ip.1}}</td>
+                                                                    <td>{{ip.0}}</td>
                                                                 </tr>
                                                             {% endfor %}
                                                         </tbody>
@@ -62,15 +55,13 @@
                                                         <table class="table" style="padding-bottom:0px">
                                                             <thead>
                                                                 <tr style="background-color:whitesmoke">
-                                                                    <th scope="col" style="text-align:center">Host</th>
                                                                     <th scope="col" style="text-align:center">IPv4</th>
                                                                 </tr>
                                                             </thead>
                                                             <tbody>
                                                                 {% for ip in applicationServer.getIPv6Addresses %}
                                                                     <tr style="background-color:whitesmoke">
-                                                                        <td style="text-align:center">{{ip.0}}</td>
-                                                                        <td style="text-align:center">{{ip.1}}</td>
+                                                                        <td style="text-align:center">{{ip}}</td>
                                                                     </tr>
                                                                 {% endfor %}
                                                             </tbody>

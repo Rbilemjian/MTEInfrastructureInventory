@@ -812,10 +812,10 @@ class ApplicationServer(models.Model):
         self.delete()
 
     def getIPv4Addresses(self):
-        return self.ipv4hostaddress_set.values_list('host', 'ipv4addr').all()
+        return self.ipv4hostaddress_set.values_list('ipv4addr').filter(visible=True)
 
     def getIPv6Addresses(self):
-        return self.ipv6hostaddress_set.values_list('host', 'ipv6addr').all()
+        return self.ipv6hostaddress_set.values_list('ipv6addr').filter(visible=True)
 
     def getAliases(self):
         return self.alias_set.values_list('alias').all()

@@ -402,56 +402,7 @@ def filter_servers(filterProfile):
 #     return filter_result
 #
 #
-def prep_filter_for_save(filter):
-    # setting any empty field to have a null value
-    fields = FilterProfile._meta.get_all_field_names()
-    for field in fields:
-        if getattr(filter, field) == "":
-            if FilterProfile._meta.get_field(field).null:
-                setattr(filter, field, None)
-    return filter
 
-def get_visible_fields(request):
-    visible_columns = VisibleColumns.objects.filter(user=request.user).get()
-    fields = VisibleColumns._meta.get_all_field_names()
-    fieldList = models.APPLICATION_SERVER_FIELDS
-    retList = []
-
-    for field in fieldList:
-        if hasattr(visible_columns, field[0]):
-            if getattr(visible_columns, field[0]) is True:
-                retList.append(field)
-
-    return retList
-
-
-
-#View Functions
-
-
-
-@login_required
-def view_application_servers(request):
-    visible_columns = VisibleColumns.objects.filter(user=request.user).get()
-    application_servers = ApplicationServer.objects.filter(visible=True)
-    if request.method == 'POST':
-        form = VisibleColumnForm(request.POST)
-        if form.is_valid():
-            if VisibleColumns.objects.filter(user=request.user).count() > 0:
-                VisibleColumns.objects.filter(user=request.user).delete()
-            visible_columns = form.save(commit=False)
-            visible_columns.user = request.user
-            visible_columns.save()
-        else:
-            form = VisibleColumnForm()
-
-    else:
-        form = VisibleColumnForm(instance=VisibleColumns.objects.filter(user=request.user).get())
-
-    fields = get_visible_fields(request)
-
-    args = {'applicationServers': application_servers, 'fields': fields, 'form': form}
-    return render(request, 'application_server_list.html', args)
 #
 #
 # @login_required
@@ -585,6 +536,58 @@ def view_application_servers(request):
 #     return render(request, 'application_server_edit.html', args)
 
 
+def prep_filter_for_save(filter):
+    # setting any empty field to have a null value
+    fields = FilterProfile._meta.get_all_field_names()
+    for field in fields:
+        if getattr(filter, field) == "":
+            if FilterProfile._meta.get_field(field).null:
+                setattr(filter, field, None)
+    return filter
+
+def get_visible_fields(request):
+    visible_columns = VisibleColumns.objects.filter(user=request.user).get()
+    fields = VisibleColumns._meta.get_all_field_names()
+    fieldList = models.APPLICATION_SERVER_FIELDS
+    retList = []
+
+    for field in fieldList:
+        if hasattr(visible_columns, field[0]):
+            if getattr(visible_columns, field[0]) is True:
+                retList.append(field)
+
+    return retList
+
+
+
+#View Functions
+
+
+
+@login_required
+def view_application_servers(request):
+    visible_columns = VisibleColumns.objects.filter(user=request.user).get()
+    application_servers = ApplicationServer.objects.filter(visible=True)
+    if request.method == 'POST':
+        form = VisibleColumnForm(request.POST)
+        if form.is_valid():
+            if VisibleColumns.objects.filter(user=request.user).count() > 0:
+                VisibleColumns.objects.filter(user=request.user).delete()
+            visible_columns = form.save(commit=False)
+            visible_columns.user = request.user
+            visible_columns.save()
+        else:
+            form = VisibleColumnForm()
+
+    else:
+        form = VisibleColumnForm(instance=VisibleColumns.objects.filter(user=request.user).get())
+
+    fields = get_visible_fields(request)
+
+    args = {'applicationServers': application_servers, 'fields': fields, 'form': form}
+    return render(request, 'application_server_list.html', args)
+
+
 @login_required()
 def details_application_server(request, pk):
     applicationServer = ApplicationServer.objects.filter(pk=pk, visible=True)
@@ -652,8 +655,8 @@ def delete_application_server(request, pk):
     application_server = get_object_or_404(ApplicationServer, pk=pk)
     application_server.deleteWithForeign()
     return redirect('/infrastructureinventory/applicationserver/')
-#
-#
+
+
 @login_required()
 def search_application_server(request):
 
@@ -665,7 +668,7 @@ def search_application_server(request):
             search_result = filter_servers(filterProfile)
             fields = get_visible_fields(request)
             args = {'applicationServers': search_result, 'fields': fields}
-            return render(request, 'application_server_search_result.html', args)
+            return render(request, 'filtered_list.html', args)
     else:
         form = AdvancedSearchForm()
     return render(request, 'application_server_search_form.html', {'form': form})
@@ -702,7 +705,7 @@ def filtered_list(request, pk):
     filterProfile = get_object_or_404(FilterProfile, pk=pk)
     filter_result = filter_servers(filterProfile)
     fields = get_visible_fields(request)
-    args = {'applicationServers': filter_result, 'fields': fields, "filterProfile": filterProfile}
+    args = {'applicationServers': filter_result, 'fields': fields, "profileName": filterProfile.profile_name}
     return render(request, 'filtered_list.html', args)
 #
 #

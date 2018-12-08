@@ -10,3 +10,5 @@ infrastructureinventoryproject/infrastructureinventoryapp/__pycache__/
 infrastructureinventoryproject/infrastructureinventoryapp/migrations/
 
 infrastructureinventoryproject/__init__\.py
+
+infrastructureinventoryproject/db\.json
