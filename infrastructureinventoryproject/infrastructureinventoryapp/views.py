@@ -302,6 +302,23 @@ def filter_by_ipv4_host_address(field, value):
     return retServers
 
 
+def filter_by_ipv6_host_address(field, value):
+
+    field = remove_prefix(field, "ipv6_")
+
+    retServers = ApplicationServer.objects.none()
+    strVal = str(value)
+    if strVal == "True" or strVal == "False":
+        filter = field
+    else:
+        filter = field + "__icontains"
+    ipv6s = IPv6HostAddress.objects.filter(visible=True).filter(**{filter: value})
+
+    for ipv6 in ipv6s:
+        retServers = retServers | ApplicationServer.objects.filter(visible=True).filter(id=ipv6.application_server.id)
+    return retServers
+
+
 def filter_by_logic_filter_rule(field, value):
 
     field = remove_prefix(field, "lfr_")
@@ -347,6 +364,38 @@ def filter_by_dhcp_option(field, value):
     return retServers
 
 
+def filter_by_domain_name_server(field, value):
+    field = remove_prefix(field, "dns_record_")
+    retServers = ApplicationServer.objects.none()
+    ipv6s = IPv6HostAddress.objects.none()
+
+    filter = field + "__icontains"
+
+    dnses = DomainNameServer.objects.filter(visible=True).filter(**{filter: value})
+
+    for dns in dnses:
+        ipv6s = ipv6s | IPv6HostAddress.objects.filter(visible=True).filter(id=dns.ipv6_host_address.id)
+
+    for ipv6 in ipv6s:
+        retServers = retServers | ApplicationServer.objects.filter(visible=True).filter(id=ipv6.application_server.id)
+
+    return retServers
+
+
+def filter_by_cli_credential(field, value):
+    field = remove_prefix(field, "cli_")
+    retServers = ApplicationServer.objects.none()
+
+    filter = field + "__icontains"
+
+    clis = CliCredential.objects.filter(visible=True).filter(**{filter: value})
+
+    for cli in clis:
+        retServers = retServers | ApplicationServer.objects.filter(visible=True).filter(id=cli.application_server.id)
+
+    return retServers
+
+
 def filter_servers(filterProfile):
     fields = FilterProfile._meta.get_all_field_names()
     if filterProfile.all_fields is not None:
@@ -371,6 +420,8 @@ def filter_servers(filterProfile):
         search_result = search_result & get_alias_application_servers(filterProfile.alias)
     if filterProfile.extensible_attribute_value is not None:
         search_result = search_result & get_extensible_attribute_application_servers(filterProfile.extensible_attribute_value)
+    if filterProfile.discovered_data is not None:
+        search_result = search_result & get_discovered_data_application_servers(filterProfile.discovered_data)
 
     for field in fields:
         if field == "id" or field == "profile_name" or field == "all_fields" or field == "ipv6addr" or field == "ipv4addr" or field == "alias" or field == "extensible_attribute_value" or field == "discovered_data": continue
@@ -390,10 +441,16 @@ def filter_servers(filterProfile):
                 search_result = search_result & filter_by_discovered_data(field, value)
             elif field.startswith("ipv4_"):
                 search_result = search_result & filter_by_ipv4_host_address(field, value)
+            elif field.startswith("ipv6_"):
+                search_result = search_result & filter_by_ipv6_host_address(field, value)
             elif field.startswith("lfr_"):
                 search_result = search_result & filter_by_logic_filter_rule(field, value)
             elif field.startswith("dhcp_"):
                 search_result = search_result & filter_by_dhcp_option(field, value)
+            elif field.startswith("dns_record_"):
+                search_result = search_result & filter_by_domain_name_server(field, value)
+            elif field.startswith("cli_"):
+                search_result = search_result & filter_by_cli_credential(field, value)
             else:
                 filter = field + "__icontains"
                 search_result = search_result.filter(**{filter: value})

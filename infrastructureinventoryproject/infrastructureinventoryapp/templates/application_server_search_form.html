@@ -23,7 +23,7 @@
             </div>
         </div>
 
-        <form method="post">
+        <form method="post" autocomplete="off">
             {% csrf_token %}
 
             {{ form.non_field_errors }}
@@ -147,9 +147,9 @@
                     {{ form.ipv4addr }}
                 </div>
                 <div class="col-md-4">
-                    {{ form.ipv6addr.errors }}
-                    <label for="{{ form.ipv6addr.id_for_label }}">IPv6 Address</label><br>
-                    {{ form.ipv6addr }}
+                    {{ form.alias.errors }}
+                    <label for="{{ form.alias.id_for_label }}">Alias</label><br>
+                    {{ form.alias }}
                 </div>
 
             </div>
@@ -158,18 +158,13 @@
 
             <div class="row">
                 <div class="col-md-4">
-                    {{ form.alias.errors }}
-                    <label for="{{ form.alias.id_for_label }}">Alias</label><br>
-                    {{ form.alias }}
-                </div>
-                <div class="col-md-4">
                     {{ form.extensible_attribute_value.errors }}
                     <label for="{{ form.extensible_attribute_value.id_for_label }}">Extensible Attribute Value</label><br>
                     {{ form.extensible_attribute_value }}
                 </div>
                 <div class="col-md-4">
                     {{ form.discovered_data.errors }}
-                    <label for="{{ form.discovered_data.id_for_label }}">Discovered Data</label><br>
+                    <label for="{{ form.discovered_data.id_for_label }}">Any Discovered Data Field</label><br>
                     {{ form.discovered_data }}
                 </div>
 
@@ -465,6 +460,29 @@
                     <label for="{{ form.aws_failover.id_for_label }}">Failover</label><br>
                     {{ form.aws_failover }}
                 </div>
+            </div>
+
+            <div class="my-padding"></div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <h2>CLI Credential Information</h2>
+                </div>
+            </div>
+
+            <div class="my-padding"></div>
+
+            <div class="row">
+
+                <div class="col-md-4">
+                    <label for="{{ form.cli_user.id_for_label }}">User</label><br>
+                    {{ form.cli_user }}
+                </div>
+                <div class="col-md-4">
+                    <label for="{{ form.cli_credential_type.id_for_label }}">Credential Type</label><br>
+                    {{ form.cli_credential_type }}
+                </div>
+
             </div>
 
             <div class="my-padding"></div>
@@ -1093,55 +1111,25 @@
                 </div>
             </div>
 
-            <div class="my-padding"></div>
 
-            <div class="row">
-                <div class="col-md-4">
-                    <label for="{{ form.ipv4_configure_for_dhcp.id_for_label }}">Configure for DHCP</label><br>
-                    {{ form.ipv4_configure_for_dhcp }}
-                </div>
-                <div class="col-md-4">
-                    <label for="{{ form.ipv4_deny_bootp.id_for_label }}">Deny Bootp</label><br>
-                    {{ form.ipv4_deny_bootp }}
-                </div>
-                <div class="col-md-4">
-                    <label for="{{ form.ipv4_discover_now_status.id_for_label }}">Discover Now Status</label><br>
-                    {{ form.ipv4_discover_now_status }}
-                </div>
-            </div>
 
             <div class="my-padding"></div>
 
             <div class="row">
-                <div class="col-md-4">
-                    <label for="{{ form.ipv4_enable_pxe_lease_time.id_for_label }}">Enable PXE Lease Time</label><br>
-                    {{ form.ipv4_enable_pxe_lease_time }}
-                </div>
                 <div class="col-md-4">
                     <label for="{{ form.ipv4_host.id_for_label }}">Host</label><br>
                     {{ form.ipv4_host }}
                 </div>
                 <div class="col-md-4">
-                    <label for="{{ form.ipv4_ignore_client_requested_options.id_for_label }}">Ignore Client Requested Options</label><br>
-                    {{ form.ipv4_ignore_client_requested_options }}
-                </div>
-            </div>
-
-            <div class="my-padding"></div>
-
-            <div class="row">
-                <div class="col-md-4">
                     <label for="{{ form.ipv4_ipv4addr.id_for_label }}">IPv4 Address</label><br>
                     {{ form.ipv4_ipv4addr }}
                 </div>
-                <div class="col-md-4">
-                    <label for="{{ form.ipv4_is_invalid_mac.id_for_label }}">Is Invalid Mac</label><br>
-                    {{ form.ipv4_is_invalid_mac }}
-                </div>
+
                 <div class="col-md-4">
                     <label for="{{ form.ipv4_mac.id_for_label }}">Mac</label><br>
                     {{ form.ipv4_mac }}
                 </div>
+
             </div>
 
             <div class="my-padding"></div>
@@ -1216,6 +1204,23 @@
 
             <div class="row">
                 <div class="col-md-4">
+                    <label for="{{ form.ipv4_configure_for_dhcp.id_for_label }}">Configure for DHCP</label><br>
+                    {{ form.ipv4_configure_for_dhcp }}
+                </div>
+                <div class="col-md-4">
+                    <label for="{{ form.ipv4_deny_bootp.id_for_label }}">Deny Bootp</label><br>
+                    {{ form.ipv4_deny_bootp }}
+                </div>
+                <div class="col-md-4">
+                    <label for="{{ form.ipv4_discover_now_status.id_for_label }}">Discover Now Status</label><br>
+                    {{ form.ipv4_discover_now_status }}
+                </div>
+            </div>
+
+            <div class="my-padding"></div>
+
+            <div class="row">
+                <div class="col-md-4">
                     <label for="{{ form.ipv4_use_nextserver.id_for_label }}">Use Next Server</label><br>
                     {{ form.ipv4_use_nextserver }}
                 </div>
@@ -1226,6 +1231,23 @@
                 <div class="col-md-4">
                     <label for="{{ form.ipv4_use_pxe_lease_time.id_for_label }}">Use PXE Lease Time</label><br>
                     {{ form.ipv4_use_pxe_lease_time }}
+                </div>
+            </div>
+
+            <div class="my-padding"></div>
+
+            <div class="row">
+                <div class="col-md-4">
+                    <label for="{{ form.ipv4_enable_pxe_lease_time.id_for_label }}">Enable PXE Lease Time</label><br>
+                    {{ form.ipv4_enable_pxe_lease_time }}
+                </div>
+                <div class="col-md-4">
+                    <label for="{{ form.ipv4_ignore_client_requested_options.id_for_label }}">Ignore Client Requested Options</label><br>
+                    {{ form.ipv4_ignore_client_requested_options }}
+                </div>
+                <div class="col-md-4">
+                    <label for="{{ form.ipv4_is_invalid_mac.id_for_label }}">Is Invalid Mac</label><br>
+                    {{ form.ipv4_is_invalid_mac }}
                 </div>
             </div>
 
@@ -1269,9 +1291,9 @@
                     <label for="{{ form.dhcp_num.id_for_label }}">Num</label><br>
                     {{ form.dhcp_num }}
                 </div>
-                <div class="col-md-4">
-                    <label for="{{ form.dhcp_use_option.id_for_label }}">Use Option</label><br>
-                    {{ form.dhcp_use_option }}
+               <div class="col-md-4">
+                    <label for="{{ form.dhcp_vendor_class.id_for_label }}">Vendor Class</label><br>
+                    {{ form.dhcp_vendor_class }}
                 </div>
             </div>
 
@@ -1282,11 +1304,158 @@
                     <label for="{{ form.dhcp_value.id_for_label }}">Value</label><br>
                     {{ form.dhcp_value }}
                 </div>
-                <div class="col-md-4">
-                    <label for="{{ form.dhcp_vendor_class.id_for_label }}">Vendor Class</label><br>
-                    {{ form.dhcp_vendor_class }}
+                 <div class="col-md-4">
+                    <label for="{{ form.dhcp_use_option.id_for_label }}">Use Option</label><br>
+                    {{ form.dhcp_use_option }}
                 </div>
             </div>
+
+            <div class="my-padding"></div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <h2>IPv6 Host Address Information</h2>
+                </div>
+            </div>
+
+             <div class="my-padding"></div>
+
+            <div class="row">
+                <div class="col-md-4">
+                    <label for="{{ form.ipv6_ref.id_for_label }}">Ref</label><br>
+                    {{ form.ipv6_ref }}
+                </div>
+                <div class="col-md-4">
+                    <label for="{{ form.ipv6_domain_name.id_for_label }}">Domain Name</label><br>
+                    {{ form.ipv6_domain_name }}
+                </div>
+                <div class="col-md-4">
+                    <label for="{{ form.ipv6_duid.id_for_label }}">DUID</label><br>
+                    {{ form.ipv6_duid }}
+                </div>
+            </div>
+
+            <div class="my-padding"></div>
+
+            <div class="row">
+                <div class="col-md-4">
+                    <label for="{{ form.ipv6_host.id_for_label }}">Host</label><br>
+                    {{ form.ipv6_host }}
+                </div>
+                <div class="col-md-4">
+                    <label for="{{ form.ipv6_ipv6addr.id_for_label }}">IPv6 Address</label><br>
+                    {{ form.ipv6_ipv6addr }}
+                </div>
+                <div class="col-md-4">
+                    <label for="{{ form.ipv6_ipv6prefix.id_for_label }}">Prefix</label><br>
+                    {{ form.ipv6_ipv6prefix }}
+                </div>
+            </div>
+
+            <div class="my-padding"></div>
+
+            <div class="row">
+                <div class="col-md-4">
+                    <label for="{{ form.ipv6_match_client.id_for_label }}">Match Client</label><br>
+                    {{ form.ipv6_match_client }}
+                </div>
+                <div class="col-md-4">
+                    <label for="{{ form.ipv6_ms_ad_user_data.id_for_label }}">MS AD User Count</label><br>
+                    {{ form.ipv6_ms_ad_user_data }}
+                </div>
+                <div class="col-md-4">
+                    <label for="{{ form.ipv6_network.id_for_label }}">Network</label><br>
+                    {{ form.ipv6_network }}
+                </div>
+            </div>
+
+            <div class="my-padding"></div>
+
+            <div class="row">
+                <div class="col-md-4">
+                    <label for="{{ form.ipv6_network_view.id_for_label }}">Network View</label><br>
+                    {{ form.ipv6_network_view }}
+                </div>
+                <div class="col-md-4">
+                    <label for="{{ form.ipv6_preferred_lifetime.id_for_label }}">Preferred Lifetime</label><br>
+                    {{ form.ipv6_preferred_lifetime }}
+                </div>
+                <div class="col-md-4">
+                    <label for="{{ form.ipv6_reserved_interface.id_for_label }}">Preferred Interface</label><br>
+                    {{ form.ipv6_reserved_interface }}
+                </div>
+            </div>
+
+
+            <div class="my-padding"></div>
+
+            <div class="row">
+                <div class="col-md-4">
+                    <label for="{{ form.ipv6_reserved_interface.id_for_label }}">Reserved Interface</label><br>
+                    {{ form.ipv6_reserved_interface }}
+                </div>
+                <div class="col-md-4">
+                    <label for="{{ form.ipv6_valid_lifetime.id_for_label }}">Valid Lifetime</label><br>
+                    {{ form.ipv6_valid_lifetime }}
+                </div>
+                <div class="col-md-4">
+                    <label for="{{ form.dns_record_domain_name_server.id_for_label }}">Domain Name Server</label><br>
+                    {{ form.dns_record_domain_name_server }}
+                </div>
+            </div>
+
+            <div class="my-padding"></div>
+
+            <div class="row">
+                <div class="col-md-4">
+                    <label for="{{ form.ipv6_use_domain_name.id_for_label }}">Use Domain Name</label><br>
+                    {{ form.ipv6_use_domain_name }}
+                </div>
+                <div class="col-md-4">
+                    <label for="{{ form.ipv6_use_domain_name_servers.id_for_label }}">Use Domain Name Servers</label><br>
+                    {{ form.ipv6_use_domain_name_servers }}
+                </div>
+                <div class="col-md-4">
+                    <label for="{{ form.ipv6_use_for_ea_inheritance.id_for_label }}">Use For EA Inheritance</label><br>
+                    {{ form.ipv6_use_for_ea_inheritance }}
+                </div>
+            </div>
+
+            <div class="my-padding"></div>
+
+            <div class="row">
+                <div class="col-md-4">
+                    <label for="{{ form.ipv6_use_options.id_for_label }}">Use Options</label><br>
+                    {{ form.ipv6_use_options }}
+                </div>
+                <div class="col-md-4">
+                    <label for="{{ form.ipv6_use_preferred_lifetime.id_for_label }}">Use Preferred Lifetime</label><br>
+                    {{ form.ipv6_use_preferred_lifetime }}
+                </div>
+                <div class="col-md-4">
+                    <label for="{{ form.ipv6_discover_now_status.id_for_label }}">Discover Now Status</label><br>
+                    {{ form.ipv6_discover_now_status }}
+                </div>
+
+            </div>
+
+
+            <div class="my-padding"></div>
+
+            <div class="row">
+
+                <div class="col-md-4">
+                    <label for="{{ form.ipv6_address_type.id_for_label }}">Address Type</label><br>
+                    {{ form.ipv6_address_type }}
+                </div>
+                <div class="col-md-4">
+                    <label for="{{ form.ipv6_configure_for_dhcp.id_for_label }}">Configure for DHCP</label><br>
+                    {{ form.ipv6_configure_for_dhcp }}
+                </div>
+            </div>
+
+            <div class="my-padding"></div>
+
 
 
 

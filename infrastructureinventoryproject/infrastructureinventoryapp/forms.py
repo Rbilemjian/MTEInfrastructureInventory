@@ -1,7 +1,7 @@
 from django import forms
 from . import models
-from .models import ApplicationServer, FilterProfile, FILTER_RECORD_TYPES, RECORD_TYPES, BOOL_WITH_NULL
-from.models import CloudInformation, SNMP3Credential, SNMPCredential, AWSRTE53RecordInfo, LogicFilterRule, DHCPOption
+from .models import ApplicationServer, FilterProfile, FILTER_RECORD_TYPES, RECORD_TYPES, BOOL_WITH_NULL, CliCredential
+from.models import CloudInformation, SNMP3Credential, SNMPCredential, AWSRTE53RecordInfo, LogicFilterRule, DHCPOption, DomainNameServer
 from .models import IPv6HostAddress, IPv4HostAddress, Alias, ExtensibleAttribute, DiscoveredData, DHCPMember, AuthoritativeZone
 import floppyforms
 
@@ -85,6 +85,12 @@ ipv4_d = {}
 for field in ipv4_fields:
     ipv4_d[field] = IPv4HostAddress.objects.filter(visible=True).values_list(field, flat=True).order_by(field).distinct()
 
+#IPv6 Host Datalists
+ipv6_fields = IPv6HostAddress._meta.get_all_field_names()
+ipv6_d = {}
+for field in ipv6_fields:
+    ipv6_d[field] = IPv6HostAddress.objects.filter(visible=True).values_list(field, flat=True).order_by(field).distinct()
+
 #Logic Filter Rule Datalists
 filters = LogicFilterRule.objects.filter(visible=True).values_list('filter', flat=True).order_by('filter').distinct()
 
@@ -94,13 +100,15 @@ dhcp_nums = DHCPOption.objects.filter(visible=True).values_list('num', flat=True
 dhcp_values = DHCPOption.objects.filter(visible=True).values_list('value', flat=True).order_by('value').distinct()
 dhcp_vendor_classes = DHCPOption.objects.filter(visible=True).values_list('vendor_class', flat=True).order_by('vendor_class').distinct()
 
+#Domain Name Server Datalist
+domain_name_servers = DomainNameServer.objects.filter(visible=True).values_list('domain_name_server', flat=True).order_by('domain_name_server').distinct()
+
+#CLI Credential Datalist
+cli_users = CliCredential.objects.filter(visible=True).values_list('user', flat=True).order_by('user').distinct()
+
 #Many-to-one datalists
 ipv4addrs = ApplicationServer.objects.filter(visible=True).values_list('ipv4addr', flat=True).order_by('ipv4addr').distinct()
 ipv4hostaddrs = IPv4HostAddress.objects.filter(visible=True).values_list('ipv4addr', flat=True).order_by('ipv4addr').distinct()
-ipv4addrs = set(ipv4addrs)
-ipv4hostaddrs = set(ipv4hostaddrs)
-ipv4addrs = ipv4addrs | ipv4hostaddrs
-ipv4addrs = list(ipv4addrs)
 canonicals = ApplicationServer.objects.filter(visible=True).values_list('canonical', flat=True).order_by('canonical').distinct()
 ipv6addrs = IPv6HostAddress.objects.filter(visible=True).values_list('ipv6addr', flat=True).order_by('ipv6addr').distinct()
 aliases = Alias.objects.filter(visible=True).values_list('alias', flat=True).order_by('alias').distinct()
@@ -193,6 +201,9 @@ class FilterProfileForm(forms.ModelForm):
             'device_type': floppyforms.widgets.Input(datalist=device_types, attrs={'size': 45}),
             'device_vendor': floppyforms.widgets.Input(datalist=device_vendors, attrs={'size': 45}),
             'network_view': floppyforms.widgets.Input(datalist=network_views, attrs={'size': 45}),
+
+            #A Record Widgets
+            'ipv4addr': floppyforms.widgets.Input(datalist=ipv4addrs, attrs={'size': 45}),
 
             #Select Widgets
             'rrset_order': forms.widgets.Select(),
@@ -363,17 +374,97 @@ class FilterProfileForm(forms.ModelForm):
             'dd_vport_conf_mode': forms.widgets.Select(choices=models.VPORT_MODES),
             'dd_vmi_is_public_address': forms.widgets.Select(choices=BOOL_WITH_NULL),
 
+            # IPv4 Host Address Form Widgets
+            'ipv4_ref': floppyforms.widgets.Input(datalist=ipv4_d['ref'], attrs={'size': 45}),
+            'ipv4_bootfile': floppyforms.widgets.Input(datalist=ipv4_d['bootfile'], attrs={'size': 45}),
+            'ipv4_bootserver': floppyforms.widgets.Input(datalist=ipv4_d['bootserver'], attrs={'size': 45}),
+            'ipv4_configure_for_dhcp': forms.widgets.Select(choices=BOOL_WITH_NULL),
+            'ipv4_deny_bootp': forms.widgets.Select(choices=BOOL_WITH_NULL),
+            'ipv4_discover_now_status': forms.widgets.Select(choices=models.DISCOVER_NOW_STATUSES),
+            'ipv4_enable_pxe_lease_time': forms.widgets.Select(choices=BOOL_WITH_NULL),
+            'ipv4_host': floppyforms.widgets.Input(datalist=ipv4_d['host'], attrs={'size': 45}),
+            'ipv4_ignore_client_requested_options': forms.widgets.Select(choices=BOOL_WITH_NULL),
+            'ipv4_ipv4addr': floppyforms.widgets.Input(datalist=ipv4_d['ipv4addr'], attrs={'size': 45}),
+            'ipv4_is_invalid_mac': forms.widgets.Select(choices=BOOL_WITH_NULL),
+            'ipv4_mac': floppyforms.widgets.Input(datalist=ipv4_d['mac'], attrs={'size': 45}),
+            'ipv4_match_client': floppyforms.widgets.Input(datalist=ipv4_d['match_client'], attrs={'size': 45}),
+            'ipv4_ms_ad_user_data': floppyforms.widgets.Input(datalist=ipv4_d['ms_ad_user_data'], attrs={'size': 45}),
+            'ipv4_network': floppyforms.widgets.Input(datalist=ipv4_d['network'], attrs={'size': 45}),
+            'ipv4_network_view': floppyforms.widgets.Input(datalist=ipv4_d['network_view'], attrs={'size': 45}),
+            'ipv4_nextserver': floppyforms.widgets.Input(datalist=ipv4_d['nextserver'], attrs={'size': 45}),
+            'ipv4_pxe_lease_time': floppyforms.widgets.Input(datalist=ipv4_d['pxe_lease_time'], attrs={'size': 45}),
+            'ipv4_reserved_interface': floppyforms.widgets.Input(datalist=ipv4_d['reserved_interface'],
+                                                                 attrs={'size': 45}),
+            'ipv4_use_bootfile': forms.widgets.Select(choices=BOOL_WITH_NULL),
+            'ipv4_use_deny_bootp': forms.widgets.Select(choices=BOOL_WITH_NULL),
+            'ipv4_use_for_ea_inheritance': forms.widgets.Select(choices=BOOL_WITH_NULL),
+            'ipv4_use_ignore_client_requested_options': forms.widgets.Select(choices=BOOL_WITH_NULL),
+            'ipv4_use_logic_filter_rules': forms.widgets.Select(choices=BOOL_WITH_NULL),
+            'ipv4_use_nextserver': forms.widgets.Select(choices=BOOL_WITH_NULL),
+            'ipv4_use_options': forms.widgets.Select(choices=BOOL_WITH_NULL),
+            'ipv4_use_pxe_lease_time': forms.widgets.Select(choices=BOOL_WITH_NULL),
+
+            # Logic Filter Rule Widgets
+            'lfr_filter': floppyforms.widgets.Input(datalist=filters, attrs={'size': 45}),
+            'lfr_type': forms.widgets.Select(choices=models.LOGIC_FILTER_RULE_TYPES),
+
+            # DHCP Member Filter Rule Widgets
+            'dhcp_name': floppyforms.widgets.Input(datalist=dhcp_names, attrs={'size': 45}),
+            'dhcp_num': floppyforms.widgets.Input(datalist=dhcp_nums, attrs={'size': 45}),
+            'dhcp_use_option': forms.widgets.Select(choices=BOOL_WITH_NULL),
+            'dhcp_value': floppyforms.widgets.Input(datalist=dhcp_values, attrs={'size': 45}),
+            'dhcp_vendor_class': floppyforms.widgets.Input(datalist=dhcp_vendor_classes, attrs={'size': 45}),
+
+            # IPV6 Host Address Widgets
+            'ipv6_ref': floppyforms.widgets.Input(datalist=ipv6_d['ref'], attrs={'size': 45}),
+            'ipv6_address_type': forms.widgets.Select(choices=models.ADDRESS_TYPES),
+            'ipv6_configure_for_dhcp': forms.widgets.Select(choices=BOOL_WITH_NULL),
+            'ipv6_discover_now_status': forms.widgets.Select(choices=models.DISCOVER_NOW_STATUSES),
+            'ipv6_domain_name': floppyforms.widgets.Input(datalist=ipv6_d['domain_name'], attrs={'size': 45}),
+            'ipv6_duid': floppyforms.widgets.Input(datalist=ipv6_d['duid'], attrs={'size': 45}),
+            'ipv6_host': floppyforms.widgets.Input(datalist=ipv6_d['host'], attrs={'size': 45}),
+            'ipv6_ipv6addr': floppyforms.widgets.Input(datalist=ipv6_d['ipv6addr'], attrs={'size': 45}),
+            'ipv6_ipv6prefix': floppyforms.widgets.Input(datalist=ipv6_d['ipv6prefix'], attrs={'size': 45}),
+            'ipv6_ipv6prefix_bits': floppyforms.widgets.Input(datalist=ipv6_d['ipv6prefix_bits'], attrs={'size': 45}),
+            'ipv6_match_client': floppyforms.widgets.Input(datalist=ipv6_d['match_client'], attrs={'size': 45}),
+            'ipv6_ms_ad_user_data': floppyforms.widgets.Input(datalist=ipv6_d['ms_ad_user_data'], attrs={'size': 45}),
+            'ipv6_network': floppyforms.widgets.Input(datalist=ipv6_d['network'], attrs={'size': 45}),
+            'ipv6_network_view': floppyforms.widgets.Input(datalist=ipv6_d['network_view'], attrs={'size': 45}),
+            'ipv6_preferred_lifetime': floppyforms.widgets.Input(datalist=ipv6_d['preferred_lifetime'],
+                                                                 attrs={'size': 45}),
+            'ipv6_reserved_interface': floppyforms.widgets.Input(datalist=ipv6_d['reserved_interface'],
+                                                                 attrs={'size': 45}),
+            'ipv6_use_domain_name': forms.widgets.Select(choices=BOOL_WITH_NULL),
+            'ipv6_use_domain_name_servers': forms.widgets.Select(choices=BOOL_WITH_NULL),
+            'ipv6_use_for_ea_inheritance': forms.widgets.Select(choices=BOOL_WITH_NULL),
+            'ipv6_use_options': forms.widgets.Select(choices=BOOL_WITH_NULL),
+            'ipv6_use_preferred_lifetime': forms.widgets.Select(choices=BOOL_WITH_NULL),
+            'ipv6_use_valid_lifetime': forms.widgets.Select(choices=BOOL_WITH_NULL),
+            'ipv6_valid_lifetime': floppyforms.widgets.Input(datalist=ipv6_d['valid_lifetime'], attrs={'size': 45}),
+
+            # Domain Name Server Information Widgets
+            'dns_record_domain_name_server': floppyforms.widgets.Input(datalist=domain_name_servers,
+                                                                       attrs={'size': 45}),
+
+            # CLI Credential Widgets
+            'cli_credential_type': forms.widgets.Select(choices=models.CLI_CREDENTIAL_TYPES),
+            'cli_user': floppyforms.widgets.Input(datalist=cli_users, attrs={'size': 45}),
+
+            # # #Many-to-one Widgets
+            'alias': floppyforms.widgets.Input(datalist=aliases, attrs={'size': 45}),
+            'extensible_attribute_value': floppyforms.widgets.Input(datalist=extensible_attribute_values,
+                                                                    attrs={'size': 45}),
+            'discovered_data': floppyforms.widgets.Input(datalist=discovered_data_values, attrs={'size': 45}),
+
             #IPv4 Host Information
 
 
             #
 
             # #Many-to-one Widgets
-            # 'ipv4addr': floppyforms.widgets.Input(datalist=ipv4addrs, attrs={'size': 45}),
-            # 'ipv6addr': floppyforms.widgets.Input(datalist=ipv6addrs, attrs={'size': 45}),
-            # 'alias': floppyforms.widgets.Input(datalist=aliases, attrs={'size': 45}),
-            # 'extensible_attribute_value': floppyforms.widgets.Input(datalist=extensible_attribute_values, attrs={'size': 45}),
-            # 'discovered_data': floppyforms.widgets.Input(datalist=discovered_data_values, attrs={'size': 45}),
+            'alias': floppyforms.widgets.Input(datalist=aliases, attrs={'size': 45}),
+            'extensible_attribute_value': floppyforms.widgets.Input(datalist=extensible_attribute_values, attrs={'size': 45}),
+            'discovered_data': floppyforms.widgets.Input(datalist=discovered_data_values, attrs={'size': 45}),
         }
 
 
@@ -400,6 +491,7 @@ class AdvancedSearchForm(forms.ModelForm):
             'device_type': floppyforms.widgets.Input(datalist=device_types, attrs={'size': 45}),
             'device_vendor': floppyforms.widgets.Input(datalist=device_vendors, attrs={'size': 45}),
             'network_view': floppyforms.widgets.Input(datalist=network_views, attrs={'size': 45}),
+            'ipv4addr': floppyforms.widgets.Input(datalist=ipv4addrs, attrs={'size': 45}),
 
             #Select Widgets
             'rrset_order': forms.widgets.Select(),
@@ -582,12 +674,42 @@ class AdvancedSearchForm(forms.ModelForm):
             'dhcp_value': floppyforms.widgets.Input(datalist=dhcp_values, attrs={'size': 45}),
             'dhcp_vendor_class': floppyforms.widgets.Input(datalist=dhcp_vendor_classes, attrs={'size': 45}),
 
+            #IPV6 Host Address Widgets
+            'ipv6_ref': floppyforms.widgets.Input(datalist=ipv6_d['ref'], attrs={'size': 45}),
+            'ipv6_address_type': forms.widgets.Select(choices=models.ADDRESS_TYPES),
+            'ipv6_configure_for_dhcp': forms.widgets.Select(choices=BOOL_WITH_NULL),
+            'ipv6_discover_now_status': forms.widgets.Select(choices=models.DISCOVER_NOW_STATUSES),
+            'ipv6_domain_name': floppyforms.widgets.Input(datalist=ipv6_d['domain_name'], attrs={'size': 45}),
+            'ipv6_duid': floppyforms.widgets.Input(datalist=ipv6_d['duid'], attrs={'size': 45}),
+            'ipv6_host': floppyforms.widgets.Input(datalist=ipv6_d['host'], attrs={'size': 45}),
+            'ipv6_ipv6addr': floppyforms.widgets.Input(datalist=ipv6_d['ipv6addr'], attrs={'size': 45}),
+            'ipv6_ipv6prefix': floppyforms.widgets.Input(datalist=ipv6_d['ipv6prefix'], attrs={'size': 45}),
+            'ipv6_ipv6prefix_bits': floppyforms.widgets.Input(datalist=ipv6_d['ipv6prefix_bits'], attrs={'size': 45}),
+            'ipv6_match_client': floppyforms.widgets.Input(datalist=ipv6_d['match_client'], attrs={'size': 45}),
+            'ipv6_ms_ad_user_data': floppyforms.widgets.Input(datalist=ipv6_d['ms_ad_user_data'], attrs={'size': 45}),
+            'ipv6_network': floppyforms.widgets.Input(datalist=ipv6_d['network'], attrs={'size': 45}),
+            'ipv6_network_view': floppyforms.widgets.Input(datalist=ipv6_d['network_view'], attrs={'size': 45}),
+            'ipv6_preferred_lifetime': floppyforms.widgets.Input(datalist=ipv6_d['preferred_lifetime'], attrs={'size': 45}),
+            'ipv6_reserved_interface': floppyforms.widgets.Input(datalist=ipv6_d['reserved_interface'], attrs={'size': 45}),
+            'ipv6_use_domain_name': forms.widgets.Select(choices=BOOL_WITH_NULL),
+            'ipv6_use_domain_name_servers': forms.widgets.Select(choices=BOOL_WITH_NULL),
+            'ipv6_use_for_ea_inheritance': forms.widgets.Select(choices=BOOL_WITH_NULL),
+            'ipv6_use_options': forms.widgets.Select(choices=BOOL_WITH_NULL),
+            'ipv6_use_preferred_lifetime': forms.widgets.Select(choices=BOOL_WITH_NULL),
+            'ipv6_use_valid_lifetime': forms.widgets.Select(choices=BOOL_WITH_NULL),
+            'ipv6_valid_lifetime': floppyforms.widgets.Input(datalist=ipv6_d['valid_lifetime'], attrs={'size': 45}),
+
+            #Domain Name Server Information Widgets
+            'dns_record_domain_name_server': floppyforms.widgets.Input(datalist=domain_name_servers, attrs={'size': 45}),
+
+            #CLI Credential Widgets
+            'cli_credential_type': forms.widgets.Select(choices=models.CLI_CREDENTIAL_TYPES),
+            'cli_user': floppyforms.widgets.Input(datalist=cli_users, attrs={'size': 45}),
+
             # # #Many-to-one Widgets
-            # 'ipv4addr': floppyforms.widgets.Input(datalist=ipv4addrs, attrs={'size': 45}),
-            # 'ipv6addr': floppyforms.widgets.Input(datalist=ipv6addrs, attrs={'size': 45}),
-            # 'alias': floppyforms.widgets.Input(datalist=aliases, attrs={'size': 45}),
-            # 'extensible_attribute_value': floppyforms.widgets.Input(datalist=extensible_attribute_values,attrs={'size': 45}),
-            # 'discovered_data': floppyforms.widgets.Input(datalist=discovered_data_values, attrs={'size': 45}),
+            'alias': floppyforms.widgets.Input(datalist=aliases, attrs={'size': 45}),
+            'extensible_attribute_value': floppyforms.widgets.Input(datalist=extensible_attribute_values,attrs={'size': 45}),
+            'discovered_data': floppyforms.widgets.Input(datalist=discovered_data_values, attrs={'size': 45}),
         }
 
 #

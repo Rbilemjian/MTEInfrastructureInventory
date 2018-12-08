@@ -3,6 +3,14 @@ from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 
 
+CLI_CREDENTIAL_TYPES = [
+    (None, 'N/A'),
+    ('ENABLE_SSH', 'ENABLE_SSH'),
+    ('ENABLE_TELNET', 'ENABLE_TELNET'),
+    ('SSH', 'SSH'),
+    ('TELNET', 'TELNET'),
+]
+
 CISCO_ISE_SESSION_STATES = [
     (None, 'N/A'),
     ('AUTHENTICATED', 'AUTHENTICATED'),
@@ -16,6 +24,13 @@ ENVIRONMENTS = [
     ('Prod', 'Production'),
     ('Dev', 'Development'),
     ('QA', 'Quality Assurance'),
+]
+
+ADDRESS_TYPES = [
+    (None, 'N/A'),
+    ('ADDRESS', 'ADDRESS'),
+    ('BOTH', 'BOTH'),
+    ('PREFIX', 'PREFIX'),
 ]
 
 ENVIRONMENTS_WITH_NULL = [
@@ -1026,9 +1041,10 @@ class FilterProfile(models.Model):
     use_snmp3_credential = models.NullBooleanField(null=True, blank=True)
     use_snmp_credential = models.NullBooleanField(null=True, blank=True)
 
-    #Infoblox A Record Information (only for a records)
+    #A Record informaiton
     ipv4addr = models.CharField(max_length=30, null=True, blank=True)
-    ipv6addr = models.CharField(max_length=30, null=True, blank=True)
+
+    #Many to One Fields
     alias = models.CharField(max_length=100, null=True, blank=True)
     extensible_attribute_value = models.CharField(max_length=100, null=True, blank=True)
     discovered_data = models.CharField(max_length=100, null=True, blank=True)
@@ -1202,6 +1218,39 @@ class FilterProfile(models.Model):
     dhcp_use_option = models.NullBooleanField(null=True, blank=True, default=False)
     dhcp_value = models.CharField(max_length=100, null=True, blank=True)
     dhcp_vendor_class = models.CharField(max_length=100, null=True, blank=True)
+
+    #IPv6 Host Information
+    ipv6_ref = models.CharField(max_length=300, null=True, blank=True)
+    ipv6_address_type = models.CharField(max_length=100, null=True, blank=True)
+    ipv6_configure_for_dhcp = models.NullBooleanField(null=True, blank=True)
+    ipv6_discover_now_status = models.CharField(max_length=100, null=True, blank=True)
+    ipv6_discovered_data = models.ForeignKey(DiscoveredData, null=True, blank=True)
+    ipv6_domain_name = models.CharField(max_length=100, null=True, blank=True)
+    ipv6_duid = models.CharField(max_length=100, null=True, blank=True)
+    ipv6_host = models.CharField(max_length=100, null=True, blank=True)
+    ipv6_ipv6addr = models.GenericIPAddressField(protocol='IPv6', null=True, blank=True)
+    ipv6_ipv6prefix = models.CharField(max_length=100, null=True, blank=True)
+    ipv6_ipv6prefix_bits = models.PositiveIntegerField(null=True, blank=True)
+    ipv6_last_queried = models.DateTimeField(null=True, blank=True)
+    ipv6_match_client = models.CharField(max_length=100, null=True, blank=True)
+    ipv6_ms_ad_user_data = models.PositiveIntegerField(null=True, blank=True)
+    ipv6_network = models.CharField(max_length=100, null=True, blank=True)
+    ipv6_network_view = models.CharField(max_length=100, null=True, blank=True)
+    ipv6_preferred_lifetime = models.PositiveIntegerField(null=True, blank=True)
+    ipv6_reserved_interface = models.CharField(max_length=100, null=True, blank=True)
+    ipv6_use_domain_name = models.NullBooleanField(null=True, blank=True)
+    ipv6_use_domain_name_servers = models.NullBooleanField(null=True, blank=True)
+    ipv6_use_for_ea_inheritance = models.NullBooleanField(null=True, blank=True)
+    ipv6_use_options = models.NullBooleanField(null=True, blank=True)
+    ipv6_use_preferred_lifetime = models.NullBooleanField(null=True, blank=True)
+    ipv6_use_valid_lifetime = models.NullBooleanField(null=True, blank=True)
+    ipv6_valid_lifetime = models.PositiveIntegerField(null=True, blank=True)
+
+    cli_credential_type = models.CharField(max_length=13, null=True, blank=True)
+    cli_user = models.CharField(max_length=100, null=True, blank=True)
+
+    #Domain Name Server Information
+    dns_record_domain_name_server = models.CharField(max_length=100, null=True, blank=True)
 
     class Meta:
         db_table = "filterprofile"
