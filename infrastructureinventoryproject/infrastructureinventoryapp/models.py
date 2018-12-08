@@ -733,13 +733,6 @@ class VisibleColumns(models.Model):
     shared_record_group = models.BooleanField(default=False)
     forbid_reclamation = models.BooleanField(default=False)
 
-    #One-to-Many Fields
-    ipv4addrs = models.BooleanField(default=False)
-    ipv6addrs = models.BooleanField(default=False)
-    extattrs = models.BooleanField(default=False)
-    aliases = models.BooleanField(default=False)
-    cli_credentials = models.BooleanField(default=False)
-
     #Infoblox A Record Information (Only for A Records)
     ipv4addr = models.BooleanField(default=True)
 
@@ -763,6 +756,13 @@ class VisibleColumns(models.Model):
 
     #Infoblox CName Record Information (Only for CNAME Records)
     canonical = models.BooleanField(default=False)
+
+    #One-to-Many Fields
+    ipv4addrs = models.BooleanField(default=False)
+    ipv6addrs = models.BooleanField(default=False)
+    extattrs = models.BooleanField(default=False)
+    aliases = models.BooleanField(default=False)
+    cli_credentials = models.BooleanField(default=False)
 
     #Cloud Information Fields
     ci_authority_type = models.BooleanField(default=False)

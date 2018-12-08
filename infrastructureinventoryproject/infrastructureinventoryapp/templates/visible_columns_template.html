@@ -1,6 +1,6 @@
 <div class="container">
-    <div class="col-md-4"></div>
-    <div class="col-md-4">
+    <!--<div class="col-md-4"></div>-->
+    <div class="col-md-12">
         <div class="panel-group">
           <div class="panel panel-default">
             <div class="panel-heading">
@@ -14,234 +14,747 @@
                     <form action="" method="POST" id="myform">
                         {% csrf_token %}
                         {{ form.non_field_errors }}
-                        <table class="table">
-                            {{ form.as_table }}
-                        </table>
-                        <!--<div class="row">-->
-                            <!--<div class="col-md-2">-->
-                                <!--{{ form.name.errors }}-->
-                                <!--{{ form.name }}-->
-                                <!--<label for="{{ form.name.id_for_label">Name</label>-->
-                            <!--</div>-->
+                        <!--<table class="table">-->
+                            <!--{{ form.as_table }}-->
+                        <!--</table>-->
+                        <div class="row">
+                            <div class="col-md-3">
+                                {{ form.name.errors }}
+                                {{ form.name }}
+                                <label for="{{ form.name.id_for_label">Name</label>
+                            </div>
 
-                            <!--<div class="col-md-2">-->
-                                <!--{{ form.view.errors }}-->
-                                <!--{{ form.view }}-->
-                                <!--<label for="{{ form.view.id_for_label">View</label>-->
-                            <!--</div>-->
+                            <div class="col-md-3">
+                                {{ form.view.errors }}
+                                {{ form.view }}
+                                <label for="{{ form.view.id_for_label">View</label>
+                            </div>
 
-                            <!--<div class="col-md-2">-->
-                                <!--{{ form.zone.errors }}-->
-                                <!--{{ form.zone }}-->
-                                <!--<label for="{{ form.zone.id_for_label">Zone</label>-->
-                            <!--</div>-->
+                            <div class="col-md-3">
+                                {{ form.zone.errors }}
+                                {{ form.zone }}
+                                <label for="{{ form.zone.id_for_label">Zone</label>
+                            </div>
 
-                            <!--<div class="col-md-2">-->
-                                <!--{{ form.record_type.errors }}-->
-                                <!--{{ form.record_type }}-->
-                                <!--<label for="{{ form.record_type.id_for_label">Record Type</label>-->
-                            <!--</div>-->
+                            <div class="col-md-3">
+                                {{ form.record_type.errors }}
+                                {{ form.record_type }}
+                                <label for="{{ form.record_type.id_for_label">Record Type</label>
+                            </div>
 
-                            <!--<div class="col-md-2">-->
-                                <!--{{ form.ddns_protected.errors }}-->
-                                <!--{{ form.ddns_protected }}-->
-                                <!--<label for="{{ form.ddns_protected.id_for_label">DDNS Protected</label>-->
-                            <!--</div>-->
 
-                            <!--<div class="col-md-2">-->
-                                <!--{{ form.disable.errors }}-->
-                                <!--{{ form.disable }}-->
-                                <!--<label for="{{ form.disable.id_for_label">Disable</label>-->
-                            <!--</div>-->
 
-                          <!--</div>-->
+                          </div>
 
-                          <!--<div class="row">-->
-                              <!--<div class="col-md-2">-->
-                                <!--{{ form.last_queried.errors }}-->
-                                <!--{{ form.last_queried }}-->
-                                <!--<label for="{{ form.last_queried.id_for_label">Last Queried</label>-->
-                              <!--</div>-->
+                          <div class="row">
 
-                              <!--<div class="col-md-2">-->
-                                <!--{{ form.ms_ad_user_data.errors }}-->
-                                <!--{{ form.ms_ad_user_data }}-->
-                                <!--<label for="{{ form.ms_ad_user_data.id_for_label">MS AD User Count</label>-->
-                              <!--</div>-->
+                              <div class="col-md-3">
+                                {{ form.ddns_protected.errors }}
+                                {{ form.ddns_protected }}
+                                <label for="{{ form.ddns_protected.id_for_label">DDNS Protected</label>
+                            </div>
 
-                              <!--<div class="col-md-2">-->
-                                <!--{{ form.ttl.errors }}-->
-                                <!--{{ form.ttl }}-->
-                                <!--<label for="{{ form.ttl.id_for_label">TTL</label>-->
-                              <!--</div>-->
+                            <div class="col-md-3">
+                                {{ form.disable.errors }}
+                                {{ form.disable }}
+                                <label for="{{ form.disable.id_for_label">Disable</label>
+                            </div>
+                              <div class="col-md-3">
+                                {{ form.last_queried.errors }}
+                                {{ form.last_queried }}
+                                <label for="{{ form.last_queried.id_for_label">Last Queried</label>
+                              </div>
 
-                              <!--<div class="col-md-2">-->
-                                <!--{{ form.use_ttl.errors }}-->
-                                <!--{{ form.use_ttl }}-->
-                                <!--<label for="{{ form.use_ttl.id_for_label">Use TTL</label>-->
-                              <!--</div>-->
+                              <div class="col-md-3">
+                                {{ form.ms_ad_user_data.errors }}
+                                {{ form.ms_ad_user_data }}
+                                <label for="{{ form.ms_ad_user_data.id_for_label">MS AD User Count</label>
+                              </div>
 
-                              <!--<div class="col-md-2">-->
-                                <!--{{ form.creation_time.errors }}-->
-                                <!--{{ form.creation_time }}-->
-                                <!--<label for="{{ form.creation_time.id_for_label">Creation Time</label>-->
-                              <!--</div>-->
 
-                              <!--<div class="col-md-2">-->
-                                <!--{{ form.creator.errors }}-->
-                                <!--{{ form.creator }}-->
-                                <!--<label for="{{ form.creator.id_for_label">Creator</label>-->
-                              <!--</div>-->
-                          <!--</div>-->
+                          </div>
 
-                          <!--<div class="row">-->
-                              <!--<div class="col-md-2">-->
-                                <!--{{ form.ddns_principal.errors }}-->
-                                <!--{{ form.ddns_principal }}-->
-                                <!--<label for="{{ form.ddns_principal.id_for_label">DDNS Principal</label>-->
-                            <!--</div>-->
+                          <div class="row">
+                              <div class="col-md-3">
+                                {{ form.ttl.errors }}
+                                {{ form.ttl }}
+                                <label for="{{ form.ttl.id_for_label">TTL</label>
+                              </div>
 
-                              <!--<div class="col-md-2">-->
-                                <!--{{ form.reclaimable.errors }}-->
-                                <!--{{ form.reclaimable }}-->
-                                <!--<label for="{{ form.reclaimable.id_for_label">Reclaimable</label>-->
-                            <!--</div>-->
+                              <div class="col-md-3">
+                                {{ form.use_ttl.errors }}
+                                {{ form.use_ttl }}
+                                <label for="{{ form.use_ttl.id_for_label">Use TTL</label>
+                              </div>
 
-                              <!--<div class="col-md-2">-->
-                                <!--{{ form.shared_record_group.errors }}-->
-                                <!--{{ form.shared_record_group }}-->
-                                <!--<label for="{{ form.shared_record_group.id_for_label">Shared Rcrd Group</label>-->
-                            <!--</div>-->
+                              <div class="col-md-3">
+                                {{ form.creation_time.errors }}
+                                {{ form.creation_time }}
+                                <label for="{{ form.creation_time.id_for_label">Creation Time</label>
+                              </div>
 
-                              <!--<div class="col-md-2">-->
-                                <!--{{ form.forbid_reclamation.errors }}-->
-                                <!--{{ form.forbid_reclamation }}-->
-                                <!--<label for="{{ form.forbid_reclamation.id_for_label">Forbid Reclamation</label>-->
-                            <!--</div>-->
+                              <div class="col-md-3">
+                                {{ form.creator.errors }}
+                                {{ form.creator }}
+                                <label for="{{ form.creator.id_for_label">Creator</label>
+                              </div>
 
-                              <!--<div class="col-md-2">-->
-                                <!--{{ form.ipv4addrs.errors }}-->
-                                <!--{{ form.ipv4addrs }}-->
-                                <!--<label for="{{ form.ipv4addrs.id_for_label">IPv4 Addresses</label>-->
-                            <!--</div>-->
+                          </div>
+                        <div class="row">
+                            <div class="col-md-3">
+                                {{ form.ddns_principal.errors }}
+                                {{ form.ddns_principal }}
+                                <label for="{{ form.ddns_principal.id_for_label">DDNS Principal</label>
+                            </div>
 
-                              <!--<div class="col-md-2">-->
-                                <!--{{ form.ipv6addrs.errors }}-->
-                                <!--{{ form.ipv6addrs }}-->
-                                <!--<label for="{{ form.ipv6addrs.id_for_label">IPv6 Addresses</label>-->
-                            <!--</div>-->
-                          <!--</div>-->
-                        <!--<div class="row">-->
-                            <!--<div class="col-md-2">-->
-                                <!--{{ form.extattrs.errors }}-->
-                                <!--{{ form.extattrs }}-->
-                                <!--<label for="{{ form.extattrs.id_for_label">Extensible Attributes</label>-->
-                            <!--</div>-->
+                              <div class="col-md-3">
+                                {{ form.reclaimable.errors }}
+                                {{ form.reclaimable }}
+                                <label for="{{ form.reclaimable.id_for_label">Reclaimable</label>
+                            </div>
 
-                            <!--<div class="col-md-2">-->
-                                <!--{{ form.ipv4addr.errors }}-->
-                                <!--{{ form.ipv4addr }}-->
-                                <!--<label for="{{ form.ipv4addr.id_for_label">IPv4 Address</label>-->
-                            <!--</div>-->
+                              <div class="col-md-3">
+                                {{ form.shared_record_group.errors }}
+                                {{ form.shared_record_group }}
+                                <label for="{{ form.shared_record_group.id_for_label">Shared Rcrd Group</label>
+                            </div>
 
-                            <!--<div class="col-md-2">-->
-                                <!--{{ form.last_pulled.errors }}-->
-                                <!--{{ form.last_pulled }}-->
-                                <!--<label for="{{ form.last_pulled.id_for_label">Last Pulled</label>-->
-                            <!--</div>-->
+                              <div class="col-md-3">
+                                {{ form.forbid_reclamation.errors }}
+                                {{ form.forbid_reclamation }}
+                                <label for="{{ form.forbid_reclamation.id_for_label">Forbid Reclamation</label>
+                            </div>
 
-                            <!--<div class="col-md-2">-->
-                                <!--{{ form.ref.errors }}-->
-                                <!--{{ form.ref }}-->
-                                <!--<label for="{{ form.ref.id_for_label">Reference</label>-->
-                            <!--</div>-->
 
-                            <!--<div class="col-md-2">-->
-                                <!--{{ form.allow_telnet.errors }}-->
-                                <!--{{ form.allow_telnet }}-->
-                                <!--<label for="{{ form.allow_telnet.id_for_label">Allow Telnet</label>-->
-                            <!--</div>-->
+                            </div>
+                        <div class="row">
+                            <div class="col-md-3">
+                                {{ form.ipv4addr }}
+                                <label for="{{ form.ipv4addr.id_for_label">IPv4 Address</label>
+                            </div>
+                              <div class="col-md-3">
+                                {{ form.last_pulled.errors }}
+                                {{ form.last_pulled }}
+                                <label for="{{ form.last_pulled.id_for_label">Last Pulled</label>
+                            </div>
+                            <div class="col-md-3">
+                                {{ form.last_pulled.errors }}
+                                {{ form.last_pulled }}
+                                <label for="{{ form.last_pulled.id_for_label">Last Pulled</label>
+                            </div>
 
-                            <!--<div class="col-md-2">-->
-                                <!--{{ form.configure_for_dns.errors }}-->
-                                <!--{{ form.configure_for_dns }}-->
-                                <!--<label for="{{ form.configure_for_dns.id_for_label">Configure for DNS</label>-->
-                            <!--</div>-->
-                        <!--</div>-->
-                        <!--<div class="row">-->
-                            <!--<div class="col-md-2">-->
-                                <!--{{ form.device_location.errors }}-->
-                                <!--{{ form.device_location }}-->
-                                <!--<label for="{{ form.device_location.id_for_label">Device Location</label>-->
-                            <!--</div>-->
+                            <div class="col-md-3">
+                                {{ form.ref.errors }}
+                                {{ form.ref }}
+                                <label for="{{ form.ref.id_for_label">Reference</label>
+                            </div>
 
-                            <!--<div class="col-md-2">-->
-                                <!--{{ form.device_type.errors }}-->
-                                <!--{{ form.device_type }}-->
-                                <!--<label for="{{ form.device_type.id_for_label">Device Type</label>-->
-                            <!--</div>-->
+                        </div>
+                        <div class="row">
 
-                            <!--<div class="col-md-2">-->
-                                <!--{{ form.device_vendor.errors }}-->
-                                <!--{{ form.device_vendor }}-->
-                                <!--<label for="{{ form.device_vendor.id_for_label">Device Vendor</label>-->
-                            <!--</div>-->
+                            <div class="col-md-3">
+                                {{ form.allow_telnet.errors }}
+                                {{ form.allow_telnet }}
+                                <label for="{{ form.allow_telnet.id_for_label">Allow Telnet</label>
+                            </div>
 
-                            <!--<div class="col-md-2">-->
-                                <!--{{ form.disable_discovery.errors }}-->
-                                <!--{{ form.disable_discovery }}-->
-                                <!--<label for="{{ form.disable_discovery.id_for_label">Disable Discovery</label>-->
-                            <!--</div>-->
+                            <div class="col-md-3">
+                                {{ form.configure_for_dns.errors }}
+                                {{ form.configure_for_dns }}
+                                <label for="{{ form.configure_for_dns.id_for_label">Configure for DNS</label>
+                            </div>
+                            <div class="col-md-3">
+                                {{ form.device_location.errors }}
+                                {{ form.device_location }}
+                                <label for="{{ form.device_location.id_for_label">Device Location</label>
+                            </div>
 
-                            <!--<div class="col-md-2">-->
-                                <!--{{ form.network_view.errors }}-->
-                                <!--{{ form.network_view }}-->
-                                <!--<label for="{{ form.network_view.id_for_label">Network View</label>-->
-                            <!--</div>-->
+                            <div class="col-md-3">
+                                {{ form.device_type.errors }}
+                                {{ form.device_type }}
+                                <label for="{{ form.device_type.id_for_label">Device Type</label>
 
-                            <!--<div class="col-md-2">-->
-                                <!--{{ form.rrset_order.errors }}-->
-                                <!--{{ form.rrset_order }}-->
-                                <!--<label for="{{ form.rrset_order.id_for_label">RRSet Order</label>-->
-                            <!--</div>-->
-                        <!--</div>-->
-                        <!--<div class="row">-->
-                            <!--<div class="col-md-2">-->
-                                <!--{{ form.use_cli_credential.errors }}-->
-                                <!--{{ form.use_cli_credential }}-->
-                                <!--<label for="{{ form.use_cli_credential.id_for_label">Use CLI Credntl</label>-->
-                            <!--</div>-->
+                            </div>
+                        </div>
 
-                            <!--<div class="col-md-2">-->
-                                <!--{{ form.use_snmp3_credential.errors }}-->
-                                <!--{{ form.use_snmp3_credential }}-->
-                                <!--<label for="{{ form.use_snmp3_credential.id_for_label">Use SNMP3 Credntl</label>-->
-                            <!--</div>-->
 
-                            <!--<div class="col-md-2">-->
-                                <!--{{ form.use_snmp_credential.errors }}-->
-                                <!--{{ form.use_snmp_credential }}-->
-                                <!--<label for="{{ form.use_snmp_credential.id_for_label">Use SNMP Credntl</label>-->
-                            <!--</div>-->
+                        <div class="row">
 
-                            <!--<div class="col-md-2">-->
-                                <!--{{ form.canonical.errors }}-->
-                                <!--{{ form.canonical }}-->
-                                <!--<label for="{{ form.canonical.id_for_label">Canonical</label>-->
-                            <!--</div>-->
+                            <div class="col-md-3">
+                                {{ form.device_vendor.errors }}
+                                {{ form.device_vendor }}
+                                <label for="{{ form.device_vendor.id_for_label">Device Vendor</label>
+                            </div>
 
-                            <!--<div class="col-md-2">-->
-                                <!--{{ form.aliases.errors }}-->
-                                <!--{{ form.aliases }}-->
-                                <!--<label for="{{ form.aliases.id_for_label">Aliases</label>-->
-                            <!--</div>-->
+                            <div class="col-md-3">
+                                {{ form.disable_discovery.errors }}
+                                {{ form.disable_discovery }}
+                                <label for="{{ form.disable_discovery.id_for_label">Disable Discovery</label>
+                            </div>
 
-                            <!--<div class="col-md-2">-->
-                                <!--{{ form.cli_credentials.errors }}-->
-                                <!--{{ form.cli_credentials }}-->
-                                <!--<label for="{{ form.cli_credentials.id_for_label">CLI Credentials</label>-->
-                            <!--</div>-->
-                        <!--</div>-->
+                            <div class="col-md-3">
+                                {{ form.network_view.errors }}
+                                {{ form.network_view }}
+                                <label for="{{ form.network_view.id_for_label">Network View</label>
+                            </div>
+
+                            <div class="col-md-3">
+                                {{ form.rrset_order.errors }}
+                                {{ form.rrset_order }}
+                                <label for="{{ form.rrset_order.id_for_label">RRSet Order</label>
+                            </div>
+                        </div>
+
+                        <div class="row">
+
+                            <div class="col-md-3">
+                                {{ form.use_cli_credential.errors }}
+                                {{ form.use_cli_credential }}
+                                <label for="{{ form.use_cli_credential.id_for_label">Use CLI Credntl</label>
+                            </div>
+
+                            <div class="col-md-3">
+                                {{ form.use_snmp3_credential.errors }}
+                                {{ form.use_snmp3_credential }}
+                                <label for="{{ form.use_snmp3_credential.id_for_label">Use SNMP3 Credntl</label>
+                            </div>
+
+                            <div class="col-md-3">
+                                {{ form.use_snmp_credential.errors }}
+                                {{ form.use_snmp_credential }}
+                                <label for="{{ form.use_snmp_credential.id_for_label">Use SNMP Credntl</label>
+                            </div>
+
+                            <div class="col-md-3">
+                                {{ form.canonical.errors }}
+                                {{ form.canonical }}
+                                <label for="{{ form.canonical.id_for_label">Canonical</label>
+                            </div>
+                        </div>
+
+                        <div class="row">
+
+                            <div class="col-md-3">
+                                {{ form.ipv4addrs }}
+                                <label for="{{ form.ipv4addrs.id_for_label">IPv4 Addresses</label>
+                            </div>
+                            <div class="col-md-3">
+                                {{ form.ipv6addrs }}
+                                <label for="{{ form.ipv6addrs.id_for_label">IPv6 Addresses</label>
+                            </div>
+                            <div class="col-md-3">
+                                {{ form.extattrs }}
+                                <label for="{{ form.extattrs.id_for_label">Extensible Attributes</label>
+                            </div>
+                            <div class="col-md-3">
+                                {{ form.aliases }}
+                                <label for="{{ form.aliases.id_for_label">Aliases</label>
+                            </div>
+                        </div>
+
+                        <div class="row">
+
+                            <div class="col-md-3">
+                                {{ form.cli_credentials }}
+                                <label for="{{ form.cli_credentials.id_for_label">CLI Credentials</label>
+                            </div>
+                            <div class="col-md-3">
+                                {{ form.ci_authority_type }}
+                                <label for="{{ form.ci_authority_type.id_for_label">Authority Type</label>
+                            </div>
+                            <div class="col-md-3">
+                                {{ form.ci_delegated_root }}
+                                <label for="{{ form.ci_delegated_root.id_for_label">Delegated Root</label>
+                            </div>
+                            <div class="col-md-3">
+                                {{ form.ci_delegated_scope }}
+                                <label for="{{ form.ci_delegated_scope.id_for_label">Delegated Scope</label>
+                            </div>
+                        </div>
+
+                        <div class="row">
+
+                            <div class="col-md-3">
+                                {{ form.ci_mgmt_platform }}
+                                <label for="{{ form.ci_mgmt_platform.id_for_label">MGMT Platform</label>
+                            </div>
+                            <div class="col-md-3">
+                                {{ form.ci_owned_by_adaptor }}
+                                <label for="{{ form.ci_owned_by_adaptor.id_for_label">Owned By Adaptor</label>
+                            </div>
+                            <div class="col-md-3">
+                                {{ form.ci_tenant }}
+                                <label for="{{ form.ci_tenant.id_for_label">Cloud Tenant</label>
+                            </div>
+                            <div class="col-md-3">
+                                {{ form.ci_usage_field }}
+                                <label for="{{ form.ci_usage_field.id_for_label">Cloud Usage</label>
+                            </div>
+                            <div class="col-md-3">
+                                {{ form.dm_ipv4_address }}
+                                <label for="{{ form.dm_ipv4_address.id_for_label">Delegated IPv4</label>
+                            </div>
+                            <div class="col-md-3">
+                                {{ form.dm_ipv6_address }}
+                                <label for="{{ form.dm_ipv6_address.id_for_label">Delegated IPv6</label>
+                            </div>
+                            <div class="col-md-3">
+                                {{ form.dm_name }}
+                                <label for="{{ form.dm_name.id_for_label">Delegated Name</label>
+                            </div>
+                            <div class="col-md-3">
+                                {{ form.snmp3_authentication_protocol }}
+                                <label for="{{ form.snmp3_authentication_protocol.id_for_label">Auth Protocol</label>
+                            </div>
+                            <div class="col-md-3">
+                                {{ form.snmp3_privacy_protocol }}
+                                <label for="{{ form.snmp3_privacy_protocol.id_for_label">Privacy Protocol</label>
+                            </div>
+                            <div class="col-md-3">
+                                {{ form.snmp3_user }}
+                                <label for="{{ form.snmp3_user.id_for_label">SNMP3 User</label>
+                            </div>
+                            <div class="col-md-3">
+                                {{ form.aws_alias_target_dns_name }}
+                                <label for="{{ form.aws_alias_target_dns_name.id_for_label">AWS DNS Name</label>
+                            </div>
+                            <div class="col-md-3">
+                                {{ form.aws_alias_target_evaluate_target_health }}
+                                <label for="{{ form.aws_alias_target_evaluate_target_health.id_for_label">Evaluate Health</label>
+                            </div>
+                            <div class="col-md-3">
+                                {{ form.aws_alias_target_hosted_zone_id }}
+                                <label for="{{ form.dm_name.aws_alias_target_hosted_zone_id">Hosted Zone ID</label>
+                            </div>
+                            <div class="col-md-3">
+                                {{ form.aws_failover }}
+                                <label for="{{ form.aws_failover.id_for_label">Failover</label>
+                            </div>
+                            <div class="col-md-3">
+                                {{ form.aws_geolocation_continent_code }}
+                                <label for="{{ form.aws_geolocation_continent_code.id_for_label">Geolocation Continent Code</label>
+                            </div>
+                           <div class="col-md-3">
+                                {{ form.aws_geolocation_country_code }}
+                                <label for="{{ form.aws_geolocation_country_code.id_for_label">Geolocation Country Code</label>
+                            </div>
+                            <div class="col-md-3">
+                                {{ form.aws_geolocation_subdivision_code }}
+                                <label for="{{ form.aws_geolocation_subdivision_code.id_for_label">Geolocation Subdivision Code</label>
+                            </div>
+                            <div class="col-md-3">
+                                {{ form.aws_health_check_id }}
+                                <label for="{{ form.aws_health_check_id.id_for_label">AWS Health Check</label>
+                            </div>
+                            <div class="col-md-3">
+                                {{ form.aws_region }}
+                                <label for="{{ form.aws_region.id_for_label">Region</label>
+                            </div>
+                            <div class="col-md-3">
+                                {{ form.aws_set_identifier }}
+                                <label for="{{ form.aws_set_identifier.id_for_label">Set Identifier</label>
+                            </div>
+                            <div class="col-md-3">
+                                {{ form.aws_type }}
+                                <label for="{{ form.aws_type.id_for_label">AWS Type</label>
+                            </div>
+                            <div class="col-md-3">
+                                {{ form.aws_weight }}
+                                <label for="{{ form.aws_weight.id_for_label">Weight</label>
+                            </div>
+
+
+
+                            <div class="col-md-3">
+                                {{ form.dd_ap_ip_address }}
+                                <label for="{{ form.dd_ap_ip_address.id_for_label">AP IP Address</label>
+                            </div>
+                            <div class="col-md-3">
+                                {{ form.dd_ap_name }}
+                                <label for="{{ form.dd_ap_name.id_for_label">AP Name</label>
+                            </div>
+                            <div class="col-md-3">
+                                {{ form.dd_ap_ssid }}
+                                <label for="{{ form.dd_ap_ssid.id_for_label">AP SSID</label>
+                            </div>
+                            <div class="col-md-3">
+                                {{ form.dd_bridge_domain }}
+                                <label for="{{ form.dd_bridge_domain.id_for_label">Bridge Domain</label>
+                            </div>
+                            <div class="col-md-3">
+                                {{ form.dd_cisco_ise_endpoint_profile }}
+                                <label for="{{ form.dd_cisco_ise_endpoint_profile.id_for_label">Cisco ISE Endpoint Profile</label>
+                            </div>
+                            <div class="col-md-3">
+                                {{ form.dd_cisco_ise_security_group }}
+                                <label for="{{ form.dd_cisco_ise_security_group.id_for_label">Cisco ISE Security Group</label>
+                            </div>
+                            <div class="col-md-3">
+                                {{ form.dd_cisco_ise_ssid }}
+                                <label for="{{ form.dd_cisco_ise_ssid.id_for_label">Cisco ISE SSID</label>
+                            </div>
+                            <div class="col-md-3">
+                                {{ form.dd_cmp_type }}
+                                <label for="{{ form.dd_cmp_type.id_for_label">CMP Type</label>
+                            </div>
+                            <div class="col-md-3">
+                                {{ form.dd_device_contact }}
+                                <label for="{{ form.dd_device_contact.id_for_label">Device Contact</label>
+                            </div>
+                            <div class="col-md-3">
+                                {{ form.dd_device_model }}
+                                <label for="{{ form.dd_device_model.id_for_label">Device Model</label>
+                            </div>
+
+
+
+                            <div class="col-md-3">
+                                {{ form.dd_device_location }}
+                                <label for="{{ form.dd_device_location.id_for_label">Device Location</label>
+                            </div>
+                            <div class="col-md-3">
+                                {{ form.dd_device_port_name }}
+                                <label for="{{ form.dd_device_port_name.id_for_label">Device Port Name</label>
+                            </div>
+                            <div class="col-md-3">
+                                {{ form.dd_device_port_type }}
+                                <label for="{{ form.dd_device_port_type.id_for_label">Device Port Type</label>
+                            </div>
+                            <div class="col-md-3">
+                                {{ form.dd_device_type }}
+                                <label for="{{ form.dd_device_type.id_for_label">Device Type</label>
+                            </div>
+                            <div class="col-md-3">
+                                {{ form.dd_device_vendor }}
+                                <label for="{{ form.dd_device_vendor.id_for_label">Device Vendor</label>
+                            </div>
+                            <div class="col-md-3">
+                                {{ form.dd_discovered_name }}
+                                <label for="{{ form.dd_discovered_name.id_for_label">Discovered Name</label>
+                            </div>
+                            <div class="col-md-3">
+                                {{ form.dd_discoverer }}
+                                <label for="{{ form.dd_discoverer.id_for_label">Discoverer</label>
+                            </div>
+                            <div class="col-md-3">
+                                {{ form.dd_duid }}
+                                <label for="{{ form.dd_duid.id_for_label">DUID</label>
+                            </div>
+                            <div class="col-md-3">
+                                {{ form.dd_endpoint_groups }}
+                                <label for="{{ form.dd_endpoint_groups.id_for_label">Endpoint Groups</label>
+                            </div>
+                            <div class="col-md-3">
+                                {{ form.dd_iprg_no }}
+                                <label for="{{ form.dd_iprg_no.id_for_label">IPRG Number</label>
+                            </div>
+
+
+                            <div class="col-md-3">
+                                {{ form.dd_iprg_state }}
+                                <label for="{{ form.dd_iprg_state.id_for_label">IPRG State</label>
+                            </div>
+                            <div class="col-md-3">
+                                {{ form.dd_iprg_type }}
+                                <label for="{{ form.dd_iprg_type.id_for_label">IPRG Type</label>
+                            </div>
+                            <div class="col-md-3">
+                                {{ form.dd_mac_address }}
+                                <label for="{{ form.dd_mac_address.id_for_label">MAC Address</label>
+                            </div>
+                            <div class="col-md-3">
+                                {{ form.dd_mgmt_ip_address }}
+                                <label for="{{ form.dd_mgmt_ip_address.id_for_label">MGMT IP Address</label>
+                            </div>
+                            <div class="col-md-3">
+                                {{ form.dd_netbios_name }}
+                                <label for="{{ form.dd_netbios_name.id_for_label">Netbios Name</label>
+                            </div>
+                            <div class="col-md-3">
+                                {{ form.dd_network_component_contact }}
+                                <label for="{{ form.dd_network_component_contact.id_for_label">Network Component Contact</label>
+                            </div>
+                            <div class="col-md-3">
+                                {{ form.dd_network_component_description }}
+                                <label for="{{ form.dd_network_component_description.id_for_label">Network Component Description</label>
+                            </div>
+                            <div class="col-md-3">
+                                {{ form.dd_network_component_ip }}
+                                <label for="{{ form.dd_network_component_ip.id_for_label">Network Component IP</label>
+                            </div>
+                            <div class="col-md-3">
+                                {{ form.dd_network_component_location }}
+                                <label for="{{ form.dd_network_component_location.id_for_label">Network Component Location</label>
+                            </div>
+                            <div class="col-md-3">
+                                {{ form.dd_network_component_model }}
+                                <label for="{{ form.dd_network_component_model.id_for_label">Network Component Model</label>
+                            </div>
+
+
+
+
+                            <div class="col-md-3">
+                                {{ form.dd_network_component_name }}
+                                <label for="{{ form.dd_network_component_name.id_for_label">Network Component Name</label>
+                            </div>
+                            <div class="col-md-3">
+                                {{ form.dd_network_component_port_description }}
+                                <label for="{{ form.dd_network_component_port_description.id_for_label">Network Component Port Desc.</label>
+                            </div>
+                            <div class="col-md-3">
+                                {{ form.dd_network_component_port_name }}
+                                <label for="{{ form.dd_network_component_port_name.id_for_label">Network Component Port Name</label>
+                            </div>
+                            <div class="col-md-3">
+                                {{ form.dd_network_component_port_number }}
+                                <label for="{{ form.dd_network_component_port_number.id_for_label">Network Component Port No.</label>
+                            </div>
+                            <div class="col-md-3">
+                                {{ form.dd_network_component_type }}
+                                <label for="{{ form.dd_network_component_type.id_for_label">Network Component Type</label>
+                            </div>
+                            <div class="col-md-3">
+                                {{ form.dd_network_component_vendor }}
+                                <label for="{{ form.dd_network_component_vendor.id_for_label">Network Component Vendor</label>
+                            </div>
+                            <div class="col-md-3">
+                                {{ form.dd_open_ports }}
+                                <label for="{{ form.dd_open_ports.id_for_label">Open Ports</label>
+                            </div>
+                            <div class="col-md-3">
+                                {{ form.dd_os }}
+                                <label for="{{ form.dd_os.id_for_label">Operating System</label>
+                            </div>
+                            <div class="col-md-3">
+                                {{ form.dd_port_duplex }}
+                                <label for="{{ form.dd_port_duplex.id_for_label">Port Duplex</label>
+                            </div>
+                            <div class="col-md-3">
+                                {{ form.dd_port_link_status }}
+                                <label for="{{ form.dd_port_link_status.id_for_label">Port Link Status</label>
+                            </div>
+
+
+                            <div class="col-md-3">
+                                {{ form.dd_port_speed }}
+                                <label for="{{ form.dd_port_speed.id_for_label">Port Speed</label>
+                            </div>
+                            <div class="col-md-3">
+                                {{ form.dd_port_status }}
+                                <label for="{{ form.dd_port_status.id_for_label">Port Status</label>
+                            </div>
+                            <div class="col-md-3">
+                                {{ form.dd_port_type }}
+                                <label for="{{ form.dd_port_type.id_for_label">Port Type</label>
+                            </div>
+                            <div class="col-md-3">
+                                {{ form.dd_port_vlan_description }}
+                                <label for="{{ form.dd_port_vlan_description.id_for_label">Port VLAN Description</label>
+                            </div>
+                            <div class="col-md-3">
+                                {{ form.dd_port_vlan_name }}
+                                <label for="{{ form.dd_port_vlan_name.id_for_label">Port VLAN Name</label>
+                            </div>
+                            <div class="col-md-3">
+                                {{ form.dd_port_vlan_number }}
+                                <label for="{{ form.dd_port_vlan_number.id_for_label">Port VLAN Number</label>
+                            </div>
+                            <div class="col-md-3">
+                                {{ form.dd_task_name }}
+                                <label for="{{ form.dd_task_name.id_for_label">Task Name</label>
+                            </div>
+                            <div class="col-md-3">
+                                {{ form.dd_tenant }}
+                                <label for="{{ form.dd_tenant.id_for_label">Tenant</label>
+                            </div>
+                            <div class="col-md-3">
+                                {{ form.dd_v_adapter }}
+                                <label for="{{ form.dd_v_adapter.id_for_label">Virtual Adapter</label>
+                            </div>
+                            <div class="col-md-3">
+                                {{ form.dd_v_cluster }}
+                                <label for="{{ form.dd_v_cluster.id_for_label">Virtual Cluster</label>
+                            </div>
+
+
+
+                            <div class="col-md-3">
+                                {{ form.dd_v_datacenter }}
+                                <label for="{{ form.dd_v_datacenter.id_for_label">Virtual Datacenter</label>
+                            </div>
+                            <div class="col-md-3">
+                                {{ form.dd_v_entity_name }}
+                                <label for="{{ form.dd_v_entity_name.id_for_label">Virtual Entity Name</label>
+                            </div>
+                            <div class="col-md-3">
+                                {{ form.dd_v_entity_type }}
+                                <label for="{{ form.dd_v_entity_type.id_for_label">Virtual Entity Type</label>
+                            </div>
+                            <div class="col-md-3">
+                                {{ form.dd_v_host }}
+                                <label for="{{ form.dd_v_host.id_for_label">Virtual Host</label>
+                            </div>
+                            <div class="col-md-3">
+                                {{ form.dd_v_switch }}
+                                <label for="{{ form.dd_v_switch.id_for_label">Virtual Switch</label>
+                            </div>
+                            <div class="col-md-3">
+                                {{ form.dd_vlan_port_group }}
+                                <label for="{{ form.dd_vlan_port_group.id_for_label">VLAN Port Group</label>
+                            </div>
+                            <div class="col-md-3">
+                                {{ form.dd_vmhost_ip_address }}
+                                <label for="{{ form.dd_vmhost_ip_address.id_for_label">VMHost IP Address</label>
+                            </div>
+                            <div class="col-md-3">
+                                {{ form.dd_vmhost_mac_address }}
+                                <label for="{{ form.dd_vmhost_mac_address.id_for_label">VMHost Mac Address</label>
+                            </div>
+                            <div class="col-md-3">
+                                {{ form.dd_vmhost_name }}
+                                <label for="{{ form.dd_vmhost_name.id_for_label">VMHost Name</label>
+                            </div>
+                            <div class="col-md-3">
+                                {{ form.dd_vmhost_nic_names }}
+                                <label for="{{ form.dd_vmhost_nic_names.id_for_label">VMHost NIC Names</label>
+                            </div>
+
+
+
+
+
+                            <div class="col-md-3">
+                                {{ form.dd_vmhost_subnet_cidr }}
+                                <label for="{{ form.dd_vmhost_subnet_cidr.id_for_label">VMHost Subnet CIDR</label>
+                            </div>
+                            <div class="col-md-3">
+                                {{ form.dd_vmi_id }}
+                                <label for="{{ form.dd_vmi_id.id_for_label">VMI ID</label>
+                            </div>
+                            <div class="col-md-3">
+                                {{ form.dd_vmi_ip_type }}
+                                <label for="{{ form.dd_vmi_ip_type.id_for_label">VMI IP Type</label>
+                            </div>
+                            <div class="col-md-3">
+                                {{ form.dd_vmi_is_public_address }}
+                                <label for="{{ form.dd_vmi_is_public_address.id_for_label">VMI Is Public Address</label>
+                            </div>
+                            <div class="col-md-3">
+                                {{ form.dd_vmi_name }}
+                                <label for="{{ form.dd_vmi_name.id_for_label">VMI Name</label>
+                            </div>
+                            <div class="col-md-3">
+                                {{ form.dd_vmi_private_address }}
+                                <label for="{{ form.dd_vmi_private_address.id_for_label">VMI Private Address</label>
+                            </div>
+                            <div class="col-md-3">
+                                {{ form.dd_vmi_tenant_id }}
+                                <label for="{{ form.dd_vmi_tenant_id.id_for_label">VMI Tenant ID</label>
+                            </div>
+                            <div class="col-md-3">
+                                {{ form.dd_vport_conf_mode }}
+                                <label for="{{ form.dd_vport_conf_mode.id_for_label">VPort Conf Mode</label>
+                            </div>
+                            <div class="col-md-3">
+                                {{ form.dd_vport_conf_speed }}
+                                <label for="{{ form.dd_vport_conf_speed.id_for_label">VPort Conf Speed</label>
+                            </div>
+                            <div class="col-md-3">
+                                {{ form.dd_vport_link_status }}
+                                <label for="{{ form.dd_vport_link_status.id_for_label">VPort Link Status</label>
+                            </div>
+
+                            <div class="col-md-3">
+                                {{ form.dd_vport_mac_address }}
+                                <label for="{{ form.dd_vport_mac_address.id_for_label">VPort Mac Address</label>
+                            </div>
+                            <div class="col-md-3">
+                                {{ form.dd_vport_mode }}
+                                <label for="{{ form.dd_vport_mode.id_for_label">VPort Mode</label>
+                            </div>
+                            <div class="col-md-3">
+                                {{ form.dd_vport_name }}
+                                <label for="{{ form.dd_vport_name.id_for_label">VPort Name</label>
+                            </div>
+                            <div class="col-md-3">
+                                {{ form.dd_vport_speed }}
+                                <label for="{{ form.dd_vport_speed.id_for_label">VPort Speed</label>
+                            </div>
+                            <div class="col-md-3">
+                                {{ form.dd_vswitch_available_ports_count }}
+                                <label for="{{ form.dd_vswitch_available_ports_count.id_for_label">VSwitch Available Port Count</label>
+                            </div>
+                            <div class="col-md-3">
+                                {{ form.dd_vswitch_id }}
+                                <label for="{{ form.dd_vswitch_id.id_for_label">VSwitch ID</label>
+                            </div>
+                            <div class="col-md-3">
+                                {{ form.dd_vswitch_ipv6_enabled }}
+                                <label for="{{ form.dd_vswitch_ipv6_enabled.id_for_label">VSwitch IPv6 Enabled</label>
+                            </div>
+                            <div class="col-md-3">
+                                {{ form.dd_vswitch_name }}
+                                <label for="{{ form.dd_vswitch_name.id_for_label">VSwitch Name</label>
+                            </div>
+                            <div class="col-md-3">
+                                {{ form.dd_vswitch_segment_id }}
+                                <label for="{{ form.dd_vswitch_segment_id.id_for_label">VSwitch Segment ID</label>
+                            </div>
+                            <div class="col-md-3">
+                                {{ form.dd_vswitch_segment_name }}
+                                <label for="{{ form.dd_vswitch_segment_name.id_for_label">VSwitch Segment Name</label>
+                            </div>
+
+
+                            <div class="col-md-3">
+                                {{ form.dd_vswitch_segment_port_group }}
+                                <label for="{{ form.dd_vswitch_segment_port_group.id_for_label">VSwitch Segment Port Group</label>
+                            </div>
+                            <div class="col-md-3">
+                                {{ form.dd_vswitch_segment_type }}
+                                <label for="{{ form.dd_vswitch_segment_type.id_for_label">VSwitch Segment Type</label>
+                            </div>
+                            <div class="col-md-3">
+                                {{ form.dd_vswitch_tep_dhcp_server }}
+                                <label for="{{ form.dd_vswitch_tep_dhcp_server.id_for_label">VSwitch TEP DHCP Server</label>
+                            </div>
+                            <div class="col-md-3">
+                                {{ form.dd_vswitch_tep_ip }}
+                                <label for="{{ form.dd_vswitch_tep_ip.id_for_label">VSwitch TEP IP</label>
+                            </div>
+                            <div class="col-md-3">
+                                {{ form.dd_vswitch_tep_multicast }}
+                                <label for="{{ form.dd_vswitch_tep_multicast.id_for_label">VSwitch TEP Multicast</label>
+                            </div>
+                            <div class="col-md-3">
+                                {{ form.dd_vswitch_tep_port_group }}
+                                <label for="{{ form.dd_vswitch_tep_port_group.id_for_label">VSwitch TEP Port Group</label>
+                            </div>
+                            <div class="col-md-3">
+                                {{ form.dd_vswitch_tep_type }}
+                                <label for="{{ form.dd_vswitch_tep_type.id_for_label">VSwitch TEP Type</label>
+                            </div>
+                            <div class="col-md-3">
+                                {{ form.dd_vswitch_tep_vlan }}
+                                <label for="{{ form.dd_vswitch_tep_vlan.id_for_label">VSwitch TEP VLAN</label>
+                            </div>
+                            <div class="col-md-3">
+                                {{ form.dd_vswitch_type }}
+                                <label for="{{ form.dd_vswitch_type.id_for_label">VSwitch Type</label>
+                            </div>
+                            <div class="col-md-3">
+                                {{ form.dd_vswitch_segment_name }}
+                                <label for="{{ form.dd_vswitch_segment_name.id_for_label">VSwitch Segment Name</label>
+                            </div>
+
+
+
+                        </div>
+
+
+
+
                         <div class="row text-center">
                             <!--<div class="col-md-3"></div>-->
                             <div class="col-md-12 text-center">
