@@ -525,6 +525,15 @@ DISCOVERED_DATA_FIELDS = [
 ]
 
 
+class APILock(models.Model):
+    type = models.CharField(max_length=20, null=True, blank=True)
+    user = models.OneToOneField(User)
+    created = models.DateTimeField(null=True, blank=True)
+
+    class Meta:
+        db_table = "apilock"
+
+
 #Holds Views and Zones from Infoblox
 class AuthoritativeZone(models.Model):
     view = models.CharField(max_length=20)

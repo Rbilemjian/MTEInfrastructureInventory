@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import login_required
 from .models import ApplicationServer, DHCPMember, CloudInformation, HOST_FIELDS, IPV4_FIELDS, IPV6_FIELDS, A_FIELDS
 from .models import SNMP3Credential, SNMPCredential, ExtensibleAttribute, DiscoveredData, IPv4HostAddress
 from .models import IPv6HostAddress, DomainNameServer, LogicFilterRule, Alias, CliCredential, DHCPOption
-from .models import AWSRTE53RecordInfo, CNAME_FIELDS, AuthoritativeZone
+from .models import AWSRTE53RecordInfo, CNAME_FIELDS, AuthoritativeZone, APILock
 from .forms import InfobloxImportForm
 import requests
 import json
@@ -123,8 +123,6 @@ def saveCNAMERecord(record):
     return curr_rec
 
 
-
-
 def saveARecord(record):
     if record.get('ms_ad_user_data') is None:
         ms_ad_user_data=None
@@ -179,7 +177,6 @@ def saveAWSRTE53RecordInfo(record, currRecord):
 
 
 
-
 def saveHostRecord(host):
     if host.get('ms_ad_user_data') is None:
         ms_ad_user_data = None
@@ -217,7 +214,6 @@ def saveHostRecord(host):
     )
     currHost.save()
     return currHost
-
 
 
 # Adding aliases from current host record to database
@@ -325,10 +321,6 @@ def saveIPv4Options(ipv4addr, ipv4host):
             new_option.save()
 
 
-
-
-
-
 # Adding ipv4addresses from current host to database
 def saveIPv4HostAddresses(host, currHost):
 
@@ -424,7 +416,6 @@ def saveIPv6Options(ipv6addr, ipv6host):
 
 # Adding ipv6addresses from current host to database
 def saveIPv6HostAddresses(host, currHost):
-    # TODO: Do a GET request for the full data of the ipv6addrs struct
 
     ipv6addrs = host.get('ipv6addrs')
     base_url = 'https://infoblox.net.tfayd.com/wapi/v2.7/'
@@ -519,25 +510,39 @@ def saveExtAttributes(host, currHost):
         new_ext_attr.save()
 
 
+def get_time_diff(currTime, recTime):
+    diff = currTime - recTime
+    return diff.total_seconds()/60
 
+def lock_application_servers(request):
+    lock = APILock(user=request.user, type='application_server', created=timezone.now())
+    lock.save()
 
+def unlock_application_servers():
+    APILock.objects.filter(type='application_server').delete()
 
-
-
-
+def lock_is_available():
+    if APILock.objects.filter(type='application_server').count() == 0:
+        return True
+    else:
+        recordTime = APILock.objects.filter(type='application_server').values_list('created', flat=True).get()
+        diff = get_time_diff(timezone.now(), recordTime)
+        print(diff)
+        if diff < 20:
+            return False
+        else:
+            unlock_application_servers()
+            return True
 
 @login_required()
 def infoblox(request):
-
-    authZonesForDisplay = AuthoritativeZone.objects.none()
+    urllib3.disable_warnings()
 
     if request.method == "GET":
-
+        authZonesForDisplay = AuthoritativeZone.objects.none()
         authZonesForDisplay = authZonesForDisplay | AuthoritativeZone.objects.filter(last_host_pull__isnull=False)
         authZonesForDisplay = authZonesForDisplay | AuthoritativeZone.objects.filter(last_a_pull__isnull=False)
         authZonesForDisplay = authZonesForDisplay | AuthoritativeZone.objects.filter(last_cname_pull__isnull=False)
-
-        urllib3.disable_warnings()
 
         r = requests.get('https://infoblox.net.tfayd.com/wapi/v2.7/zone_auth', auth=('206582055', 'miketysonpunchout'), verify=False)
         auth_zones_json = json.loads(r.content)
@@ -547,8 +552,13 @@ def infoblox(request):
             new_zone = AuthoritativeZone(view = auth_zone.get('view'), zone=auth_zone.get('fqdn'))
             new_zone.save()
 
+
     if request.method == "POST":
         if request.POST.get('confirmed') == "true":
+
+            #If lock has timed out before user pressed confirm button, redirect user
+            if lock_is_available():
+                return HttpResponse("Import timed out because it did not complete within 20 minutes.")
 
 
             #Updating last pulled value of auth zone that was pulled from
@@ -572,11 +582,20 @@ def infoblox(request):
             #Doing a database update and setting all of the new servers to be visible
             databaseDiff()
             setAllVisible()
+
+            #Now that all database modification has been completed, unlocking application servers for another import
+            unlock_application_servers()
+
             return redirect('/infrastructureinventory/applicationserver')
 
         form = InfobloxImportForm(request.POST)
         if form.is_valid and len(request.POST.get('view')) > 0 and len(request.POST.get('zone')) > 0:
 
+            #"Acquiring" lock if possible
+            if lock_is_available():
+                lock_application_servers(request)
+            else:
+                return HttpResponse("An import is currently being processed. Please wait for the current import to finish.")
 
             clearAllInvisible()
 
@@ -625,6 +644,11 @@ def infoblox(request):
 
             #"Infinite" loop which ends when no pages to query remain
             while True:
+
+                #If the lock is available (Meaning in this case it has timed out), stop execution and return message to user
+                if lock_is_available():
+                    return HttpResponse("Import timed out because it did not complete within 20 minutes.")
+
                 for record in records:
 
 
@@ -656,8 +680,6 @@ def infoblox(request):
                         saveCloudInfo(record, currRecord)
                         saveExtAttributes(record, currRecord)
 
-
-                    #TODO: Deal with extattrs
 
 
 
