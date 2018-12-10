@@ -514,50 +514,63 @@ def get_time_diff(currTime, recTime):
     diff = currTime - recTime
     return diff.total_seconds()/60
 
-def lock_application_servers(request):
-    lock = APILock(user=request.user, type='application_server', created=timezone.now())
+def take_lock(request, type):
+    lock = APILock(user=request.user, type=type, created=timezone.now())
     lock.save()
 
-def unlock_application_servers():
-    APILock.objects.filter(type='application_server').delete()
+def release_lock(type):
+    APILock.objects.filter(type=type).delete()
 
-def lock_is_available():
-    if APILock.objects.filter(type='application_server').count() == 0:
+def lock_is_available(type):
+    if APILock.objects.filter(type=type).count() == 0:
         return True
     else:
-        recordTime = APILock.objects.filter(type='application_server').values_list('created', flat=True).get()
+        recordTime = APILock.objects.filter(type=type).values_list('created', flat=True).get()
         diff = get_time_diff(timezone.now(), recordTime)
-        print(diff)
         if diff < 20:
             return False
         else:
-            unlock_application_servers()
+            release_lock(type)
             return True
 
 @login_required()
 def infoblox(request):
     urllib3.disable_warnings()
-
-    if request.method == "GET":
-        authZonesForDisplay = AuthoritativeZone.objects.none()
-        authZonesForDisplay = authZonesForDisplay | AuthoritativeZone.objects.filter(last_host_pull__isnull=False)
-        authZonesForDisplay = authZonesForDisplay | AuthoritativeZone.objects.filter(last_a_pull__isnull=False)
-        authZonesForDisplay = authZonesForDisplay | AuthoritativeZone.objects.filter(last_cname_pull__isnull=False)
-
-        r = requests.get('https://infoblox.net.tfayd.com/wapi/v2.7/zone_auth', auth=('206582055', 'miketysonpunchout'), verify=False)
-        auth_zones_json = json.loads(r.content)
-        for auth_zone in auth_zones_json:
-            if AuthoritativeZone.objects.filter(view=auth_zone.get('view'), zone=auth_zone.get('fqdn')).count() > 0:
-                continue
-            new_zone = AuthoritativeZone(view = auth_zone.get('view'), zone=auth_zone.get('fqdn'))
-            new_zone.save()
+    authZonesForDisplay = AuthoritativeZone.objects.none()
+    authZonesForDisplay = authZonesForDisplay | AuthoritativeZone.objects.filter(last_host_pull__isnull=False)
+    authZonesForDisplay = authZonesForDisplay | AuthoritativeZone.objects.filter(last_a_pull__isnull=False)
+    authZonesForDisplay = authZonesForDisplay | AuthoritativeZone.objects.filter(last_cname_pull__isnull=False)
 
 
     if request.method == "POST":
+
+        #Auth Zone Import Button Pressed
+        if request.POST.get('auth_zone_import') == "true":
+
+            if lock_is_available('authoritative_zones'):
+                take_lock(request, 'authoritative_zones')
+            else:
+                return HttpResponse("Could not update authoritative zone definitions. The definitions are already being updated.")
+
+            r = requests.get('https://infoblox.net.tfayd.com/wapi/v2.7/zone_auth',auth=('206582055', 'miketysonpunchout'), verify=False)
+
+            if lock_is_available('authoritative_zones'):
+                return HttpResponse("Authoritative zone definition update could not be completed due to timeout.")
+
+            auth_zones_json = json.loads(r.content)
+            for auth_zone in auth_zones_json:
+                if AuthoritativeZone.objects.filter(view=auth_zone.get('view'), zone=auth_zone.get('fqdn')).count() > 0:
+                    continue
+                new_zone = AuthoritativeZone(view=auth_zone.get('view'), zone=auth_zone.get('fqdn'))
+                new_zone.save()
+            release_lock('authoritative_zones')
+            return render(request, 'infoblox.html', {'form': InfobloxImportForm(), 'zones': authZonesForDisplay})
+
+        #Confirm Import Button Pressed
         if request.POST.get('confirmed') == "true":
 
             #If lock has timed out before user pressed confirm button, redirect user
-            if lock_is_available():
+            if lock_is_available('application_servers'):
                 return HttpResponse("Import timed out because it did not complete within 20 minutes.")
 
 
@@ -584,16 +597,18 @@ def infoblox(request):
             setAllVisible()
 
             #Now that all database modification has been completed, unlocking application servers for another import
-            unlock_application_servers()
+            release_lock('application_servers')
 
             return redirect('/infrastructureinventory/applicationserver')
 
+
+        #Import Button Pressed with Form Filled
         form = InfobloxImportForm(request.POST)
         if form.is_valid and len(request.POST.get('view')) > 0 and len(request.POST.get('zone')) > 0:
 
             #"Acquiring" lock if possible
-            if lock_is_available():
-                lock_application_servers(request)
+            if lock_is_available('application_servers'):
+                take_lock(request, 'application_servers')
             else:
                 return HttpResponse("An import is currently being processed. Please wait for the current import to finish.")
 
@@ -630,11 +645,13 @@ def infoblox(request):
             if result.get('Error') is not None:
                 error = result.get('Error')
                 error = "Infoblox Error: " + error.split(": ", 1)[1]
+                release_lock('application_servers')
                 return render(request, "infoblox.html", {"form": form, "error": error})
 
             #Error handling: if API returned nothing
             if len(result.get('result')) == 0:
                 error = "Infoblox returned no records for this query"
+                release_lock('application_servers')
                 return render(request, "infoblox.html", {"form": form, "error": error})
 
             records = result.get('result')
@@ -646,7 +663,7 @@ def infoblox(request):
             while True:
 
                 #If the lock is available (Meaning in this case it has timed out), stop execution and return message to user
-                if lock_is_available():
+                if lock_is_available('application_servers'):
                     return HttpResponse("Import timed out because it did not complete within 20 minutes.")
 
                 for record in records:

@@ -28,6 +28,17 @@
             <div class="col-md-4">
                 <h2>Infoblox API Page</h2>
             </div>
+
+            <div class="col-md-8 text-right">
+                <form method="POST">
+                    {% csrf_token %}
+                    <input name="auth_zone_import" type="hidden" value="true">
+                    <button type="submit" class="btn btn-primary" style="margin-bottom:23px;">
+                        Update Authoritative Zone Definitions
+                    <span style="padding-left:7px" class="glyphicon glyphicon-download" aria-hidden="true"></span></button>
+                </form>
+    </div>
+
         </div>
     </div>
 
