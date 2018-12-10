@@ -49,20 +49,21 @@
                                     {% if field.1 == "IPv4 Addresses" %}
 
                                         {% if applicationServer.getIPv4Addresses.0 != null %}
-                                            <td>
-                                                <a class="link">View IPv4 Addresses</a>
-                                                <div class="nested-table" style="padding-bottom:0px">
-                                                    <table class="table" style="padding-bottom:0px">
-                                                        <tbody>
-                                                            {% for ip in applicationServer.getIPv4Addresses %}
-                                                                <tr style="background-color:whitesmoke">
-                                                                    <td>{{ip.0}}</td>
-                                                                </tr>
-                                                            {% endfor %}
-                                                        </tbody>
-                                                    </table>
-                                                </div>
-                                            </td>
+                                            <td class = "table-entry">
+                                                    <div style="color:purple;">Hover to View</div>
+                                                    <div class="nested-table" style="padding-bottom:0px">
+                                                        <table class="table" style="padding-bottom:0px">
+                                                            <tbody>
+                                                                {% for ip in applicationServer.getIPv4Addresses %}
+                                                                    <tr>
+                                                                    <td style="text-align:center">
+                                                                        {{ip.0}}
+                                                                    </td>
+                                                                {% endfor %}
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </td>
 
                                         {% else %}
                                             <td>None</td>
@@ -73,20 +74,16 @@
                                     {% elif field.1 == "IPv6 Addresses" %}
 
                                         {% if applicationServer.getIPv6Addresses.0 != null %}
-                                                <td>
-                                                    <a class="link">View IPv6 Addresses</a>
+                                                <td class = "table-entry">
+                                                    <div style="color:purple;">Hover to View</div>
                                                     <div class="nested-table" style="padding-bottom:0px">
                                                         <table class="table" style="padding-bottom:0px">
-                                                            <thead>
-                                                                <tr style="background-color:whitesmoke">
-                                                                    <th scope="col" style="text-align:center">IPv4</th>
-                                                                </tr>
-                                                            </thead>
                                                             <tbody>
                                                                 {% for ip in applicationServer.getIPv6Addresses %}
-                                                                    <tr style="background-color:whitesmoke">
-                                                                        <td style="text-align:center">{{ip}}</td>
-                                                                    </tr>
+                                                                    <tr>
+                                                                    <td style="text-align:center">
+                                                                        {{ip.0}}
+                                                                    </td>
                                                                 {% endfor %}
                                                             </tbody>
                                                         </table>
@@ -100,20 +97,16 @@
                                     {% elif field.1 == "Aliases" %}
 
                                         {% if applicationServer.getAliases.0 != null %}
-                                                <td>
-                                                    <a class="link">View Aliases</a>
+                                                <td class = "table-entry">
+                                                    <div style="color:purple;">Hover to View</div>
                                                     <div class="nested-table" style="padding-bottom:0px">
                                                         <table class="table" style="padding-bottom:0px">
-                                                            <thead>
-                                                                <tr style="background-color:whitesmoke">
-                                                                    <th scope="col" style="text-align:center">Alias</th>
-                                                                </tr>
-                                                            </thead>
                                                             <tbody>
                                                                 {% for alias in applicationServer.getAliases %}
-                                                                    <tr style="background-color:whitesmoke">
-                                                                        <td style="text-align:center">{{alias.0}}</td>
-                                                                    </tr>
+                                                                    <tr>
+                                                                    <td style="text-align:center">
+                                                                        {{alias.0}}
+                                                                    </td>
                                                                 {% endfor %}
                                                             </tbody>
                                                         </table>
@@ -127,22 +120,16 @@
                                     {% elif field.1 == "Extensible Attributes" %}
 
                                         {% if applicationServer.getExtensibleAttributes.0 != null %}
-                                                <td>
-                                                    <a class="link">View Extensible Attributes</a>
+                                                <td class = "table-entry">
+                                                    <div style="color:purple;">Hover to View</div>
                                                     <div class="nested-table" style="padding-bottom:0px">
                                                         <table class="table" style="padding-bottom:0px">
-                                                            <thead>
-                                                                <tr style="background-color:whitesmoke">
-                                                                    <th scope="col" style="text-align:center">Attribute Name</th>
-                                                                    <th scope="col" style="text-align:center">Attribute Value</th>
-                                                                </tr>
-                                                            </thead>
                                                             <tbody>
                                                                 {% for extattr in applicationServer.getExtensibleAttributes %}
-                                                                    <tr style="background-color:whitesmoke">
-                                                                        <td style="text-align:center">{{extattr.0}}</td>
-                                                                        <td style="text-align:center">{{extattr.1}}</td>
-                                                                    </tr>
+                                                                    <tr>
+                                                                    <td style="text-align:center">
+                                                                        <strong>{{ extattr.0 }}: </strong>{{ extattr.1 }}
+                                                                    </td>
                                                                 {% endfor %}
                                                             </tbody>
                                                         </table>
@@ -156,22 +143,16 @@
                                     {% elif field.1 == "CLI Credentials" %}
 
                                         {% if applicationServer.getCliCredentials.0 != null %}
-                                                <td>
-                                                    <a class="link">View CLI Credentials</a>
+                                                <td class = "table-entry">
+                                                    <div style="color:purple;">Hover to View</div>
                                                     <div class="nested-table" style="padding-bottom:0px">
                                                         <table class="table" style="padding-bottom:0px">
-                                                            <thead>
-                                                                <tr style="background-color:whitesmoke">
-                                                                    <th scope="col" style="text-align:center">Credential Type</th>
-                                                                    <th scope="col" style="text-align:center">User</th>
-                                                                </tr>
-                                                            </thead>
                                                             <tbody>
-                                                                {% for cli_cred in applicationServer.getCliCredentials %}
-                                                                    <tr style="background-color:whitesmoke">
-                                                                        <td style="text-align:center">{{cli_cred.0}}</td>
-                                                                        <td style="text-align:center">{{cli_cred.1}}</td>
-                                                                    </tr>
+                                                                {% for clic in applicationServer.getCliCredentials %}
+                                                                    <tr>
+                                                                    <td style="text-align:center">
+                                                                        <strong>{{ clic.1 }}: </strong>{{ clic.0 }}
+                                                                    </td>
                                                                 {% endfor %}
                                                             </tbody>
                                                         </table>

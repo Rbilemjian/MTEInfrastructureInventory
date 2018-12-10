@@ -988,14 +988,14 @@ class ApplicationServer(models.Model):
         return self.ipv6hostaddress_set.values_list('ipv6addr').filter(visible=True)
 
     def getAliases(self):
-        return self.alias_set.values_list('alias').all()
+        return self.alias_set.values_list('alias').filter(visible=True)
 
     def getExtensibleAttributes(self):
         # print(self.extensibleattribute_set.values.all())
-        return self.extensibleattribute_set.values_list('attribute_name', 'attribute_value').all()
+        return self.extensibleattribute_set.values_list('attribute_name', 'attribute_value').filter(visible=True)
 
     def getCliCredentials(self):
-        return self.clicredential_set.values_list('credential_type', 'user').all()
+        return self.clicredential_set.values_list('credential_type', 'user').filter(visible=True)
 
 
 

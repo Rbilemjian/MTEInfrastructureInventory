@@ -216,13 +216,7 @@ td, tr {
     border-collapse: separate;
 }
 
-.nested-table {
-    visibility:hidden;
-    opacity:0;
-    max-height:0px;
-    overflow:hidden;
-    transition: visibility 1s, max-height 0.5s, opacity 0.25s ease-out;
-}
+
 
 a:hover + .nested-table {
     visibility:visible;
@@ -234,6 +228,18 @@ a:hover + .nested-table {
 
 #nested-table + #table {
     background:transparent !important;
+}
+
+
+.table-entry .nested-table {
+    max-height: 0;
+    transition: max-height 0.5s ease-out;
+    overflow: hidden;
+}
+
+.table-entry:hover .nested-table {
+    max-height:5000px;
+    transition: max-height 1s ease-in;
 }
 
 .dataTables_length {
