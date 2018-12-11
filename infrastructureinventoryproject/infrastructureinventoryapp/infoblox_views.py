@@ -330,6 +330,7 @@ def saveIPv4HostAddresses(host, currHost):
     base_url = 'https://infoblox.net.tfayd.com/wapi/v2.7/'
     ipv4_fields = '?_return_fields%2b='
     for field in IPV4_FIELDS:
+        if field[0] == 'ref': continue
         ipv4_fields += field[0] + ','
 
 
@@ -421,6 +422,7 @@ def saveIPv6HostAddresses(host, currHost):
     base_url = 'https://infoblox.net.tfayd.com/wapi/v2.7/'
     ipv6_fields = '?_return_fields%2b='
     for field in IPV6_FIELDS:
+        if field[0] == 'ref': continue
         ipv6_fields += field[0] + ','
 
 
