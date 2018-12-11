@@ -400,16 +400,42 @@ def filter_servers(filterProfile):
     fields = FilterProfile._meta.get_all_field_names()
     if filterProfile.all_fields is not None:
         results = ApplicationServer.objects.none()
+        value = filterProfile.all_fields
         for field in fields:
             if field == "id" or field == "profile_name" or field == "all_fields" or field == "ipv6addr" or field == "alias" or field == "extensible_attribute_value" or field == "discovered_data": continue
-            lookup = "%s__icontains" % field
-            query = {lookup: filterProfile.all_fields}
-            results = results | ApplicationServer.objects.filter(**query).filter(visible=True)
-        results = results | get_ipv4_application_servers(filterProfile.all_fields)
-        results = results | get_ipv6_application_servers(filterProfile.all_fields)
-        results = results | get_alias_application_servers(filterProfile.all_fields)
-        results = results | get_extensible_attribute_application_servers(filterProfile.all_fields)
-        results = results | get_discovered_data_application_servers(filterProfile.all_fields)
+            if field.startswith("ci_"):
+                results = results | filter_by_cloud_information(field, value)
+            elif field.startswith("snmp3_"):
+                results = results | filter_by_snmp3_credential_information(field, value)
+            elif field.startswith("snmp_"):
+                print(field)
+                results = results | filter_by_snmp_credential_information(field, value)
+            elif field.startswith("aws_"):
+                results = results | filter_by_aws_rte53_record_information(field, value)
+            elif field.startswith("dd_"):
+                results = results | filter_by_discovered_data(field, value)
+            elif field.startswith("ipv4_"):
+                results = results | filter_by_ipv4_host_address(field, value)
+            elif field.startswith("ipv6_"):
+                results = results | filter_by_ipv6_host_address(field, value)
+            elif field.startswith("lfr_"):
+                results = results | filter_by_logic_filter_rule(field, value)
+            elif field.startswith("dhcp_"):
+                results = results | filter_by_dhcp_option(field, value)
+            elif field.startswith("dns_record_"):
+                results = results | filter_by_domain_name_server(field, value)
+            elif field.startswith("cli_"):
+                results = results | filter_by_cli_credential(field, value)
+            else:
+                lookup = "%s__icontains" % field
+                query = {lookup: value}
+                results = results | ApplicationServer.objects.filter(**query).filter(visible=True)
+
+        results = results | get_ipv4_application_servers(value)
+        results = results | get_ipv6_application_servers(value)
+        results = results | get_alias_application_servers(value)
+        results = results | get_extensible_attribute_application_servers(value)
+        results = results | get_discovered_data_application_servers(value)
 
         search_result = results
 

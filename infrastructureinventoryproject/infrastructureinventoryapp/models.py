@@ -243,6 +243,7 @@ IPV4_FIELDS = {
     ('use_nextserver', 'Use Next Server'),
     ('use_options', 'Use Options'),
     ('use_pxe_lease_time', 'Use PXE Lease Time'),
+    ('ref', 'Ref'),
 }
 
 IPV6_FIELDS = [
@@ -271,7 +272,8 @@ IPV6_FIELDS = [
     ('use_options', 'Use Options'),
     ('use_preferred_lifetime', 'Use Preferred Lifetime'),
     ('use_valid_lifetime', 'Use Valid Lifetime'),
-    ('valid_lifetime', 'Valid Lifetime')
+    ('valid_lifetime', 'Valid Lifetime'),
+    ('ref', 'Ref'),
 ]
 
 A_FIELDS = {
@@ -1233,7 +1235,6 @@ class FilterProfile(models.Model):
     ipv6_address_type = models.CharField(max_length=100, null=True, blank=True)
     ipv6_configure_for_dhcp = models.NullBooleanField(null=True, blank=True)
     ipv6_discover_now_status = models.CharField(max_length=100, null=True, blank=True)
-    ipv6_discovered_data = models.ForeignKey(DiscoveredData, null=True, blank=True)
     ipv6_domain_name = models.CharField(max_length=100, null=True, blank=True)
     ipv6_duid = models.CharField(max_length=100, null=True, blank=True)
     ipv6_host = models.CharField(max_length=100, null=True, blank=True)

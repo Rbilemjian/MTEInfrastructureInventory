@@ -169,13 +169,6 @@
             <div class="my-padding"></div>
 
             <div class="row">
-
-
-                <div class="col-md-4">
-                    {{ form.ipv6addr.errors }}
-                    <label for="{{ form.ipv6addr.id_for_label }}">IPv6 Address</label><br>
-                    {{ form.ipv6addr }}
-                </div>
                 <div class="col-md-4">
                     {{ form.alias.errors }}
                     <label for="{{ form.alias.id_for_label }}">Alias</label><br>
@@ -186,13 +179,6 @@
                     <label for="{{ form.extensible_attribute_value.id_for_label }}">Extensible Attribute Value</label><br>
                     {{ form.extensible_attribute_value }}
                 </div>
-            </div>
-
-            <div class="my-padding"></div>
-
-            <div class="row">
-
-
                 <div class="col-md-4">
                     {{ form.discovered_data.errors }}
                     <label for="{{ form.discovered_data.id_for_label }}">Discovered Data</label><br>
@@ -274,6 +260,8 @@
                     {{ form.configure_for_dns }}
                 </div>
             </div>
+
+            <div class="my-padding"></div>
 
             <div class="row">
                 <div class="col-md-12">
