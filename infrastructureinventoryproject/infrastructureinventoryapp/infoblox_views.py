@@ -568,6 +568,16 @@ def infoblox(request):
             release_lock('authoritative_zones')
             return render(request, 'infoblox.html', {'form': InfobloxImportForm(), 'zones': authZonesForDisplay})
 
+        #Cancel Import button pressed
+        if request.POST.get('cancelled') == 'true':
+            if lock_is_available('application_servers'):
+                error = "Import already timed out because it did not complete within 20 minutes."
+            else:
+                clearAllInvisible()
+                release_lock('application_servers')
+                error = "Import has been cancelled."
+            return render(request, "infoblox.html", {"form": InfobloxImportForm(), "error": error, "zones": authZonesForDisplay})
+
         #Confirm Import Button Pressed
         if request.POST.get('confirmed') == "true":
 
