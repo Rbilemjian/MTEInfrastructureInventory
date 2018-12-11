@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect, get_object_or_404, HttpResponse
+from django.shortcuts import render, redirect
 from django.utils import timezone
 
 from django.contrib.auth.decorators import login_required
@@ -550,12 +550,14 @@ def infoblox(request):
             if lock_is_available('authoritative_zones'):
                 take_lock(request, 'authoritative_zones')
             else:
-                return HttpResponse("Could not update authoritative zone definitions. The definitions are already being updated.")
+                error = "Could not update authoritative zone definitions. The definitions are already being updated."
+                return render(request, "infoblox.html",{"form": InfobloxImportForm(), "error": error, "zones": authZonesForDisplay})
 
             r = requests.get('https://infoblox.net.tfayd.com/wapi/v2.7/zone_auth',auth=('206582055', 'miketysonpunchout'), verify=False)
 
             if lock_is_available('authoritative_zones'):
-                return HttpResponse("Authoritative zone definition update could not be completed due to timeout.")
+                error = "Authoritative zone definition update could not be completed due to timeout."
+                return render(request, "infoblox.html",{"form": InfobloxImportForm(), "error": error, "zones": authZonesForDisplay})
 
             auth_zones_json = json.loads(r.content)
             for auth_zone in auth_zones_json:
@@ -571,7 +573,8 @@ def infoblox(request):
 
             #If lock has timed out before user pressed confirm button, redirect user
             if lock_is_available('application_servers'):
-                return HttpResponse("Import timed out because it did not complete within 20 minutes.")
+                error = "Import timed out because it did not complete within 20 minutes."
+                return render(request, "infoblox.html",{"form": InfobloxImportForm(), "error": error, "zones": authZonesForDisplay})
 
 
             #Updating last pulled value of auth zone that was pulled from
@@ -610,7 +613,9 @@ def infoblox(request):
             if lock_is_available('application_servers'):
                 take_lock(request, 'application_servers')
             else:
-                return HttpResponse("An import is currently being processed. Please wait for the current import to finish.")
+                error = "An import is currently being processed. Please wait for the current import to finish."
+                return render(request, "infoblox.html", {"form": form, "error": error, "zones": authZonesForDisplay})
+
 
             clearAllInvisible()
 
@@ -646,13 +651,13 @@ def infoblox(request):
                 error = result.get('Error')
                 error = "Infoblox Error: " + error.split(": ", 1)[1]
                 release_lock('application_servers')
-                return render(request, "infoblox.html", {"form": form, "error": error})
+                return render(request, "infoblox.html", {"form": form, "error": error, "zones": authZonesForDisplay})
 
             #Error handling: if API returned nothing
             if len(result.get('result')) == 0:
                 error = "Infoblox returned no records for this query"
                 release_lock('application_servers')
-                return render(request, "infoblox.html", {"form": form, "error": error})
+                return render(request, "infoblox.html", {"form": form, "error": error, "zones": authZonesForDisplay})
 
             records = result.get('result')
             next_page_id = result.get('next_page_id')
@@ -664,7 +669,8 @@ def infoblox(request):
 
                 #If the lock is available (Meaning in this case it has timed out), stop execution and return message to user
                 if lock_is_available('application_servers'):
-                    return HttpResponse("Import timed out because it did not complete within 20 minutes.")
+                    error = "Import timed out because it did not complete within 20 minutes."
+                    return render(request, "infoblox.html",{"form": form, "error": error, "zones": authZonesForDisplay})
 
                 for record in records:
 

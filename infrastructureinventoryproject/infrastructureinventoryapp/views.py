@@ -410,6 +410,7 @@ def filter_servers(filterProfile):
         results = results | get_alias_application_servers(filterProfile.all_fields)
         results = results | get_extensible_attribute_application_servers(filterProfile.all_fields)
         results = results | get_discovered_data_application_servers(filterProfile.all_fields)
+
         search_result = results
 
     else:

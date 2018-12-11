@@ -69,13 +69,13 @@
                     {{ form.record_type }}
                 </div>
                 <div class="col-md-2">
-                    <button type="submit" class="btn btn-success" style="margin-top:20px;">
+                    <button type="submit" class="btn btn-success" style="margin-top:24px;">
                         Import from Zone
                     <span style="padding-left:7px" class="glyphicon glyphicon-import" aria-hidden="true"></span></button>
                 </div>
             </div>
             {% if error != null %}
-            <div class="row" style="margin-top:10px;">
+            <div class="row" style="margin-top:25px;">
                 <div class="col-md-3"></div>
                 <div class="col-md-6 text-center" style="color:red;">
                     {{ error }}
@@ -97,30 +97,34 @@
         </form>
     </div>
 
+    <div class="my-padding"></div>
+
     {% if zones.count > 0 %}
-    <div class="container">
+    <div class="container" style="margin-top:30px;">
         <div class="row">
             <div class="col-md-12">
                 <div class="col-md-2"></div>
                 <div class="col-md-8">
-                    <table class="table" style="background-color:white; margin-top:50px;">
+                    <table id="simple-table" class="table table-bordered" style="background-color:white;">
                         <thead style="text-align:center;">
-                            <th>View</th>
-                            <th>Zone</th>
-                            <th>Last Host Record Pull</th>
-                            <th>Last A Record Pull</th>
-                            <th>Last CNAME Record Pull</th>
+                            <tr>
+                                <th>View</th>
+                                <th>Zone</th>
+                                <th>Last Host Record Pull</th>
+                                <th>Last A Record Pull</th>
+                                <th>Last CNAME Record Pull</th>
+                            </tr>
                         </thead>
 
                         <tbody>
                             {% for zone in zones %}
-                            <tr>
-                                <td>{{ zone.view }}</td>
-                                <td>{{ zone.zone }}</td>
-                                <td>{{ zone.last_host_pull }}</td>
-                                <td>{{ zone.last_a_pull }}</td>
-                                <td>{{ zone.last_cname_pull }}</td>
-                            </tr>
+                                <tr>
+                                    <td>{{ zone.view }}</td>
+                                    <td>{{ zone.zone }}</td>
+                                    <td>{{ zone.last_host_pull }}</td>
+                                    <td>{{ zone.last_a_pull }}</td>
+                                    <td>{{ zone.last_cname_pull }}</td>
+                                </tr>
                             {% endfor %}
                         </tbody>
                     </table>

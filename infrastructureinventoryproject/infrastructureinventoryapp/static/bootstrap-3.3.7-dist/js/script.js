@@ -3,22 +3,11 @@
 
 $(document).ready(function() {
 
-    if(document.getElementById("hw-support") != null)
-    {
-        hwSupport = document.getElementById("hw-support");
-        var hwDate = hwSupport.textContent;
-        if(hwDate != "None")
-            {
-                var hwDateMilliseconds = Date.parse(hwDate);
-                var todayMilliseconds = Date.parse(new Date());
-                var difference = hwDateMilliseconds - todayMilliseconds;
-                if(difference <= 0)
-                    hwSupport.style.color = "red";
-                else if(difference < 2592000000)
-                    hwSupport.style.color = "orange";
-
-            }
-    }
+    $('#simple-table').DataTable({
+        "select": false,
+        "paging": false,
+        dom: 'tr'
+    });
 
     var table = $('#example').DataTable( {
         "scrollX": true,
@@ -51,23 +40,6 @@ $(document).ready(function() {
                 } );
             } );
         },
-
-        "createdRow": function(row, data, dataIndex)
-        {
-            var hwDate = data[23];
-            if(hwDate != "None")
-            {
-                var hwDateMilliseconds = Date.parse(hwDate);
-                var todayMilliseconds = Date.parse(new Date());
-                var difference = hwDateMilliseconds - todayMilliseconds;
-                if(difference <= 0)
-                    $(row).addClass('red');
-                else if(difference < 2592000000)
-                    $(row).addClass('orange');
-
-            }
-        },
-
     });
 
     $('#uncheck-all').on('click', function() {
