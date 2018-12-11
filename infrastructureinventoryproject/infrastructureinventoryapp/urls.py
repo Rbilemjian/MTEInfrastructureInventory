@@ -23,9 +23,11 @@ urlpatterns = [
     # #delete urls
     url(r'^applicationserver/delete/confirm/(?P<pk>\d+)/$', views.application_server_delete_confirm, name="delete-confirmation-view"),
     url(r'^applicationserver/delete/(?P<pk>\d+)/$', views.delete_application_server, name="delete-view"),
-    #
+
     url(r'^applicationserver/filterprofile/delete/confirm/(?P<pk>\d+)/$', views.filter_profile_delete_confirm, name="filter-profile-delete-confirm-view"),
     url(r'^applicationserver/filterprofile/delete/(?P<pk>\d+)/$', views.filter_profile_delete, name="filter-profile-delete"),
+
+    url(r'^applicationserver/batchdelete/confirm', views.confirm_batch_delete, name='batch-delete-confirm'),
     #
     # #search urls
     url(r'^applicationserver/search', views.search_application_server, name="search-view"),

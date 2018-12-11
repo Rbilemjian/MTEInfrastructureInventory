@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load jsonify %}
 
 {% load static %}
 
@@ -19,6 +20,9 @@
 
 {% block body %}
 
+<div class="modal fade" id="batch-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    </div>
+
         <div class="container" style="border-bottom: 3px inset #c4cedb; border-bottom-left-radius: 5px; border-bottom-right-radius: 5px; border-top-left-radius: 5px; border-top-right-radius: 5px">
             <div class="col-md-8">
                 {% if profileName != null %}
@@ -26,6 +30,12 @@
                 {% else %}
                     <h2>Advanced Search Result</h2>
                 {% endif %}
+            </div>
+            <div class="col-md-4 text-right">
+                    <a class="btn btn-danger btn-md" data-toggle="modal" data-target="#batch-modal">
+                            Batch Delete Currently Displayed Records
+                        <span style="padding-left: 7px;" class="glyphicon glyphicon-trash" aria-hidden="true"></span></a>
+                </form>
             </div>
     </div>
 
@@ -43,6 +53,26 @@
 {% endblock %}
 
 {% block scripts %}
+
+    <!-- JQuery modal script -->
+    <script src="http://malsup.github.com/jquery.form.js"></script>
+
+    <script>
+        $('#batch-modal').on('show.bs.modal', function (event) {
+            var modal = $(this)
+            $.ajax({
+                method: "POST",
+                url: "{% url 'batch-delete-confirm' %}",
+                context: document.body,
+                data: {
+                    csrfmiddlewaretoken: '{{ csrf_token }}',
+                    application_servers: '{{ applicationServers|jsonify }}',
+                },
+            }).done(function(response) {
+                modal.html(response);
+            });
+        });
+    </script>
 
     <!-- Datatables js and jquery -->
 

@@ -1,0 +1,36 @@
+<div class="modal-dialog modal-md">
+
+    <div class="modal-content">
+
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+            <h4 class="modal-tital" style="text-align: center;" id="myModalLabel">Really Batch Delete Currently Displayed Application Servers?</h4>
+        </div>
+
+        <div class="modal-body">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="col-md-2"></div>
+                    <div class="col-md-4 text-right">
+                        <form method="POST">
+                            {% csrf_token %}
+                            <input name="confirmed-delete" type="hidden" value="true">
+                            <input name="application_servers" type="hidden" value="{{ applicationServers }}">
+                            <button type="submit" class="btn btn-danger btn-md">
+                                Confirm Deletion
+                                <span style="padding-left: 7px;" class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+                            </button>
+                        </form>
+                    </div>
+                    <div class="col-md-4 text-left">
+                        <button class="btn btn-primary" data-dismiss="modal">
+                            Cancel Deletion
+                            <span style="padding-left: 7px;" class="glyphicon glyphicon-remove-circle" aria-hidden="true"></span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

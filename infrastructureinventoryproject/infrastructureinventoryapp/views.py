@@ -408,7 +408,6 @@ def filter_servers(filterProfile):
             elif field.startswith("snmp3_"):
                 results = results | filter_by_snmp3_credential_information(field, value)
             elif field.startswith("snmp_"):
-                print(field)
                 results = results | filter_by_snmp_credential_information(field, value)
             elif field.startswith("aws_"):
                 results = results | filter_by_aws_rte53_record_information(field, value)
@@ -481,6 +480,7 @@ def filter_servers(filterProfile):
             else:
                 filter = field + "__icontains"
                 search_result = search_result.filter(**{filter: value})
+    search_result = search_result.filter(visible=True)
     return search_result
 #
 #
@@ -951,15 +951,25 @@ def filter_profile_form(request):
 @login_required()
 def filtered_list(request, pk):
     if request.method == 'POST':
-        form = VisibleColumnForm(request.POST)
-        if form.is_valid():
-            if VisibleColumns.objects.filter(user=request.user).count() > 0:
-                VisibleColumns.objects.filter(user=request.user).delete()
-            visible_columns = form.save(commit=False)
-            visible_columns.user = request.user
-            visible_columns.save()
+
+        #If delete modal in filteredlist page was opened and confirmed for deletion of this batch of records
+        if request.POST.get('confirmed-delete') == 'true':
+            applicationServers = json.loads(request.POST.get('application_servers'), strict=False)
+            for applicationServer in applicationServers:
+                if applicationServer['fields']['visible'] is True:
+                    if ApplicationServer.objects.filter(visible=True).filter(ref=applicationServer['fields']['ref']).count() == 1:
+                        currServer = ApplicationServer.objects.filter(visible=True).filter(ref=applicationServer['fields']['ref']).get()
+                        currServer.deleteWithForeign()
+
+        #If the user is submitting a visible column form (The other possible POST request from this page
         else:
-            form = VisibleColumnForm()
+            form = VisibleColumnForm(request.POST)
+            if form.is_valid():
+                if VisibleColumns.objects.filter(user=request.user).count() > 0:
+                    VisibleColumns.objects.filter(user=request.user).delete()
+                visible_columns = form.save(commit=False)
+                visible_columns.user = request.user
+                visible_columns.save()
 
     form = VisibleColumnForm(instance=VisibleColumns.objects.filter(user=request.user).get())
 
@@ -996,8 +1006,11 @@ def filter_profile_edit(request, pk):
         form = FilterProfileForm(instance=filterProfile)
     args = {"form": form, "filterProfile": filterProfile}
     return render(request, "filter_profile_edit.html", args)
-#
-# #InfoBlox views
-#
-#
-#
+
+
+@login_required()
+def confirm_batch_delete(request):
+    if request.method == "POST":
+        applicationServers = request.POST.get('application_servers')
+        return render(request, "batch_delete_confirm.html", {"applicationServers": applicationServers})
+    return HttpResponse("Should be accessed through a POST Request.")
