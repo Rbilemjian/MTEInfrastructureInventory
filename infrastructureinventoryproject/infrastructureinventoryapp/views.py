@@ -28,6 +28,9 @@ def get_ipv4_application_servers(ipv4addr):
     return retServers
 
 
+#If a user searches for an ipv6address, this function looks at ipv6hostaddresses and finds the applicationserver
+#that is associated with the ipv6hostaddress that has that IP address, if such an applicationserver exists
+#as well as any record applicationservers that have that IP address
 def get_ipv6_application_servers(ipv6addr):
     retServers = ApplicationServer.objects.none()
     if IPv6HostAddress.objects.filter(visible=True).filter(ipv6addr__istartswith=ipv6addr).count() > 0:
@@ -38,6 +41,7 @@ def get_ipv6_application_servers(ipv6addr):
     return retServers
 
 
+#If a user searches for an alias, this function looks at applicationservers that are associated with that alias
 def get_alias_application_servers(alias):
     retServers = ApplicationServer.objects.none()
     if Alias.objects.filter(visible=True).filter(alias__icontains=alias).count() > 0:
@@ -48,6 +52,8 @@ def get_alias_application_servers(alias):
     return retServers
 
 
+#If a user searches for an extensible attribute value, this function looks at applicationservers that are associated
+#with that extensible attribute value
 def get_extensible_attribute_application_servers(extensible_attribute_value):
     retServers = ApplicationServer.objects.none()
     if ExtensibleAttribute.objects.filter(visible=True).filter(attribute_value__icontains=extensible_attribute_value).count() > 0:
@@ -57,6 +63,8 @@ def get_extensible_attribute_application_servers(extensible_attribute_value):
     return retServers
 
 
+#If a user searches for a discovered data value, this function looks at applicationservers that are associated with that
+#discovered data value and returns them
 def get_discovered_data_application_servers(discovered_data_value):
     retServers = ApplicationServer.objects.none()
     ipv4s = IPv4HostAddress.objects.none()
@@ -89,12 +97,15 @@ def get_discovered_data_application_servers(discovered_data_value):
     return retServers
 
 
+#Removes a substring from the start of a string, if it exists at the start of the string
+#If it does not exist, returns the original string
 def remove_prefix(string, prefix):
     if string.startswith(prefix):
         return string[len(prefix):]
     return string
 
 
+#Returns only application servers that are associated with cloud information that contains the inputted field & value
 def filter_by_cloud_information(field, value):
     appServers = ApplicationServer.objects.none()
     field = remove_prefix(field, "ci_")
@@ -129,6 +140,7 @@ def filter_by_cloud_information(field, value):
     return appServers
 
 
+#Returns only applicationservers that are associated with an snmp3 credential with the inputted field & value
 def filter_by_snmp3_credential_information(field, value):
     appServers = ApplicationServer.objects.none()
 
@@ -168,7 +180,7 @@ def filter_by_snmp_credential_information(field, value):
     return appServers
 
 
-
+#Returns only applicationservers that are associated with aws rte53 record info that has inputted field & value
 def filter_by_aws_rte53_record_information(field, value):
     appServers = ApplicationServer.objects.none()
 
@@ -187,6 +199,7 @@ def filter_by_aws_rte53_record_information(field, value):
     return appServers
 
 
+#Returns only applicationservers that are associated with discovered data that has inputted field and value
 def filter_by_discovered_data(field, value):
 
     field = remove_prefix(field, "dd_")
@@ -215,6 +228,7 @@ def filter_by_discovered_data(field, value):
     return retServers
 
 
+#Returns only applicationservers that are associated with an ipv4 host address that has inputted field and value
 def filter_by_ipv4_host_address(field, value):
 
     field = remove_prefix(field, "ipv4_")
@@ -232,6 +246,7 @@ def filter_by_ipv4_host_address(field, value):
     return retServers
 
 
+#Returns only applicationservers that are associated with an ipv6 host address that has inputted field and value
 def filter_by_ipv6_host_address(field, value):
 
     field = remove_prefix(field, "ipv6_")
@@ -249,6 +264,8 @@ def filter_by_ipv6_host_address(field, value):
     return retServers
 
 
+#Returns only applicationservers that are associated with an ipv4 host address which has
+#a filter logic rule with the given field and value
 def filter_by_logic_filter_rule(field, value):
 
     field = remove_prefix(field, "lfr_")
@@ -268,6 +285,8 @@ def filter_by_logic_filter_rule(field, value):
     return retServers
 
 
+#Returns only applicationservers that are associated with an ipv4/6 address that is associated with
+#A DHCP option with the inputted field & value
 def filter_by_dhcp_option(field, value):
 
     field = remove_prefix(field, "dhcp_")
@@ -294,6 +313,8 @@ def filter_by_dhcp_option(field, value):
     return retServers
 
 
+#Returns only applicationservers that are associated with ipv6 host addresses that are associated with
+# the DNS with given field and value
 def filter_by_domain_name_server(field, value):
     field = remove_prefix(field, "dns_record_")
     retServers = ApplicationServer.objects.none()
@@ -312,6 +333,7 @@ def filter_by_domain_name_server(field, value):
     return retServers
 
 
+#Returns only applicationservers that are associated with a cli credential with the inputted field & value
 def filter_by_cli_credential(field, value):
     field = remove_prefix(field, "cli_")
     retServers = ApplicationServer.objects.none()
@@ -326,6 +348,8 @@ def filter_by_cli_credential(field, value):
     return retServers
 
 
+#filters servers based on a filter profile model instance, either created by a user through a filter profile form
+#or temporarily instantiated for the purpose of a one-time advanced search
 def filter_servers(filterProfile):
     fields = FilterProfile._meta.get_all_field_names()
     if filterProfile.all_fields is not None:
@@ -414,6 +438,7 @@ def filter_servers(filterProfile):
     return search_result
 
 
+#If any filter profile fields are empty strings, sets them to null for convenience later
 def prep_filter_for_save(filter):
     # setting any empty field to have a null value
     fields = FilterProfile._meta.get_all_field_names()
@@ -425,6 +450,9 @@ def prep_filter_for_save(filter):
 
 
 #------Visible Field Helper Functions------
+
+#This group of functions gets the visible fields from the visible field model instance for the current user
+#for the relevant model that is designated in the function name
 
 
 def get_visible_fields(request):
@@ -516,6 +544,7 @@ def get_visible_discovered_data_fields(request):
 #------View Functions-------
 
 
+#Gets the applicationservers that are to be shown in the home page
 @login_required
 def view_application_servers(request):
     visible_columns = VisibleColumns.objects.filter(user=request.user).get()
@@ -555,6 +584,7 @@ def view_application_servers(request):
     return render(request, 'application_server_list.html', args)
 
 
+#Gets details for a given applicationserver, passes them to the details view
 @login_required()
 def details_application_server(request, pk):
     applicationServer = ApplicationServer.objects.filter(pk=pk, visible=True)
@@ -615,8 +645,8 @@ def details_application_server(request, pk):
         "domainNameServerFields": domainNameServerFields
             }
     return render(request, 'application_server_details.html', args)
-#
-#
+
+
 @login_required()
 def delete_application_server(request, pk):
     application_server = get_object_or_404(ApplicationServer, pk=pk)
@@ -624,6 +654,7 @@ def delete_application_server(request, pk):
     return redirect('/infrastructureinventory/applicationserver/')
 
 
+#One-time instantiation of a filter profile for the purpose of an advanced search
 @login_required()
 def search_application_server(request):
 
@@ -641,18 +672,22 @@ def search_application_server(request):
     return render(request, 'application_server_search_form.html', {'form': form})
 
 
+#Renders modal for confirmation of deletion of an applicationserver
 @login_required()
 def application_server_delete_confirm(request, pk):
     applicationServer = get_object_or_404(ApplicationServer, pk=pk)
     return render(request, 'application_server_delete_confirm.html', {'applicationServer': applicationServer})
 
 
+#Gets filter profiles and renders filter profile list with those filter profiles
 @login_required()
 def filter_profile(request):
     filterProfiles = FilterProfile.objects.all()
     return render(request, 'filter_profiles.html', {"filterProfiles": filterProfiles})
 
 
+#Renders list to create a new filter profile, handles POST case of submitted filter profile form in which case
+#the profile needs to be saved
 @login_required()
 def filter_profile_form(request):
     if request.method == "POST":
@@ -666,7 +701,9 @@ def filter_profile_form(request):
         form = FilterProfileForm()
     return render(request, 'filter_profile_form.html', {'form': form})
 
-#
+
+#Filters the applicationservers by the fields provided in the passed-in filter profile
+#Renders applicationserver list with those applicationservers
 @login_required()
 def filtered_list(request, pk):
     if request.method == 'POST':
@@ -697,20 +734,24 @@ def filtered_list(request, pk):
     fields = get_visible_fields(request)
     args = {'applicationServers': filter_result, 'fields': fields, "profileName": filterProfile.profile_name, "form": form}
     return render(request, 'filtered_list.html', args)
-#
-#
+
+
+#Renders modal for confirmation of deletion of a filter profile
 @login_required()
 def filter_profile_delete_confirm(request, pk):
     filterProfile = get_object_or_404(FilterProfile, pk=pk)
     return render(request, 'filter_profile_delete_confirm.html', {"filterProfile": filterProfile})
-#
-#
+
+
+#Executes deletion of a filter profile and redirects user to filter profile list page
 @login_required()
 def filter_profile_delete(request, pk):
     get_object_or_404(FilterProfile, pk=pk).delete()
     return redirect('/infrastructureinventory/applicationserver/filterprofile')
 
 
+#Renders filter profile form, pre-populated with information from passed-in instance of filter profile.
+#After user makes desired modifications & submits form, saves those modifications and redirects user to filter profile list
 @login_required()
 def filter_profile_edit(request, pk):
     filterProfile = get_object_or_404(FilterProfile, pk=pk)
@@ -726,6 +767,9 @@ def filter_profile_edit(request, pk):
     args = {"form": form, "filterProfile": filterProfile}
     return render(request, "filter_profile_edit.html", args)
 
+
+#Renders modal for confirmation of batch delete of applicationservers, with applicationservers to be deleted passed in
+#In JSON format
 
 @login_required()
 def confirm_batch_delete(request):
