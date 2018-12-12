@@ -17,7 +17,6 @@
                         <!--<table class="table">-->
                             <!--{{ form.as_table }}-->
                         <!--</table>-->
-                        <div class="row">
                             <div class="col-md-3">
                                 {{ form.name.errors }}
                                 {{ form.name }}
@@ -41,13 +40,6 @@
                                 {{ form.record_type }}
                                 <label for="{{ form.record_type.id_for_label">Record Type</label>
                             </div>
-
-
-
-                          </div>
-
-                          <div class="row">
-
                               <div class="col-md-3">
                                 {{ form.ddns_protected.errors }}
                                 {{ form.ddns_protected }}
@@ -70,11 +62,6 @@
                                 {{ form.ms_ad_user_data }}
                                 <label for="{{ form.ms_ad_user_data.id_for_label">MS AD User Count</label>
                               </div>
-
-
-                          </div>
-
-                          <div class="row">
                               <div class="col-md-3">
                                 {{ form.ttl.errors }}
                                 {{ form.ttl }}
@@ -98,9 +85,6 @@
                                 {{ form.creator }}
                                 <label for="{{ form.creator.id_for_label">Creator</label>
                               </div>
-
-                          </div>
-                        <div class="row">
                             <div class="col-md-3">
                                 {{ form.ddns_principal.errors }}
                                 {{ form.ddns_principal }}
@@ -124,20 +108,11 @@
                                 {{ form.forbid_reclamation }}
                                 <label for="{{ form.forbid_reclamation.id_for_label">Forbid Reclamation</label>
                             </div>
-
-
-                            </div>
-                        <div class="row">
                             <div class="col-md-3">
                                 {{ form.ipv4addr }}
                                 <label for="{{ form.ipv4addr.id_for_label">IPv4 Address</label>
                             </div>
                               <div class="col-md-3">
-                                {{ form.last_pulled.errors }}
-                                {{ form.last_pulled }}
-                                <label for="{{ form.last_pulled.id_for_label">Last Pulled</label>
-                            </div>
-                            <div class="col-md-3">
                                 {{ form.last_pulled.errors }}
                                 {{ form.last_pulled }}
                                 <label for="{{ form.last_pulled.id_for_label">Last Pulled</label>
@@ -148,9 +123,6 @@
                                 {{ form.ref }}
                                 <label for="{{ form.ref.id_for_label">Reference</label>
                             </div>
-
-                        </div>
-                        <div class="row">
 
                             <div class="col-md-3">
                                 {{ form.allow_telnet.errors }}
@@ -175,10 +147,6 @@
                                 <label for="{{ form.device_type.id_for_label">Device Type</label>
 
                             </div>
-                        </div>
-
-
-                        <div class="row">
 
                             <div class="col-md-3">
                                 {{ form.device_vendor.errors }}
@@ -203,9 +171,6 @@
                                 {{ form.rrset_order }}
                                 <label for="{{ form.rrset_order.id_for_label">RRSet Order</label>
                             </div>
-                        </div>
-
-                        <div class="row">
 
                             <div class="col-md-3">
                                 {{ form.use_cli_credential.errors }}
@@ -230,9 +195,6 @@
                                 {{ form.canonical }}
                                 <label for="{{ form.canonical.id_for_label">Canonical</label>
                             </div>
-                        </div>
-
-                        <div class="row">
 
                             <div class="col-md-3">
                                 {{ form.ipv4addrs }}
@@ -250,10 +212,6 @@
                                 {{ form.aliases }}
                                 <label for="{{ form.aliases.id_for_label">Aliases</label>
                             </div>
-                        </div>
-
-                        <div class="row">
-
                             <div class="col-md-3">
                                 {{ form.cli_credentials }}
                                 <label for="{{ form.cli_credentials.id_for_label">CLI Credentials</label>
@@ -270,9 +228,6 @@
                                 {{ form.ci_delegated_scope }}
                                 <label for="{{ form.ci_delegated_scope.id_for_label">Delegated Scope</label>
                             </div>
-                        </div>
-
-                        <div class="row">
 
                             <div class="col-md-3">
                                 {{ form.ci_mgmt_platform }}
@@ -304,7 +259,7 @@
                             </div>
                             <div class="col-md-3">
                                 {{ form.snmp3_authentication_protocol }}
-                                <label for="{{ form.snmp3_authentication_protocol.id_for_label">Auth Protocol</label>
+                                <label for="{{ form.snmp3_authentication_protocol.id_for_label">Authentication Protocol</label>
                             </div>
                             <div class="col-md-3">
                                 {{ form.snmp3_privacy_protocol }}
@@ -316,15 +271,15 @@
                             </div>
                             <div class="col-md-3">
                                 {{ form.aws_alias_target_dns_name }}
-                                <label for="{{ form.aws_alias_target_dns_name.id_for_label">AWS DNS Name</label>
+                                <label for="{{ form.aws_alias_target_dns_name.id_for_label">Alias Target Name</label>
                             </div>
                             <div class="col-md-3">
                                 {{ form.aws_alias_target_evaluate_target_health }}
-                                <label for="{{ form.aws_alias_target_evaluate_target_health.id_for_label">Evaluate Health</label>
+                                <label for="{{ form.aws_alias_target_evaluate_target_health.id_for_label">Alias Target Evaluate Health</label>
                             </div>
                             <div class="col-md-3">
                                 {{ form.aws_alias_target_hosted_zone_id }}
-                                <label for="{{ form.dm_name.aws_alias_target_hosted_zone_id">Hosted Zone ID</label>
+                                <label for="{{ form.dm_name.aws_alias_target_hosted_zone_id">Alias Target Hosted Zone ID</label>
                             </div>
                             <div class="col-md-3">
                                 {{ form.aws_failover }}
@@ -344,7 +299,7 @@
                             </div>
                             <div class="col-md-3">
                                 {{ form.aws_health_check_id }}
-                                <label for="{{ form.aws_health_check_id.id_for_label">AWS Health Check</label>
+                                <label for="{{ form.aws_health_check_id.id_for_label">Health Check ID</label>
                             </div>
                             <div class="col-md-3">
                                 {{ form.aws_region }}
@@ -356,7 +311,7 @@
                             </div>
                             <div class="col-md-3">
                                 {{ form.aws_type }}
-                                <label for="{{ form.aws_type.id_for_label">AWS Type</label>
+                                <label for="{{ form.aws_type.id_for_label">AWS RTE53 Record Type</label>
                             </div>
                             <div class="col-md-3">
                                 {{ form.aws_weight }}
@@ -410,7 +365,7 @@
 
                             <div class="col-md-3">
                                 {{ form.dd_device_location }}
-                                <label for="{{ form.dd_device_location.id_for_label">Device Location</label>
+                                <label for="{{ form.dd_device_location.id_for_label">Discovered Device Location</label>
                             </div>
                             <div class="col-md-3">
                                 {{ form.dd_device_port_name }}
@@ -422,11 +377,11 @@
                             </div>
                             <div class="col-md-3">
                                 {{ form.dd_device_type }}
-                                <label for="{{ form.dd_device_type.id_for_label">Device Type</label>
+                                <label for="{{ form.dd_device_type.id_for_label">Discovered Device Type</label>
                             </div>
                             <div class="col-md-3">
                                 {{ form.dd_device_vendor }}
-                                <label for="{{ form.dd_device_vendor.id_for_label">Device Vendor</label>
+                                <label for="{{ form.dd_device_vendor.id_for_label">Discovered Device Vendor</label>
                             </div>
                             <div class="col-md-3">
                                 {{ form.dd_discovered_name }}
@@ -464,7 +419,7 @@
                             </div>
                             <div class="col-md-3">
                                 {{ form.dd_mgmt_ip_address }}
-                                <label for="{{ form.dd_mgmt_ip_address.id_for_label">MGMT IP Address</label>
+                                <label for="{{ form.dd_mgmt_ip_address.id_for_label">Management IP Address</label>
                             </div>
                             <div class="col-md-3">
                                 {{ form.dd_netbios_name }}
@@ -476,7 +431,7 @@
                             </div>
                             <div class="col-md-3">
                                 {{ form.dd_network_component_description }}
-                                <label for="{{ form.dd_network_component_description.id_for_label">Network Component Description</label>
+                                <label for="{{ form.dd_network_component_description.id_for_label">Network Component Desc.</label>
                             </div>
                             <div class="col-md-3">
                                 {{ form.dd_network_component_ip }}
@@ -743,14 +698,6 @@
                                 {{ form.dd_vswitch_type }}
                                 <label for="{{ form.dd_vswitch_type.id_for_label">VSwitch Type</label>
                             </div>
-                            <div class="col-md-3">
-                                {{ form.dd_vswitch_segment_name }}
-                                <label for="{{ form.dd_vswitch_segment_name.id_for_label">VSwitch Segment Name</label>
-                            </div>
-
-
-
-                        </div>
 
 
 
@@ -783,6 +730,6 @@
             </div>
           </div>
         </div>
-</div>
+    </div>
 
 

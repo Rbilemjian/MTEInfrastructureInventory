@@ -334,8 +334,8 @@ CLOUD_INFORMATION_FIELDS = [
     ('delegated_scope', 'Delegated Scope'),
     ('mgmt_platform', 'Management Platform'),
     ('owned_by_adaptor', 'Owned By Adaptor'),
-    ('tenant', 'Tenant'),
-    ('usage_field', 'Usage'),
+    ('tenant', 'Cloud Tenant'),
+    ('usage_field', 'Cloud Usage'),
     ('delegated_member', 'Delegated Member')
 ]
 
@@ -358,7 +358,7 @@ SNMP_CREDENTIAL_FIELDS = [
 ]
 
 AWS_RTE53_RECORD_INFO_FIELDS = [
-    ('type', 'Type'),
+    ('type', 'AWS RTE53 Record Type'),
     ('region', 'Region'),
     ('weight', 'Weight'),
     ('alias_target_dns_name', 'Alias Target DNS Name'),
@@ -389,8 +389,6 @@ DOMAIN_NAME_SERVER_FIELDS = [
     ('domain_name_server', 'Domain Name Server')
 ]
 
-
-#TODO: Use the ordering defined here in the future to make the ordering of the display of the columns consistent
 APPLICATION_SERVER_FIELDS = [
     ('record_type', 'Record Type'),
     ('zone', 'Zone'),
@@ -418,7 +416,7 @@ APPLICATION_SERVER_FIELDS = [
     ('disable_discovery', 'Disable Discovery'),
     ('network_view', 'Network View'),
     ('rrset_order', 'RRSet Order'),
-    ('use_cli_credentials', 'Use CLI Credentials'),
+    ('use_cli_credential', 'Use CLI Credential'),
     ('use_snmp3_credential', 'Use SNMP3 Credential'),
     ('use_snmp_credential', 'Use SNMP Credential'),
     ('ipv4addr', 'IPv4 Address'),
@@ -442,12 +440,12 @@ DISCOVERED_DATA_FIELDS = [
     ('cisco_ise_ssid', 'Cisco ISE SSID'),
     ('cmp_type', 'CMP Type'),
     ('device_contact', 'Device Contact'),
-    ('device_location', 'Device Location'),
+    ('device_location', 'Discovered Device Location'),
     ('device_model', 'Device Model'),
     ('device_port_name', 'Device Port Name'),
     ('device_port_type', 'Device Port Type'),
-    ('device_type', 'Device Type'),
-    ('device_vendor', 'Device Vendor'),
+    ('device_type', 'Discovered Device Type'),
+    ('device_vendor', 'Discovered Device Vendor'),
     ('discovered_name', 'Discovered Name'),
     ('discoverer', 'Discoverer'),
     ('duid', 'DUID'),
@@ -472,7 +470,7 @@ DISCOVERED_DATA_FIELDS = [
     ('network_component_type', 'Network Component Type'),
     ('network_component_vendor', 'Network Component Vendor'),
     ('open_ports', 'Open Ports'),
-    ('os', 'OS'),
+    ('os', 'Operating System'),
     ('port_duplex', 'Port Duplex'),
     ('port_link_status', 'Port Link Status'),
     ('port_speed', 'Port Speed'),
@@ -483,19 +481,19 @@ DISCOVERED_DATA_FIELDS = [
     ('port_vlan_number', 'Port VLAN Number'),
     ('task_name', 'Task Name'),
     ('tenant', 'Tenant'),
-    ('v_adapter', 'V Adapter'),
-    ('v_cluster', 'V Cluster'),
-    ('v_datacenter', 'V Datacenter'),
-    ('v_entity_name', 'V Entity Name'),
-    ('v_entity_type', 'V_Entity Type'),
-    ('v_host', 'V Host'),
-    ('v_switch', 'V Switch'),
+    ('v_adapter', 'Virtual Adapter'),
+    ('v_cluster', 'Virtual Cluster'),
+    ('v_datacenter', 'Virtual Datacenter'),
+    ('v_entity_name', 'Virtual Entity Name'),
+    ('v_entity_type', 'Virtual Entity Type'),
+    ('v_host', 'Virtual Host'),
+    ('v_switch', 'Virtual Switch'),
     ('vlan_port_group', 'VLAN Port Group'),
-    ('vmhost_ip_address', 'VM Host IP Address'),
-    ('vmhost_mac_address', 'VM Host Mac Address'),
-    ('vmhost_name', 'VM Host Name'),
-    ('vmhost_nic_names', 'VM Host NIC Names'),
-    ('vmhost_subnet_cidr', 'VM Host Subnet CIDR'),
+    ('vmhost_ip_address', 'VMHost IP Address'),
+    ('vmhost_mac_address', 'VMHost Mac Address'),
+    ('vmhost_name', 'VMHost Name'),
+    ('vmhost_nic_names', 'VMHost NIC Names'),
+    ('vmhost_subnet_cidr', 'VMHost Subnet CIDR'),
     ('vmi_id', 'VMI ID'),
     ('vmi_ip_type', 'VMI IP Type'),
     ('vmi_is_public_address', 'VMI Is Public Address'),
