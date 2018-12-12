@@ -992,21 +992,50 @@ class ApplicationServer(models.Model):
 
         self.delete()
 
-    def getIPv4Addresses(self):
-        return self.ipv4hostaddress_set.values_list('ipv4addr').filter(visible=True)
+    def displayIPv4Addresses(self):
+        ips = self.ipv4hostaddress_set.values_list('ipv4addr').filter(visible=True)
+        if len(ips) == 0: return None
+        ret = ""
+        for ip in ips:
+            ret = ret + ip[0] + ",<br> "
+        ret = ret[:-6]
+        return ret
 
-    def getIPv6Addresses(self):
-        return self.ipv6hostaddress_set.values_list('ipv6addr').filter(visible=True)
+    def displayIPv6Addresses(self):
+        ips = self.ipv6hostaddress_set.values_list('ipv6addr').filter(visible=True)
+        if len(ips) == 0: return None
+        ret = ""
+        for ip in ips:
+            ret = ret + ip[0] + ",<br> "
+        ret = ret[:-6]
+        return ret
 
-    def getAliases(self):
-        return self.alias_set.values_list('alias').filter(visible=True)
+    def displayAliases(self):
+        aliases = self.alias_set.values_list('alias').filter(visible=True)
+        if len(aliases) == 0: return None
+        ret = ""
+        for alias in aliases:
+            ret = ret + alias[0] + ",<br> "
+        ret = ret[:-6]
+        return ret
 
-    def getExtensibleAttributes(self):
-        # print(self.extensibleattribute_set.values.all())
-        return self.extensibleattribute_set.values_list('attribute_name', 'attribute_value').filter(visible=True)
+    def displayExtensibleAttributes(self):
+        attrs = self.extensibleattribute_set.values_list('attribute_name', 'attribute_value').filter(visible=True)
+        if len(attrs) == 0: return None
+        ret = ""
+        for attr in attrs:
+            ret = ret + "<strong>" + attr[0] + ": </strong>" + attr[1] + ",<br> "
+        ret = ret[:-6]
+        return ret
 
-    def getCliCredentials(self):
-        return self.clicredential_set.values_list('credential_type', 'user').filter(visible=True)
+    def displayCliCredentials(self):
+        creds = self.clicredential_set.values_list('credential_type', 'user').filter(visible=True)
+        if len(creds) == 0: return None
+        ret = ""
+        for cred in creds:
+            ret = ret + "<strong>" + cred[1] + ": </strong>" + cred[0] + ",<br> "
+        ret = ret[:-6]
+        return ret
 
 
 

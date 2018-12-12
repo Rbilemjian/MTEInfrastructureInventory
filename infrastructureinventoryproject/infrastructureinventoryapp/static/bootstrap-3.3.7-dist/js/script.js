@@ -16,7 +16,7 @@ $(document).ready(function() {
 
         //export datatable columns
         dom: 'Bfrtipl',
-        buttons: ['copy', 'csv', 'excel', 'pdf'],
+        buttons: ['copy', 'csv', 'excel'],
 
 
 // individual column searching
