@@ -23,10 +23,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'p%+x4u8$h_gai6v-bke%163i++o+7lvecs!^ltyjiadyjsb+r^'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['*']
-
 
 # Application definition
 
@@ -80,8 +79,8 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'mteinfrastructure',
         'USER': 'root',
-        'PASSWORD': os.environ['MYSQL_PASSWORD'],
-        'HOST': 'mtpappinfrainv502',
+        'PASSWORD': 'MikeTysonPunchout87!',
+        'HOST': 'localhost',
         'PORT': '3306',
     }
 }
@@ -115,6 +114,8 @@ FILE_UPLOAD_HANDLERS = ("django_excel.ExcelMemoryFileUploadHandler",
 
 # Internationalization
 # https://docs.djangoproject.com/en/2.1/topics/i18n/
+
+
 
 LANGUAGE_CODE = 'en-us'
 

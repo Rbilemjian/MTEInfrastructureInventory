@@ -11,7 +11,7 @@ class SSOAuth(object):
     """
 
     def authenticate(self, username=None, password=None):
-        response = requests.post('https://guardhouse.mts.inbcu.com/ldapauth',
+        response = requests.post('https://guardhouse-prd.mts.inbcu.com/ldapauth',
                                  params={'username': username, 'password': password, 'domain': 'tfayd'})
 
         # response code of 200 means successful authentication
