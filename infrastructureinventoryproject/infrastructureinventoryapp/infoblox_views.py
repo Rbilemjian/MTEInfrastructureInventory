@@ -15,7 +15,7 @@ import urllib3
 
 #Helper functions
 
-
+#Sets a date returned from infoblox API to null as needed
 def nullifyAsNeeded(date):
     if date == 0 or "00:00":
         return None
@@ -23,6 +23,8 @@ def nullifyAsNeeded(date):
         return date
 
 
+#Clears all invisible tables (done when a user cancels an ongoing import or initiates an import with some records
+#from a previous timed-out import in the database)
 def clearAllInvisible():
     application_servers = ApplicationServer.objects.filter(visible=False)
     for application_server in application_servers:
@@ -30,6 +32,8 @@ def clearAllInvisible():
 
 
 
+#Sets all records that have been newly added to the database for an import to be visible
+#(To be done after a user confirms an import)
 def setAllVisible():
     cli_creds = CliCredential.objects.filter(visible=False)
     setVisible(cli_creds)
@@ -78,12 +82,15 @@ def setAllVisible():
 
 
 
+#Updates the set of items that are passed in to make them all visible
 def setVisible(items):
     for item in items:
         item.visible = True
         item.save()
 
 
+#Updates the database with new records from import
+#Deletes records with a matching ref # to a record that is being added so that it is replaced and duplicates do not exist
 def databaseDiff():
 
     currAppServers = ApplicationServer.objects.filter(visible=True)
@@ -96,6 +103,7 @@ def databaseDiff():
 
 
 
+#Saves a CNAME record given the JSON from the API
 def saveCNAMERecord(record):
     curr_rec = ApplicationServer(
         ref=record.get('_ref'),
@@ -123,6 +131,7 @@ def saveCNAMERecord(record):
     return curr_rec
 
 
+#Saves an A Record given the JSON returned by the API call
 def saveARecord(record):
     if record.get('ms_ad_user_data') is None:
         ms_ad_user_data=None
@@ -155,6 +164,8 @@ def saveARecord(record):
     return curr_rec
 
 
+#Saves the aws information nested within the record JSON API output to an aws model
+#Then associates that model with the application server model that is passed in
 def saveAWSRTE53RecordInfo(record, currRecord):
     aws_info = record.get('aws_rte53_record_info')
     if aws_info is None: return
@@ -177,6 +188,7 @@ def saveAWSRTE53RecordInfo(record, currRecord):
 
 
 
+#Saves a host record to a new model given the JSON output from the infoblox API
 def saveHostRecord(host):
     if host.get('ms_ad_user_data') is None:
         ms_ad_user_data = None
@@ -305,6 +317,7 @@ def saveLogicFilterRules(ipv4addr, ipv4host):
         new_rule.save()
 
 
+#Adding IPv4 Options to the database
 def saveIPv4Options(ipv4addr, ipv4host):
     options = ipv4addr.get('options')
     if options is not None:
@@ -499,6 +512,7 @@ def saveSNMPCredential(host, currHost):
         currHost.save()
 
 
+#Adding extensible attributes from the current host to the database
 def saveExtAttributes(host, currHost):
     ext_attrs = host.get('extattrs')
     if ext_attrs is None: return
@@ -512,17 +526,25 @@ def saveExtAttributes(host, currHost):
         new_ext_attr.save()
 
 
+#Calculates the time difference between the two times that are passed in
 def get_time_diff(currTime, recTime):
     diff = currTime - recTime
     return diff.total_seconds()/60
 
+
+#Takes the lock to be used by the currently logged in user (the one who made the request)
 def take_lock(request, type):
     lock = APILock(user=request.user, type=type, created=timezone.now())
     lock.save()
 
+
+#Releases the lock
 def release_lock(type):
     APILock.objects.filter(type=type).delete()
 
+
+#Checks if the lock is available
+#If there is a timed out lock, function automatically releases it and returns true
 def lock_is_available(type):
     if APILock.objects.filter(type=type).count() == 0:
         return True
@@ -535,16 +557,30 @@ def lock_is_available(type):
             release_lock(type)
             return True
 
+
+#Infoblox API import view function
+#Handles:
+    #-GET Request (by default) to load display of form, authoritative zones on initial load of the page
+    #-POST Request when Authoritative Zone import button is pressed
+    #-POST Request when Cancel Import button is pressed
+    #-POST Request when Confirm Import button is pressed
+    #-POST Request when Initiate Import button is pressed
 @login_required()
 def infoblox(request):
+
+
     urllib3.disable_warnings()
     authZonesForDisplay = AuthoritativeZone.objects.none()
     authZonesForDisplay = authZonesForDisplay | AuthoritativeZone.objects.filter(last_host_pull__isnull=False)
     authZonesForDisplay = authZonesForDisplay | AuthoritativeZone.objects.filter(last_a_pull__isnull=False)
     authZonesForDisplay = authZonesForDisplay | AuthoritativeZone.objects.filter(last_cname_pull__isnull=False)
 
+    infobloxCredentials = ['206582055', 'miketysonpunchout']
+
 
     if request.method == "POST":
+
+
 
         #Auth Zone Import Button Pressed
         if request.POST.get('auth_zone_import') == "true":
@@ -555,7 +591,7 @@ def infoblox(request):
                 error = "Could not update authoritative zone definitions. The definitions are already being updated."
                 return render(request, "infoblox.html",{"form": InfobloxImportForm(), "error": error, "zones": authZonesForDisplay})
 
-            r = requests.get('https://infoblox.net.tfayd.com/wapi/v2.7/zone_auth',auth=('206582055', 'miketysonpunchout'), verify=False)
+            r = requests.get('https://infoblox.net.tfayd.com/wapi/v2.7/zone_auth',auth=(infobloxCredentials[0], infobloxCredentials[1]), verify=False)
 
             if lock_is_available('authoritative_zones'):
                 error = "Authoritative zone definition update could not be completed due to timeout."
@@ -568,7 +604,10 @@ def infoblox(request):
                 new_zone = AuthoritativeZone(view=auth_zone.get('view'), zone=auth_zone.get('fqdn'))
                 new_zone.save()
             release_lock('authoritative_zones')
-            return render(request, 'infoblox.html', {'form': InfobloxImportForm(), 'zones': authZonesForDisplay})
+            message = "Authoritative zones have been successfully updated."
+            return render(request, 'infoblox.html', {'form': InfobloxImportForm(), 'zones': authZonesForDisplay, 'message': message})
+
+
 
         #Cancel Import button pressed
         if request.POST.get('cancelled') == 'true':
@@ -579,6 +618,8 @@ def infoblox(request):
                 release_lock('application_servers')
                 error = "Import has been cancelled."
             return render(request, "infoblox.html", {"form": InfobloxImportForm(), "error": error, "zones": authZonesForDisplay})
+
+
 
         #Confirm Import Button Pressed
         if request.POST.get('confirmed') == "true":
@@ -615,6 +656,7 @@ def infoblox(request):
             release_lock('application_servers')
 
             return redirect('/infrastructureinventory/applicationserver')
+
 
 
         #Import Button Pressed with Form Filled
@@ -656,7 +698,7 @@ def infoblox(request):
             get_url = base_url + static_args + additional_fields
 
 
-            r = requests.get(get_url, auth=('206582055', 'miketysonpunchout'), verify=False)
+            r = requests.get(get_url, auth=(infobloxCredentials[0], infobloxCredentials[1]), verify=False)
             result = r.json()
             #Error handling: if API returned an error
             if result.get('Error') is not None:
@@ -724,7 +766,7 @@ def infoblox(request):
 
                 # Get the next page of results from the infoblox WAPI
                 get_url = base_url + static_args + '&_page_id=' + next_page_id + additional_fields
-                r = requests.get(get_url, auth=('206582055', 'miketysonpunchout'), verify=False)
+                r = requests.get(get_url, auth=(infobloxCredentials[0], infobloxCredentials[1]), verify=False)
                 result = r.json()
                 records = result.get('result')
                 next_page_id = result.get('next_page_id')
@@ -732,8 +774,15 @@ def infoblox(request):
             records = ApplicationServer.objects.filter(visible=False)
             record_type = records.first().record_type
             return render(request, "infoblox.html", {"form": form, "records": records, "record_type": record_type})
+
+
+    #If this is a get request
     else:
         form = InfobloxImportForm()
+        message = "Note: Imports from zones with many records may take a minute or more to process." \
+                  " Please press the import button only once and if an import is initiated, do not leave the page without completing or cancelling it"
+        return render(request, "infoblox.html", {"form": form, "zones": authZonesForDisplay, "message": message})
+
     return render(request, "infoblox.html", {"form": form, "zones": authZonesForDisplay})
 
 

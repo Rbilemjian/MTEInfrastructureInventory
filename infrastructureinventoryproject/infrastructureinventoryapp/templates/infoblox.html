@@ -76,12 +76,24 @@
             </div>
             {% if error != null %}
             <div class="row" style="margin-top:25px;">
-                <div class="col-md-3"></div>
-                <div class="col-md-6 text-center" style="color:red;">
+                <div class="col-md-2"></div>
+                <div class="col-md-8 text-center" style="color:red;">
                     {{ error }}
                 </div>
             </div>
+
+            {% elif message != null %}
+
+            <div class="row" style="margin-top:25px;">
+                <div class="col-md-2"></div>
+                <div class="col-md-8 text-center">
+                    {{ message }}
+                </div>
+            </div>
+
             {% endif %}
+
+
             <div class="row" style="margin-top:10px;">
                 <div class="col-md-2"></div>
                 <div class="col-md-2">
@@ -136,6 +148,16 @@
 
 {% if records.count > 0 %}
     <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="col-md-2"></div>
+                <div class="col-md-8 text-center">
+                    Please select to confirm or cancel this import before navigating away from this page or initiating another import.
+                    When confirming an import, the button should be pressed only once and the page should not be navigated away from until the import is completed.
+                </div>
+                <div class="col-md-2"></div>
+            </div>
+        </div>
         <div class="row">
             <div class="col-md-12">
                 <div class="col-md-4"></div>
