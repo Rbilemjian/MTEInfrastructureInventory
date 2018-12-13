@@ -539,8 +539,8 @@ def take_lock(request, type):
 
 
 #Releases the lock
-def release_lock(type):
-    APILock.objects.filter(type=type).delete()
+def release_lock(type, request):
+    APILock.objects.filter(type=type).filter(user=request.user).delete()
 
 
 #Checks if the lock is available
@@ -554,7 +554,7 @@ def lock_is_available(type):
         if diff < 20:
             return False
         else:
-            release_lock(type)
+            APILock.objects.filter(type=type).delete()
             return True
 
 
@@ -603,7 +603,7 @@ def infoblox(request):
                     continue
                 new_zone = AuthoritativeZone(view=auth_zone.get('view'), zone=auth_zone.get('fqdn'))
                 new_zone.save()
-            release_lock('authoritative_zones')
+            release_lock('authoritative_zones', request)
             message = "Authoritative zones have been successfully updated."
             return render(request, 'infoblox.html', {'form': InfobloxImportForm(), 'zones': authZonesForDisplay, 'message': message})
 
@@ -615,7 +615,7 @@ def infoblox(request):
                 error = "Import already timed out because it did not complete within 20 minutes."
             else:
                 clearAllInvisible()
-                release_lock('application_servers')
+                release_lock('application_servers', request)
                 error = "Import has been cancelled."
             return render(request, "infoblox.html", {"form": InfobloxImportForm(), "error": error, "zones": authZonesForDisplay})
 
@@ -653,7 +653,7 @@ def infoblox(request):
             setAllVisible()
 
             #Now that all database modification has been completed, unlocking application servers for another import
-            release_lock('application_servers')
+            release_lock('application_servers', request)
 
             return redirect('/infrastructureinventory/applicationserver')
 
@@ -704,13 +704,13 @@ def infoblox(request):
             if result.get('Error') is not None:
                 error = result.get('Error')
                 error = "Infoblox Error: " + error.split(": ", 1)[1]
-                release_lock('application_servers')
+                release_lock('application_servers', request)
                 return render(request, "infoblox.html", {"form": form, "error": error, "zones": authZonesForDisplay})
 
             #Error handling: if API returned nothing
             if len(result.get('result')) == 0:
                 error = "Infoblox returned no records for this query"
-                release_lock('application_servers')
+                release_lock('application_servers', request)
                 return render(request, "infoblox.html", {"form": form, "error": error, "zones": authZonesForDisplay})
 
             records = result.get('result')
