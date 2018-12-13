@@ -569,11 +569,16 @@ def lock_is_available(type):
 def infoblox(request):
 
 
+
     urllib3.disable_warnings()
     authZonesForDisplay = AuthoritativeZone.objects.none()
     authZonesForDisplay = authZonesForDisplay | AuthoritativeZone.objects.filter(last_host_pull__isnull=False)
     authZonesForDisplay = authZonesForDisplay | AuthoritativeZone.objects.filter(last_a_pull__isnull=False)
     authZonesForDisplay = authZonesForDisplay | AuthoritativeZone.objects.filter(last_cname_pull__isnull=False)
+
+    if not request.user.is_superuser and not request.user.is_staff:
+        error = "You do not have authorization to make modifications on this page."
+        return render(request, "infoblox.html", {"zones": authZonesForDisplay, "error": error})
 
     infobloxCredentials = ['206582055', 'miketysonpunchout']
 

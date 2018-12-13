@@ -85,8 +85,8 @@ DATABASES = {
     }
 }
 
-AUTHENTICATION_BACKENDS = ('infrastructureinventoryapp.custom_auth.SSOAuth.SSOAuth'
-                           'django.contrib.auth.backends.ModelBackend',
+AUTHENTICATION_BACKENDS = ('infrastructureinventoryapp.custom_auth.SSOAuth.SSOAuth',
+                           'django.contrib.auth.backends.ModelBackend'
                           )
 
 

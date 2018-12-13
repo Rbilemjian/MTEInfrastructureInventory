@@ -29,14 +29,18 @@
                 <h2>Infoblox API Page</h2>
             </div>
 
-            <div class="col-md-8 text-right">
-                <form method="POST">
-                    {% csrf_token %}
-                    <input name="auth_zone_import" type="hidden" value="true">
-                    <button type="submit" class="btn btn-primary" style="margin-bottom:23px;">
-                        Update Authoritative Zone Definitions
-                    <span style="padding-left:7px" class="glyphicon glyphicon-download" aria-hidden="true"></span></button>
-                </form>
+            {% if form != null %}
+
+                <div class="col-md-8 text-right">
+                    <form method="POST">
+                        {% csrf_token %}
+                        <input name="auth_zone_import" type="hidden" value="true">
+                        <button type="submit" class="btn btn-primary" style="margin-bottom:23px;">
+                            Update Authoritative Zone Definitions
+                        <span style="padding-left:7px" class="glyphicon glyphicon-download" aria-hidden="true"></span></button>
+                    </form>
+
+            {% endif %}
     </div>
 
         </div>
@@ -46,6 +50,9 @@
 
 
     <div class="my-padding"></div>
+
+{% if form != null %}
+
     <div class="container" style="text-align:center">
         <form method="post" autocomplete="off">
             {% csrf_token %}
@@ -108,6 +115,19 @@
             </div>
         </form>
     </div>
+
+{% else %}
+
+    {% if error != null %}
+        <div class="row" style="margin-top:25px;">
+            <div class="col-md-2"></div>
+            <div class="col-md-8 text-center" style="color:red;">
+                {{ error }}
+            </div>
+        </div>
+    {% endif %}
+
+{% endif %}
 
     <div class="my-padding"></div>
 
