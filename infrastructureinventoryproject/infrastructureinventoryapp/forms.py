@@ -97,8 +97,8 @@ def get_aliases():
 class InfobloxImportForm(forms.Form):
     def __init__(self, *args, **kwargs):
         super(InfobloxImportForm, self).__init__(*args, **kwargs)
-        self.fields['view'] = forms.CharField(min_length=1, max_length=50, required=True, widget=floppyforms.widgets.Input(datalist=get_zone_auth_values('view')))
-        self.fields['zone'] = forms.CharField(min_length=1, max_length=50, required=True, widget=floppyforms.widgets.Input(datalist=get_zone_auth_values('zone')))
+        self.fields['view'] = forms.CharField(min_length=1, max_length=50, widget=floppyforms.widgets.Input(datalist=get_zone_auth_values('view')))
+        self.fields['zone'] = forms.CharField(min_length=1, max_length=50, widget=floppyforms.widgets.Input(datalist=get_zone_auth_values('zone')))
         self.fields['record_type'] = forms.ChoiceField(choices=RECORD_TYPES, required=True, widget=forms.Select())
 
 
