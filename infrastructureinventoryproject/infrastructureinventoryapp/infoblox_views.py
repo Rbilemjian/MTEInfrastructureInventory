@@ -551,7 +551,7 @@ def lock_is_available(type):
     else:
         recordTime = APILock.objects.filter(type=type).values_list('created', flat=True).get()
         diff = get_time_diff(timezone.now(), recordTime)
-        if diff < 20:
+        if diff < 5:
             return False
         else:
             APILock.objects.filter(type=type).delete()
@@ -672,7 +672,7 @@ def infoblox(request):
             if lock_is_available('application_servers'):
                 take_lock(request, 'application_servers')
             else:
-                error = "An import is currently being processed. Please wait for the current import to finish."
+                error = "An import is currently being processed. Please wait for the current import to finish (at most 5 minutes)."
                 return render(request, "infoblox.html", {"form": form, "error": error, "zones": authZonesForDisplay})
 
 
