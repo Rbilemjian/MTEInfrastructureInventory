@@ -35,7 +35,7 @@
                     <form method="POST">
                         {% csrf_token %}
                         <input name="auth_zone_import" type="hidden" value="true">
-                        <button type="submit" class="btn btn-primary" style="margin-bottom:23px;">
+                        <button onclick="disableButton('auth-submit')" id="auth-submit" class="btn btn-primary" style="margin-bottom:23px;">
                             Update Authoritative Zone Definitions
                         <span style="padding-left:7px" class="glyphicon glyphicon-download" aria-hidden="true"></span></button>
                     </form>
@@ -76,7 +76,7 @@
                     {{ form.record_type }}
                 </div>
                 <div class="col-md-2">
-                    <button type="submit" class="btn btn-success" style="margin-top:24px;">
+                    <button onclick="disableButton('import-submit')" id="import-submit" class="btn btn-success" style="margin-top:24px;">
                         Import from Zone
                     <span style="padding-left:7px" class="glyphicon glyphicon-import" aria-hidden="true"></span></button>
                 </div>
@@ -185,7 +185,7 @@
                     <form method="POST">
                         {% csrf_token %}
                         <input name="confirmed" type="hidden" value="true">
-                        <button type="submit" class="btn btn-success" style="margin-bottom:23px;">
+                        <button onclick="disableConfirmButtons('confirm-import')" id="confirm-import" class="btn btn-success" style="margin-bottom:23px;">
                                     Confirm Import
                                 <span style="padding-left:7px" class="glyphicon glyphicon-ok-sign" aria-hidden="true"></span></button>
                     </form>
@@ -194,7 +194,7 @@
                     <form method="POST">
                         {% csrf_token %}
                         <input name="cancelled" type="hidden" value="true">
-                        <button type="submit" class="btn btn-danger" style="margin-bottom:23px;">
+                        <button onclick="disableConfirmButtons('cancel-import')" id="cancel-import" class="btn btn-danger" style="margin-bottom:23px;">
                                     Cancel Import
                                 <span style="padding-left:7px" class="glyphicon glyphicon-remove-circle" aria-hidden="true"></span></button>
                     </form>
@@ -251,6 +251,24 @@
 {% endblock %}
 
 {% block scripts %}
+
+        <script style="text/javascript">
+            function disableButton(id)
+            {
+                button = document.getElementById(id);
+                button.form.submit();
+                button.disabled=true;
+            }
+
+            function disableConfirmButtons(id)
+            {
+                document.getElementById(id).form.submit();
+                document.getElementById('confirm-import').disabled=true;
+                document.getElementById('cancel-import').disabled=true;
+            }
+
+
+        </script>
 
     <!-- Datatables js and jquery -->
 
