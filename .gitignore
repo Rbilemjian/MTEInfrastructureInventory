@@ -14,3 +14,5 @@ infrastructureinventoryproject/__init__\.py
 infrastructureinventoryproject/db\.json
 
 \.idea/inspectionProfiles/Project_Default\.xml
+
+infrastructureinventoryproject/infrastructureinventoryapp/static/django\.conf

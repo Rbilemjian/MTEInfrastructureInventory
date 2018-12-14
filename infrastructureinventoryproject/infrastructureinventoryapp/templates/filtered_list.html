@@ -31,12 +31,26 @@
                     <h2>Advanced Search Result</h2>
                 {% endif %}
             </div>
+
+            {% if user.is_staff or user.is_superuser %}
+
             <div class="col-md-4 text-right">
                     <a class="btn btn-danger btn-md" data-toggle="modal" data-target="#batch-modal">
                             Batch Delete Currently Displayed Records
                         <span style="padding-left: 7px;" class="glyphicon glyphicon-trash" aria-hidden="true"></span></a>
                 </form>
             </div>
+
+            {% else %}
+
+            <div class="col-md-4 text-right">
+                    <a class="btn btn-default btn-md" data-toggle="modal" disabled="disabled">
+                            Batch Delete Currently Displayed Records
+                        <span style="padding-left: 7px;" class="glyphicon glyphicon-trash" aria-hidden="true"></span></a>
+                    <p>*Must have staff or superuser status to delete*</p>
+            </div>
+
+            {% endif %}
     </div>
 
 <div class="my-padding"></div>

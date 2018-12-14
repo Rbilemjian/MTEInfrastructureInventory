@@ -30,7 +30,7 @@
 
             <div class="col-md-4 text-right">
 
-                {% if user.is_staff %}
+                {% if user.is_staff or user.is_superuser %}
 
                 <a class="btn btn-danger btn-md" data-toggle="modal" data-target="#modal">
                     Delete Record
@@ -42,7 +42,7 @@
                     Delete Record
                     <span style="padding-left: 7px" class="glyphicon glyphicon-trash" aria-hiddne="true">
                     </span></a>
-                    <p> *Must be owner or have staff status to delete*</p>
+                    <p> *Must have staff or superuser status to delete*</p>
                 {% endif %}
             </div>
     </div>
