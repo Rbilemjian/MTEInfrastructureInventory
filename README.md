@@ -138,18 +138,46 @@ That user can then log into the admin panel and add other users who will then be
 
 <br>
 
-<h3>Modifying Application Parameters</h3>
+<h3>Modifying the Application</h3>
 
 <br>
+
+<strong>Updating Infoblox Credentials</strong>
 
 If the credentials for Infoblox need to be updated, this can be done by updating any instance of "auth=('someusername', 'somepassword')" to be the new username and password in the following file (there are 3 instances): 
 
     infoblox_views.py
     
+    
+<strong>Changing Import Timeout Duration (Currently 5 minutes)</strong>
+    
 If the time-out needs to be changed, it can be modified by changing the comparison of "diff", which is currently diff<20, to be diff<x where x is the desired timeout period. 
 This change should be done in the same file as the credential change above:
 
     infoblox_views.py
+    
+<strong>Adding New Users</strong>
+
+Adding users should be done through a superuser/staff account using the admin panel. This can be done by going to the url of the deployed site like the following example in the case that it is hosted through an IP:
+
+    100.115.100.116/admin
+    
+After authenticating to enter the admin interface, a user can be added by entering their SSO into the "Add User" form and entering a dummy password 
+(authentication is done through guardhouse with SSO & NBCU password so the dummy password entered will not actually be used).
+In order for that user to have permissions to import/delete records, the checkbox to make them a staff user should be checked right after creation.
+
+In the case that it is a fresh instance of the project with no users, the following command should be run:
+
+    python manage.py createsuperuser
+    
+That superuser should be set to have the SSO of the person who it will represent it as its username, and a dummy password which doesn't matter because as mentioned above, the authentication is done through guardhouse.
+The email prompt when creating the superuser can simply be left blank.
+Note that this command can only be run if the python virtual environment has been set up correctly, but if a new installation of the application has been set up that should be the case.
+
+<strong>In the Case of Trouble with Lock Mechanism</strong>
+
+If a user is conducting an import from infoblox, they cannot update authoritative zones in another tab without encountering a server error. This is because a user can only hold one lock at once, 
+and the infoblox import lock is a different type of lock than the authoritative zone update lock. The issue should be cleared up if the user completes the import and re-attempts to update the authoritative zones.
     
 
     
