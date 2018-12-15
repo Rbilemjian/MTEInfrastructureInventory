@@ -156,6 +156,10 @@ And in order to restart the server:
 And to stop the server completely:
 
     systemctl stop httpd
+    
+In order to start apache automatically at boot of VM:
+
+    systemctl enable httpd
 
 <br>
 
@@ -203,7 +207,7 @@ and the infoblox import lock is a different type of lock than the authoritative 
     
 <strong>What to do After Making Modifications</strong>
 
-Run the following command to restart Apache server:
+Run the following command to restart Apache server (unneeded if all that's been changed is the addition of new users):
 
     systemctl restart httpd
     
