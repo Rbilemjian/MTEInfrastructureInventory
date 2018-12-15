@@ -89,6 +89,10 @@ Delete the current settings.py file and run the following command to make the pr
 
     mv production_settings.py settings.py
     
+Additionally, in order to hide debug messages from end users, the following setting should be changed in the settings.py file:
+
+    DEBUG = True --> DEBUG = False
+    
     
 <strong> Installing Python </strong>
 
@@ -121,7 +125,7 @@ in order to place all the static files for the project where they need to be:
 
     python manage.py collectstatic
     
-Make sure to create a migrations folder in the following directory if it does not already exist and create an empty file called "__init__.py" within it:
+Make sure to create a migrations folder in the following directory if it does not already exist and create an empty file called "\__init\__.py" within it:
 
     /home/mteinfrastructure/infrastructureinventoryproject/infrastructureinventoryapp
     
@@ -135,6 +139,23 @@ You can create a superuser with the following command:
     python manage.py createsuperuser
     
 That user can then log into the admin panel and add other users who will then be able to log into the application using their guardhouse credentials
+
+You will have to place the django.conf file from the repository in the following directory for the Apache server to work:
+
+    /etc/httpd/conf.d/(django.conf goes here [within conf.d])
+    
+Refer to the second guide under the "Installing Python" header in order to see how Apache should be configured in a general sense.
+After configuration, the following command should be run in order to start the Apache server:
+
+    systemctl start httpd
+    
+And in order to restart the server:
+
+    systemctl restart httpd
+    
+And to stop the server completely:
+
+    systemctl stop httpd
 
 <br>
 
@@ -180,7 +201,11 @@ Note that this command can only be run if the python virtual environment has bee
 If a user is conducting an import from infoblox, they cannot update authoritative zones in another tab without encountering a server error. This is because a user can only hold one lock at once, 
 and the infoblox import lock is a different type of lock than the authoritative zone update lock. The issue should be cleared up if the user completes the import and re-attempts to update the authoritative zones.
     
+<strong>What to do After Making Modifications</strong>
 
+Run the following command to restart Apache server:
+
+    systemctl restart httpd
     
 
 
