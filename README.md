@@ -144,15 +144,16 @@ That user can then log into the admin panel and add other users who will then be
 
 <strong>Updating Infoblox Credentials</strong>
 
-If the credentials for Infoblox need to be updated, this can be done by updating any instance of "auth=('someusername', 'somepassword')" to be the new username and password in the following file (there are 3 instances): 
+If the credentials for Infoblox need to be updated, this can be done by updating the assignment of the infobloxCredentials to be the new username and password in the format (username, password) 
+in the following file (should be ~ line 583): 
 
     infoblox_views.py
     
     
 <strong>Changing Import Timeout Duration (Currently 5 minutes)</strong>
     
-If the time-out needs to be changed, it can be modified by changing the comparison of "diff", which is currently diff<20, to be diff<x where x is the desired timeout period. 
-This change should be done in the same file as the credential change above:
+If the time-out needs to be changed, it can be modified by changing the comparison of "diff", which is currently diff<5, to be diff<x where x is the desired timeout period. 
+This change should be done in the same file as the credential change above (should be ~ line 554):
 
     infoblox_views.py
     
