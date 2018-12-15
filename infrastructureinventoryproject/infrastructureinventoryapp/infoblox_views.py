@@ -335,7 +335,7 @@ def saveIPv4Options(ipv4addr, ipv4host):
 
 
 # Adding ipv4addresses from current host to database
-def saveIPv4HostAddresses(host, currHost):
+def saveIPv4HostAddresses(host, currHost, infobloxCredentials):
 
     ipv4addrs = host.get('ipv4addrs')
 
@@ -353,7 +353,7 @@ def saveIPv4HostAddresses(host, currHost):
         for ipv4addr in ipv4addrs:
 
             get_url = base_url + ipv4addr.get('_ref') + ipv4_fields
-            r = requests.get(get_url, auth=('206582055', 'miketysonpunchout'), verify=False)
+            r = requests.get(get_url, auth=(infobloxCredentials[0], infobloxCredentials[1]), verify=False)
             ipv4addr = r.json()
 
             if ipv4addr.get('ms_ad_user_data') is None:
@@ -429,7 +429,7 @@ def saveIPv6Options(ipv6addr, ipv6host):
 
 
 # Adding ipv6addresses from current host to database
-def saveIPv6HostAddresses(host, currHost):
+def saveIPv6HostAddresses(host, currHost, infobloxCredentials):
 
     ipv6addrs = host.get('ipv6addrs')
     base_url = 'https://infoblox.net.tfayd.com/wapi/v2.7/'
@@ -444,7 +444,7 @@ def saveIPv6HostAddresses(host, currHost):
         for ipv6addr in ipv6addrs:
 
             get_url = base_url + ipv6addr.get('_ref') + ipv6_fields
-            r = requests.get(get_url, auth=('206582055', 'miketysonpunchout'), verify=False)
+            r = requests.get(get_url, auth=(infobloxCredentials[0], infobloxCredentials[1]), verify=False)
             ipv6addr = r.json()
 
 
@@ -739,8 +739,8 @@ def infoblox(request):
                         saveAliases(record, currHost)
                         saveCLICredentials(record, currHost)
                         saveCloudInfo(record, currHost)
-                        saveIPv4HostAddresses(record, currHost)
-                        saveIPv6HostAddresses(record, currHost)
+                        saveIPv4HostAddresses(record, currHost, infobloxCredentials)
+                        saveIPv6HostAddresses(record, currHost, infobloxCredentials)
                         saveSNMP3Credential(record, currHost)
                         saveSNMPCredential(record, currHost)
                         saveExtAttributes(record, currHost)
